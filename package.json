@@ -15,6 +15,7 @@
     "express": "~4.13.1",
     "less-middleware": "1.0.x",
     "morgan": "~1.6.1",
+    "newrelic": "^1.22.0",
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
