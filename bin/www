@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-
+require('newrelic.js');
 var app = require('../app');
 var debug = require('debug')('limitless-garden:server');
 var http = require('http');
