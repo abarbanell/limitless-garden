@@ -1,14 +1,17 @@
-// dummy tests...
+// router tests...
 
 var expect = require('expect.js');
 
-describe('API tests (dummy)', function() {
-  it('should fail for 0 and 5,  out of bounds in our array', function(){
-      expect([1,2,3].indexOf(5)).to.equal(-1);
-      expect([1,2,3].indexOf(0)).to.equal(-1);
+process.env.THREESCALE_PROVIDER_KEY='dummykey';
+var apiRouter = require('../routes/api.js');
+
+describe('API router tests', function() {
+  it('router should be valid', function(){
+      expect(apiRouter).to.be.ok();
+			expect(apiRouter.get).to.be.an('function');
   });
 
-  it('check some syntax of expect.js', function(done) {
+  it('dummy - check some syntax of expect.js', function(done) {
     var f = function(){};
     expect(f).to.be.an('function');
     expect(f.doesnotexist).to.not.be.an('function'); // should fail
