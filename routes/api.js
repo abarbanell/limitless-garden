@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var logger = require('../util/logger');
 var mongoskin = require('mongoskin');
 var env = process.env.ENVIRONMENT || 'dev';
 
@@ -31,6 +32,7 @@ router.get('/collections/:collectionName', function(req, res, next) {
 })
 
 router.post('/collections/:collectionName', function(req, res, next) {
+	logger.info('POST: ' + JSON.stringify(req.body));
   req.collection.insert(req.body, {}, function(e, results){
     if (e) return next(e)
     res.send(results)
