@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoskin = require('mongoskin');
+var env = process.env.ENVIRONMENT || 'dev';
 
 var mongourl = process.env.MONGOLAB_URI || 'mongodb://localhost:27107/test';
 var db = mongoskin.db(mongourl, {safe: true});
@@ -14,7 +15,7 @@ router.get('/hello', function(req, res, next) {
 });
 
 router.param('collectionName', function(req, res, next, collectionName){
-  req.collection = db.collection(collectionName)
+  req.collection = db.collection(env + '.'+  collectionName)
   return next()
 });
 
@@ -29,5 +30,32 @@ router.get('/collections/:collectionName', function(req, res, next) {
   })
 })
 
+router.post('/collections/:collectionName', function(req, res, next) {
+  req.collection.insert(req.body, {}, function(e, results){
+    if (e) return next(e)
+    res.send(results)
+  })
+})
+
+router.get('/collections/:collectionName/:id', function(req, res, next) {
+  req.collection.findById(req.params.id, function(e, result){
+    if (e) return next(e)
+    res.send(result)
+  })
+})
+
+router.put('/collections/:collectionName/:id', function(req, res, next) {
+  req.collection.updateById(req.params.id, {$set: req.body}, {safe: true, multi: false}, function(e, result){
+    if (e) return next(e)
+    res.send((result === 1) ? {msg:'success'} : {msg: 'error'})
+  })
+})
+
+router.delete('/collections/:collectionName/:id', function(req, res, next) {
+  req.collection.removeById(req.params.id, function(e, result){
+    if (e) return next(e)
+    res.send((result === 1)?{msg: 'success'} : {msg: 'error'})
+  })
+});
 
 module.exports = router;
