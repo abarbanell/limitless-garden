@@ -5,3 +5,10 @@ body {
   padding: 40px 15px;
   text-align: center;
 }
+
+.lgstyle-inverse { 
+	color: #fff;
+	background-color: #6CD886;
+	border-color: #080808;
+}
+
