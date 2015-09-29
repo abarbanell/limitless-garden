@@ -31,4 +31,5 @@ npm-debug.log
 
 # Heroku Local .env file
 .env
+.env.test
 
