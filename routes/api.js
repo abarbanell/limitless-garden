@@ -3,9 +3,7 @@ var router = express.Router();
 var logger = require('../util/logger');
 var mongoskin = require('mongoskin');
 var env = process.env.ENVIRONMENT || 'dev';
-
-var mongourl = process.env.MONGOLAB_URI || 'mongodb://localhost:27107/test';
-var db = mongoskin.db(mongourl, {safe: true});
+var db = require('../util/db');
 
 var threescale = require('../util/threescale');
 router.use(threescale);
