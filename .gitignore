@@ -33,3 +33,8 @@ npm-debug.log
 .env
 .env.test
 
+# Settings directories for eclipse and vscode
+.settings
+.vscode
+
+
