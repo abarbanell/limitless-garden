@@ -1,11 +1,9 @@
-![Build status](https://travis-ci.org/abarbanell/limitless-garden.svg)
-
-# limitless-garden
+# limitless-garden ![Build status](https://travis-ci.org/abarbanell/limitless-garden.svg)
 
 This is a small backend using 
-Heroku / node.js / 3scale
+Heroku / node.js / 3scale / MongoLab / Newrelic
 
-Continuous Intergartion is using travis-ci.org
+Continuous Integration is using travis-ci.org
 
 
 It is deployed via heroku/github integration to 
