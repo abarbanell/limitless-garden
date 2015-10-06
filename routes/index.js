@@ -5,15 +5,17 @@ var logger = require('../util/logger');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	res.render('index', { title: 'Limitless Garden'});
-//	sensor.getMulti(0, 10, function(err, result) { 
-//		logger.info('sensor.getMulti called: err=' + err);
-//		if (err) { 
-//			res.status(500).render(error, { err: err });
-//		} else { 		
-//  		res.render('index', { title: 'Limitless Garden', data: result });
-//		};
-//	});
+	
+    sensor.getMulti(0, 10, function(err, result) { 
+		logger.info('sensor.getMulti returned: err=' + err);
+		if (err) { 
+			logger.error(err);
+			res.status(500).render(error, { err: err });
+		} else { 		
+			logger.info('result = '+ JSON.stringify(result));
+	  		res.render('index', { title: 'Limitless Garden', data: result });
+		};
+	});
 });
 
 module.exports = router;
