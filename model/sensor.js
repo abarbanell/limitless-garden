@@ -1,6 +1,7 @@
 var logger = require('../util/logger');
 var db = require('../util/db');
-var colname = process.env.ENVIRONMENT + '.sensor';
+var env = process.env.ENVIRONMENT || 'dev';
+var colname = env + '.sensor';
 
 var sensor = function() { 
 

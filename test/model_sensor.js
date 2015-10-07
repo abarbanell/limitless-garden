@@ -12,9 +12,8 @@ describe('Sensor Model ', function() {
 	it('get a single value - notfound', function(done) {
 		sensor.get("notexistingid", function(err, result) { 
 			if (err) logger.info('err = ' + JSON.stringify(err));
-			// currently failing with connection refused - need to have proper mongo credentials for test
-			// expect(err).to.not.be.ok();
-			
+			expect(err).to.not.be.ok();
+			expect(result).to.not.be.ok();
 		  done();
 		});
 	});

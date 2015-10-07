@@ -1,5 +1,6 @@
 // test util/db.js
-// also check some basic mongo / mongoskin fucntionality to make sure we have connectivity
+// also check some basic mongo / mongoskin fucntionality to make sure 
+// we have connectivity
 
 var expect = require('expect.js');
 var rewire = require('rewire'); 
