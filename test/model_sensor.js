@@ -4,19 +4,29 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 var env = process.env.ENVIRONMENT || 'dev';
 var colname = env + '.sensor';
-var insertedId = "";
+var insertedIds = [];
 
 describe('Sensor Model ', function() {
 	beforeEach(function(done) {
 		logger.info('beforeEach: remove and insert some data');
-		db.collection(colname).insert({}, function(err, result) {
-			logger.info('empty row inserted in collection '+ colname);
+		var objs = [{
+			"soil": 35,
+			"host": "rpi03",
+			"sensor": "soil",
+			"timestamp": "2015-09-29T19:23:12.435121"
+		}, {
+				"soil": 36,
+				"host": "rpi03",
+				"sensor": "soil",
+				"timestamp": "2015-09-29T19:28:12.435121"
+			}];
+		db.collection(colname).insert(objs, function(err, result) {
 			if (err) {
 				logger.error('beforeEach Error: ' + err);
 				done();
 			} 
 			logger.info('beforeEach result: ' + JSON.stringify(result));
-			insertedId = result.insertedIds[0];
+			insertedIds = result.insertedIds;
 			done();
 		});
 	});
@@ -42,6 +52,20 @@ describe('Sensor Model ', function() {
 			expect(err).to.not.be.ok();
 			expect(result).to.not.be.ok();
 		  done();
+		});
+	});
+	
+	it('get a single value - found', function (done) {
+		sensor.get(insertedIds[0], function (err, result) {
+			if (err) {
+				logger.error('err = ' + JSON.stringify(err));
+				done();
+			} else {
+				expect(err).to.not.be.ok();
+				expect(result).to.be.ok();
+				expect(result._id).to.eql(insertedIds[0]);
+				done();
+			}
 		});
 	});
 
