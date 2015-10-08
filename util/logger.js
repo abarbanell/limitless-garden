@@ -4,7 +4,7 @@ var logger = function() {
     // maybe we want to have a more complex logging later
     
   var winston = require('winston');
-  //winston.level = process.env.LOG_LEVEL || 'error';
+  winston.level = process.env.LOG_LEVEL || 'error';
   return winston;
 }();
 

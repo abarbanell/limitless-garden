@@ -6,12 +6,12 @@ var logger = require('../util/logger');
 
 describe('logger tests', function() {
 
-it('check default logger object', function(done){
+	it('check default logger object', function(done){
 		expect(logger).to.be.ok();
     expect(logger.error).to.be.an('function');
     expect(logger.info).to.be.an('function');
     expect(logger.warn).to.be.an('function');
-		expect(logger.level).to.eql(process.env.LOG_LEVEL || 'info');
+		expect(logger.level).to.eql(process.env.LOG_LEVEL || 'error');
 		done();
   });
 

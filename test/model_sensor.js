@@ -1,8 +1,14 @@
 var expect = require('expect.js');
 var sensor = require('../model/sensor.js');
 var logger = require('../util/logger');
+var db = require('../util/db');
+
 
 describe('Sensor Model ', function() {
+	beforeEach(function() {
+		logger.info('beforeEach: remove and insert some data');
+	});
+
   it('should contain get and getMulti methods ', function(){
       expect(sensor).to.be.an('object');
       expect(sensor.get).to.be.an('function');
