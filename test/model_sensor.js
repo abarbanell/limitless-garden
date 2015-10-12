@@ -8,7 +8,13 @@ var insertedIds = [];
 
 describe('Sensor Model ', function() {
 	beforeEach(function(done) {
-		logger.info('beforeEach: remove and insert some data');
+		droprows(function(){
+			insertrows(done);
+		});
+	});
+	
+	function insertrows(done){
+		logger.info('insertrows: insert some data');
 		var objs = [{
 			"soil": 35,
 			"host": "rpi03",
@@ -22,24 +28,29 @@ describe('Sensor Model ', function() {
 			}];
 		db.collection(colname).insert(objs, function(err, result) {
 			if (err) {
-				logger.error('beforeEach Error: ' + err);
+				logger.error('insertrows Error: ' + err);
 				done();
 			} 
-			logger.info('beforeEach result: ' + JSON.stringify(result));
+			logger.info('insertrows result: ' + JSON.stringify(result));
 			insertedIds = result.insertedIds;
 			done();
 		});
-	});
+	};
 	
 	after(function(done){
+		droprows(done);
+	});	
+	
+	function droprows(done) {
 		db.collection(colname).remove({}, function(err, result) {
 			if (err) {
-				logger.error('after() error: '+ err);
+				logger.error('droprows() error: '+ err);
 			}
-			logger.info('after() - removed data: ' + JSON.stringify(result));
+			logger.info('droprows() - removed data: ' + JSON.stringify(result));
 			done();
 		});
-	});
+	};
+	
   it('should contain get and getMulti methods ', function(){
       expect(sensor).to.be.an('object');
       expect(sensor.get).to.be.an('function');
@@ -70,6 +81,18 @@ describe('Sensor Model ', function() {
 	});
 
 	it('should get an array of values', function(done) {
-		done();
+		sensor.getMulti(insertedIds[0],insertedIds.length, function (err, result) {
+			logger.info('model_sensor test: getmulti callback reached');
+			if (err) {
+				logger.error('err = ' + JSON.stringify(err));
+				done();
+			} else {
+				expect(err).to.not.be.ok();
+				expect(result).to.be.ok();
+				logger.info('getMulti result: ' + JSON.stringify(result));
+				expect(result.length).to.eql(insertedIds.length);
+				done();
+			}
+		});
 	});
 });

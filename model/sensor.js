@@ -10,16 +10,22 @@ var sensor = function() {
 	};
 
 	var getMulti = function(base, count, callback) {
-		db.collection(colname).find({ 
-			"_id": { $gte: base }
-		}, null, { 
-			limit: count, 
-			sort: { 
-				"_id": 1 
-			}
-		}, function (err, resultCursor) {
-			resultCursor.toArray(callback);
-		});
+		db.collection(colname).find({
+			 _id: { $gte: base }
+		}, null, {
+			limit: count
+		}).toArray(callback);
+		//{ 
+		//	"_id": { $gte: base }
+		//}, null,  { 
+		//	limit: count, 
+		//	sort: { 
+		//		"_id": 1 
+		//	}
+		//}, function (err, resultCursor) {
+		//	logger.info('getMulti mongo query result: ' + JSON.stringify(resultCursor));
+		//	resultCursor.toArray(callback);
+		//});
 	};
 
 	return {

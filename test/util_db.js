@@ -5,6 +5,8 @@
 var expect = require('expect.js');
 var rewire = require('rewire'); 
 var mongo_url = process.env.TEST_MONGO_URL; 
+var mongo = rewire('mongoskin');
+var logger = require('../util/logger');
 
 describe('util/db tests', function() {
 	
@@ -13,14 +15,19 @@ describe('util/db tests', function() {
 		done();
 	});
 
-  it('open DB from mongoskin directly?', function(done){
-		var mongo = rewire('mongoskin');
+  it('open DB from mongoskin directly?', function(done){		
 		var db = mongo.db(mongo_url);
 		check_db(db, done);
 	});
 
+ it('mongoskin has ObjectID?', function(done){		
+		var ObjectID = mongo.ObjectID;
+		expect(mongo.ObjectID).to.be.an('function');
+		expect(ObjectID).to.be.an('function');
+		done();
+	});
+	
 	var check_db = function(db, done) {
-		// console.log(db);
 		expect(db).to.be.an('object');
 		expect(db.bind).to.be.an('function');
 		db.bind('testcollection');
@@ -39,5 +46,13 @@ describe('util/db tests', function() {
 		var db = rewire('../util/db');
 		check_db(db, done);
 	});  
+	
+	it('db object has ObjectID function?', function(done) {
+		process.env.MONGOLAB_URI = mongo_url;
+		var db = rewire('../util/db');
+		expect(db.ObjectID).to.be.an('function');
+		expect(db.ObjectID.createFromHexString).to.be.an('function');
+		done();
+	}); 
 
 });
