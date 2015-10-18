@@ -13,18 +13,7 @@ router.get('/', function (req, res, next) {
 			res.status(500).render(error, { err: err });
 		} else {
 			logger.info('result = ' + JSON.stringify(result));
-			var testdata = [
-				{
-					date: "yesterday", host: "rpi03", sensor: "soil", value: 150
-				}, {
-					date: "monday", host: "rpi03", sensor: "soil", value: 150
-				}, {
-					date: "tuesday", host: "rpi03", sensor: "soil", value: 150
-				}, {
-					date: "today", host: "rpi03", sensor: "soil", value: 150
-				}
-			];
-			res.render('index', { title: 'Limitless Garden', data: testdata });
+			res.render('index', { title: 'Limitless Garden', data: result });
 		};
 	});
 });
