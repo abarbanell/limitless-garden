@@ -13,7 +13,17 @@ router.get('/', function (req, res, next) {
 			res.status(500).render(error, { err: err });
 		} else {
 			logger.info('result = ' + JSON.stringify(result));
-			res.render('index', { title: 'Limitless Garden', data: result });
+			var mapped = result.map(function(obj) {
+				var rObj = {};
+				//rename some fields
+				rObj.date = obj.timestamp;
+				rObj.value = obj.soil;
+				// copy some fields
+				rObj.host = obj.host;
+				rObj.sensor = obj.sensor;
+				// ignore all other fields
+			})
+			res.render('index', { title: 'Limitless Garden', data: mapped });
 		};
 	});
 });
