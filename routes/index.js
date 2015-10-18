@@ -21,8 +21,10 @@ router.get('/', function (req, res, next) {
 				// copy some fields
 				rObj.host = obj.host;
 				rObj.sensor = obj.sensor;
-				// ignore all other fields
-			})
+				// ignore all other fields and return
+				return rObj;
+			});
+			logger.info('mapped = ' + JSON.stringify(mapped));
 			res.render('index', { title: 'Limitless Garden', data: mapped });
 		};
 	});
