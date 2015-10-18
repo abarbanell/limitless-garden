@@ -10,9 +10,12 @@ var sensor = function() {
 	};
 
 	var getMulti = function(base, count, callback) {
-		db.collection(colname).find({
-			 _id: { $gte: base }
-		}, null, {
+		
+		var baseobj = {};
+		if (base) {
+			baseobj._id = { $gte: base };
+		}
+		db.collection(colname).find(baseobj, null, {
 			limit: count
 		}).toArray(callback);
 		//{ 

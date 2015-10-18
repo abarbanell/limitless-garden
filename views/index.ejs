@@ -61,22 +61,15 @@
 							<td>Value</td>
 						</thead>
 
+					<% for(var i=0; i<data.length; i++) { %>
 						<tr>
-							<td>Date</td>
-							<td>Host</td>
-							<td>Sensor</td>
-							<td>Value</td>
-						</tr><tr>
-							<td>Date</td>
-							<td>Host</td>
-							<td>Sensor</td>
-							<td>Value</td>
-						</tr><tr>
-							<td>Date</td>
-							<td>Host</td>
-							<td>Sensor</td>
-							<td>Value</td>
+							<td><%= data[i].date %></td>
+							<td><%= data[i].host %></td>
+							<td><%= data[i].sensor %></td>
+							<td><%= data[i].value %></td>
 						</tr>
+					<% } %>
+
 					</table>
 				</div>
 			</div>	
