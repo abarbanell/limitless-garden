@@ -25,8 +25,16 @@ router.get('/', function (req, res, next) {
 				return rObj;
 			});
 			logger.info('mapped = ' + JSON.stringify(mapped));
-			res.render('index', { title: 'Limitless Garden', data: mapped });
+			res.render('index', { title: 'Limitless Garden', dataTable: true, hostsTable: false, data: mapped });
 		};
+	});
+});
+
+/* GET hosts page. */
+router.get('/hosts', function (req, res, next) {
+
+    sensor.getUniqueHosts(function (err, result) {
+		res.render('index', { title: 'Limitless Garden - Hosts', dataTable: false, hostsTable: true, data: [{host: 'dummy' }, {host: 'dummy2'}]} );
 	});
 });
 

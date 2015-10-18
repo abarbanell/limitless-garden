@@ -30,10 +30,17 @@ var sensor = function() {
 		//	resultCursor.toArray(callback);
 		//});
 	};
+	
+	var getUniqueHosts = function(callback) {
+		
+		db.collection(colname).find().toArray(callback);
+
+	};
 
 	return {
 		get: get,
-		getMulti: getMulti
+		getMulti: getMulti,
+		getUniqueHosts: getUniqueHosts
 	}
 }();
 
