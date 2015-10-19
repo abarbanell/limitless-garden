@@ -32,9 +32,7 @@ var sensor = function() {
 	};
 	
 	var getUniqueHosts = function(callback) {
-		
-		db.collection(colname).find().toArray(callback);
-
+		db.collection(colname).distinct("host", callback);
 	};
 
 	return {

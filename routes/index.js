@@ -34,7 +34,18 @@ router.get('/', function (req, res, next) {
 router.get('/hosts', function (req, res, next) {
 
     sensor.getUniqueHosts(function (err, result) {
-		res.render('index', { title: 'Limitless Garden - Hosts', dataTable: false, hostsTable: true, data: [{host: 'dummy' }, {host: 'dummy2'}]} );
+		if (err) {
+			logger.error(err);
+			res.status(500).render(error, { err: err});
+		} else {
+			logger.info('result = ' + JSON.stringify(result));	
+			res.render('index', { 
+				title: 'Limitless Garden - Hosts', 
+				dataTable: false, 
+				hostsTable: true, 
+				data: result
+			});
+		}
 	});
 });
 
