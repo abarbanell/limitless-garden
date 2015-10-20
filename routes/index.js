@@ -16,7 +16,12 @@ router.get('/', function (req, res, next) {
 			var mapped = result.map(function(obj) {
 				var rObj = {};
 				//rename some fields
-				rObj.date = obj.timestamp;
+				logger.info('typeof(timestamp) = ' + typeof(obj.timestamp));
+				logger.info('typeof(timespamp) = ' + typeof(obj.timespamp));
+				if(obj.timestamp) {
+					var date = new Date(obj.timestamp);
+					rObj.date = date.toJSON();
+				}
 				rObj.value = obj.soil;
 				// copy some fields
 				rObj.host = obj.host;
