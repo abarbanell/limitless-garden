@@ -36,6 +36,12 @@ router.get('/', function (req, res, next) {
 });
 
 /* GET hosts page. */
+router.get('/login', function (req, res, next) {
+			res.render('login', { 
+			});
+});
+
+/* GET hosts page. */
 router.get('/hosts', function (req, res, next) {
 
     sensor.getUniqueHosts(function (err, result) {
