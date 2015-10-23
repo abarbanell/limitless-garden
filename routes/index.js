@@ -35,9 +35,17 @@ router.get('/', function (req, res, next) {
 	});
 });
 
-/* GET hosts page. */
+/* GET login page. */
 router.get('/login', function (req, res, next) {
-			res.render('login', { 
+			res.render('login',  { 
+				title: 'Limitless Garden'
+			});
+});
+
+/* GET about page. */
+router.get('/about', function (req, res, next) {
+			res.render('about', { 
+				 title: 'Limitless Garden'
 			});
 });
 
