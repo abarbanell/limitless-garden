@@ -20,7 +20,7 @@
     "morgan": "~1.6.1",
     "newrelic": "^1.22.0",
     "passport": "^0.3.0",
-    "passport-google": "^0.3.0",
+    "passport-google-oauth": "^0.2.0",
     "serve-favicon": "~2.3.0",
     "winston": "^1.0.1"
   },
