@@ -1,10 +1,12 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
+var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var user = require('./model/user');
+var session = require('express-session');
+var logger = require('./util/logger');
 
 //set auth startegy
 var passport = require('passport');
@@ -18,10 +20,12 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 //   have a database of user records, the complete Google profile is
 //   serialized and deserialized.
 passport.serializeUser(function(user, done) {
+  logger.info("serialize user: " + JSON.stringify(user));
   done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
+  logger.info("deserialize user: " + JSON.stringify(obj));
   done(null, obj);
 });
 
@@ -35,30 +39,12 @@ passport.use(new GoogleStrategy({
   callbackURL: process.env.GOOGLE_RETURN_URL_HOST + '/auth/google/callback'
 },
   function (accessToken, refreshToken, profile, done) {
-     // asynchronous verification, for effect...
-    process.nextTick(function () {
-      
-      // To keep the example simple, the user's Google profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Google account with a user record in your database,
-      // and return that user instead.
-      return done(null, profile);
+    user.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return done(err, user);
     });
-    //User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    //  return done(err, user);
-    //});
   }
   ));
   
-// Simple route middleware to ensure user is authenticated.
-//   Use this route middleware on any resource that needs to be protected.  If
-//   the request is authenticated (typically via a persistent login session),
-//   the request will proceed.  Otherwise, the user will be redirected to the
-//   login page.
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
-}
   
 var routes = require('./routes/index');
 var api = require('./routes/api');
@@ -72,10 +58,11 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
   
@@ -105,7 +92,8 @@ if (app.get('env') === 'development') {
     res.render('error', {
       title: 'Limitless Garden',
       message: err.message,
-      error: err
+      error: err,
+      user: req.user
     });
   });
 }
@@ -117,7 +105,8 @@ app.use(function(err, req, res, next) {
   res.render('error', {
     title: 'Limitless Garden',
     message: err.message,
-    error: {}
+    error: {},
+    user: req.user
   });
 });
 

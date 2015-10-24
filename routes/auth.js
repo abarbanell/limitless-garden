@@ -10,7 +10,7 @@ var passport = require('passport');
 //   redirecting the user to google.com.  After authorization, Google
 //   will redirect the user back to this application at /auth/google/callback
 router.get('/google',
-  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login'] }),
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/plus.me'] }),
   function(req, res){
     logger.err('/auth/google - should not reach this line');
     // The request will be redirected to Google for authentication, so this

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var sensor = require('../model/sensor');
 var logger = require('../util/logger');
+var authenticated = require('../util/authenticated');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -30,7 +31,13 @@ router.get('/', function (req, res, next) {
 				return rObj;
 			});
 			logger.info('mapped = ' + JSON.stringify(mapped));
-			res.render('index', { title: 'Limitless Garden', dataTable: true, hostsTable: false, data: mapped });
+			res.render('index', { 
+				title: 'Limitless Garden', 
+				dataTable: true, 
+				hostsTable: false, 
+				data: mapped, 
+				user: req.user 
+			});
 		};
 	});
 });
@@ -38,19 +45,21 @@ router.get('/', function (req, res, next) {
 /* GET login page. */
 router.get('/login', function (req, res, next) {
 			res.render('login',  { 
-				title: 'Limitless Garden'
+				title: 'Limitless Garden',
+				user: req.user
 			});
 });
 
 /* GET about page. */
-router.get('/about', function (req, res, next) {
+router.get('/about',  function (req, res, next) {
 			res.render('about', { 
-				 title: 'Limitless Garden'
+				 title: 'Limitless Garden',
+				 user: req.user
 			});
 });
 
 /* GET hosts page. */
-router.get('/hosts', function (req, res, next) {
+router.get('/hosts', authenticated, function (req, res, next) {
 
     sensor.getUniqueHosts(function (err, result) {
 		if (err) {
@@ -62,7 +71,8 @@ router.get('/hosts', function (req, res, next) {
 				title: 'Limitless Garden - Hosts', 
 				dataTable: false, 
 				hostsTable: true, 
-				data: result
+				data: result,
+				user: req.user
 			});
 		}
 	});

@@ -1,7 +1,7 @@
 var logger = require('../util/logger');
 var db = require('../util/db');
 var env = process.env.ENVIRONMENT || 'dev';
-var colname = env + '.user';
+var colname = 'sys.' + env + '.user';
 
 var user = function() { 
 
@@ -10,8 +10,29 @@ var user = function() {
 	};
 
 var findOrCreate = function(obj, callback) {
-      logger.warn('TODO: user.findOrCreate not implemented');
-      callback({status: 'not implemented'}, null);
+	logger.info('findOrCreate obj: ' + JSON.stringify(obj));
+	db.collection(colname).findOne({ "googleId": obj.googleId}, function(err, result) {
+		if (err) {
+			logger.error('find user err: ' + err);
+			callback(err, null);
+		}
+		if (result) {
+			// found
+			logger.info('found user result: ' + JSON.stringify(result));
+			callback(null, result);
+		} else {
+			// not found - create new
+			db.collection(colname).insert(obj, function(err, result) {
+				if (err) {
+					logger.error('create user err: ' + err);
+					callback(err, null);
+				}			
+				// created
+				logger.info('create user result: ' + JSON.stringify(result));
+				callback(null, result.ops[0]);
+			});
+		}
+	})
 }
 	return {
 		get: get,

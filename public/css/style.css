@@ -15,3 +15,13 @@ body {
 .lgstyle-brand { 
 	padding-top: 0px;
 }
+
+.lgerror {
+  color: red;
+  text-align: center;
+}
+
+.lgerror-trace {
+  color: #000;
+  text-align: left;
+}
