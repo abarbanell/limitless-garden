@@ -11,7 +11,9 @@ var user = function() {
 
 var findOrCreate = function(obj, callback) {
 	logger.info('findOrCreate obj: ' + JSON.stringify(obj));
-	db.collection(colname).findOne({ "googleId": obj.googleId}, function(err, result) {
+	var userObj = { "googleId": obj.profile.id, "displayName": obj.profile.displayName,
+		"name": obj.profile.name };
+	db.collection(colname).findOne( { "googleId": userObj.googleId }, function(err, result) {
 		if (err) {
 			logger.error('find user err: ' + err);
 			callback(err, null);
@@ -22,7 +24,7 @@ var findOrCreate = function(obj, callback) {
 			callback(null, result);
 		} else {
 			// not found - create new
-			db.collection(colname).insert(obj, function(err, result) {
+			db.collection(colname).insert(userObj, function(err, result) {
 				if (err) {
 					logger.error('create user err: ' + err);
 					callback(err, null);

@@ -39,7 +39,7 @@ passport.use(new GoogleStrategy({
   callbackURL: process.env.GOOGLE_RETURN_URL_HOST + '/auth/google/callback'
 },
   function (accessToken, refreshToken, profile, done) {
-    user.findOrCreate({ googleId: profile.id }, function (err, user) {
+    user.findOrCreate({ profile: profile }, function (err, user) {
       return done(err, user);
     });
   }
