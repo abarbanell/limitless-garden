@@ -4,10 +4,41 @@
 - create digital ocean server (1GB RAM for 10$/month should do) 
 - set up your own sudo user so that you do not need to use the root account
 - put public ssh keys into your $HOME/.ssh/authorized_keys file
+- optional: install [new relic server](http://www.newrelic.com)
 - create a mongo backing store with 
 
 ```
 $ dokku mongo:create <instance_name> 
 ```
+
+- create an app and link mongo service
+
+```
+$ dokku app:create lg
+$ dokku mongo:link mongo lg
+```
+
+- we need to set some environment variables in the app like so: 
+
+```
+$ dokku config:set lg GOOGE_CLIENT_ID=<your-google-clientid>
+$ dokku config:set lg GOOGLE_CLIENT_SECRET=<your-google-client-secret>
+$ dokku config:set lg GOOGLE_RETURN_URL_HOST=<your google return host url>
+$ dokku config:set lg LOGLEVEL=error
+$ dokku config:set lg PAPERTRAIL_API_TOKEN=<your-papertrail-api-token>
+$ dokku config:set lg NEW_RELIC_LICENSE_KEY=<your-new-relic-license-key>
+$ dokku config:set lg NEW_RELIC_LOG=stdout
+$ dokku config:set lg THREESCALE_PROVIDER_KEY=<your-3scale-apikey>
+```
+
+- now you have an app which can be deployed to. So you go on your development system and connect git to a remote push
+
+```
+$ git remote add dokku dokku@dokku.me:lg
+$ git push dokku master
+```
+
+- this will build the limitless-garden app and fail because of missing keys (threescale etc) 
+
 
 
