@@ -1,7 +1,23 @@
 ## HOWTO for dokku on digitalocean
 
 - create digitalocean account if you don't have one
-- create digital ocean server (1GB RAM for 10$/month should do) 
+- create digital ocean server  with dokku image (1GB RAM for 10$/month should do) 
+- point your DNS to the new server with two A records (one for your
+dokku server and one wildcard record for *.<your dokku server>. If
+you use BIND as your DNS server the zone file would look similar
+to this:
+
+```
+$ORIGIN example.tld
+$TTL 5m
+
+myserver         IN      A       127.0.0.1
+*.myserver       IN      A       127.0.0.1
+```
+
+- go with a browser to your dokku server and you should see the
+setup screen. Upload your ssh key and fill out the other fields and
+save.
 - set up your own sudo user so that you do not need to use the root account
 - put public ssh keys into your $HOME/.ssh/authorized_keys file
 - optional: install [new relic server](http://www.newrelic.com)
@@ -38,7 +54,7 @@ $ git remote add dokku dokku@dokku.me:lg
 $ git push dokku master
 ```
 
-- this will build the limitless-garden app and fail because of missing keys (threescale etc) 
+- this will build the limitless-garden app and fail because of some error
 
 
 
