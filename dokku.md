@@ -38,7 +38,8 @@ $ git remote add dokku dokku@dokku.me:lg
 $ git push dokku master
 ```
 
-- this will build the limitless-garden app and fail because of missing keys (threescale etc) 
+- you will need to set the DNS with a plainand a wildcard A record (see [here](https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-dokku-application)
+- change the hostname on the dokku setup screen and check virtual host naming
 
 
 
