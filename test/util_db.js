@@ -1,11 +1,11 @@
 // test util/db.js
-// also check some basic mongo / mongoskin fucntionality to make sure 
+// also check some basic mongo functionality to make sure 
 // we have connectivity
 
 var expect = require('expect.js');
-var rewire = require('rewire'); 
+var rewire = require('rewire');
 var mongo_url = process.env.TEST_MONGO_URL; 
-var mongo = rewire('mongoskin');
+var mongoClient = require('mongodb').MongoClient;
 var logger = require('../util/logger');
 
 describe('util/db tests', function() {
@@ -15,20 +15,31 @@ describe('util/db tests', function() {
 		done();
 	});
 
-  it('open DB from mongoskin directly?', function(done){		
-		var db = mongo.db(mongo_url);
-		check_db(db, done);
+  it('open DB from mongodb driver directly?', function(done){		
+		mongoClient.connect(mongo_url, function(err, db) {
+			expect(err).to.not.be.ok();
+			check_db(db, done);
+		});
 	});
 
- it('mongoskin has ObjectID?', function(done){		
-		var ObjectID = mongo.ObjectID;
-		expect(mongo.ObjectID).to.be.an('function');
+ it('mongo has ObjectID?', function(done){		
+		var ObjectID = require('mongodb').ObjectID;
+		var oid = new ObjectID('aabbaabbaabbaabbaabbaabb');
+		logger.info('o0 - typeof ObjectID = %s', typeof(ObjectID));
 		expect(ObjectID).to.be.an('function');
+		logger.info('o1: - typeof oid = %s', typeof(oid));
+		expect(oid).to.be.an('object');
+		logger.info('o2');
 		done();
 	});
 	
 	var check_db = function(db, done) {
+		expect(db).to.be.ok();
 		expect(db).to.be.an('object');
+		expect(db.close).to.be.an('function');
+		db.close();
+		done();
+/****
 		expect(db.bind).to.be.an('function');
 		db.bind('testcollection');
 		expect(db.testcollection).to.be.an('object');
@@ -39,20 +50,38 @@ describe('util/db tests', function() {
 			expect(items).to.be.an('array');
 			done();
 		});
+*****/
 	};
 
 	it('open DB via MONGOLAB_URI in util/db.js?', function(done) {
 		process.env.MONGOLAB_URI = mongo_url;
 		var db = rewire('../util/db');
-		check_db(db, done);
+		logger.info('m0 - typeof(db): %s', typeof(db));
+		expect(db).to.be.an('function');
+		logger.info('m1');
+		db(function(err,db1){
+			logger.info('m2');
+			expect(err).to.not.be.ok();
+			logger.info('m3');
+			check_db(db1, done);
+		});
 	});  
 	
-	it('db object has ObjectID function?', function(done) {
-		process.env.MONGOLAB_URI = mongo_url;
+	it('open DB via MONGO_URL in util/db.js?', function(done) {
+		if(process.env.MONGOLAB_URI) {
+			delete process.env.MONGOLAB_URI;
+		}
+		process.env.MONGO_URL = mongo_url;
 		var db = rewire('../util/db');
-		expect(db.ObjectID).to.be.an('function');
-		expect(db.ObjectID.createFromHexString).to.be.an('function');
-		done();
-	}); 
+		logger.info('m0 - typeof(db): %s', typeof(db));
+		expect(db).to.be.an('function');
+		logger.info('m1');
+		db(function(err,db1){
+			logger.info('m2');
+			expect(err).to.not.be.ok();
+			logger.info('m3');
+			check_db(db1, done);
+		});
+	});  
 
 });

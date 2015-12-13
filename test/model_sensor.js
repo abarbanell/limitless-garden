@@ -26,14 +26,17 @@ describe('Sensor Model ', function() {
 				"sensor": "soil",
 				"timestamp": "2015-09-29T19:28:12.435121"
 			}];
-		db.collection(colname).insert(objs, function(err, result) {
-			if (err) {
-				logger.error('insertrows Error: ' + err);
+		db(function(err,dbObj){
+			dbObj.collection(colname).insert(objs, function(err, result) {
+				if (err) {
+					logger.error('insertrows Error: ' + err);
+					done();
+				} 
+				logger.info('insertrows result: ' + JSON.stringify(result));
+				insertedIds = result.insertedIds;
+				dbObj.close();
 				done();
-			} 
-			logger.info('insertrows result: ' + JSON.stringify(result));
-			insertedIds = result.insertedIds;
-			done();
+			});
 		});
 	};
 	
@@ -42,12 +45,15 @@ describe('Sensor Model ', function() {
 	});	
 	
 	function droprows(done) {
-		db.collection(colname).remove({}, function(err, result) {
-			if (err) {
-				logger.error('droprows() error: '+ err);
-			}
-			logger.info('droprows() - removed data: ' + JSON.stringify(result));
-			done();
+		db(function(err,dbObj){
+			dbObj.collection(colname).remove({}, function(err, result) {
+				if (err) {
+					logger.error('droprows() error: '+ err);
+				}
+				logger.info('droprows() - removed data: ' + JSON.stringify(result));
+				dbObj.close();
+				done();
+			});
 		});
 	};
 	
@@ -59,8 +65,12 @@ describe('Sensor Model ', function() {
 
 	it('get a single value - notfound', function(done) {
 		sensor.get("notexistingid", function(err, result) { 
-			if (err) logger.info('err = ' + JSON.stringify(err));
-			expect(err).to.not.be.ok();
+			// not found would return both err= null and result = null (or empty object{} )
+			logger.info('get single - notfound - returns err=%s and result=%s', typeof(err), typeof(result));
+			if (err) {
+				logger.info('err = %s', JSON.stringify(err));
+			}
+			expect(err).to.not.be.ok(); 
 			expect(result).to.not.be.ok();
 		  done();
 		});
@@ -81,7 +91,7 @@ describe('Sensor Model ', function() {
 	});
 
 	it('should get an array of values', function(done) {
-		sensor.getMulti(insertedIds[0],insertedIds.length, function (err, result) {
+		sensor.getMulti({}, {}, function (err, result) {
 			logger.info('model_sensor test: getmulti callback reached');
 			if (err) {
 				logger.error('err = ' + JSON.stringify(err));
@@ -93,6 +103,20 @@ describe('Sensor Model ', function() {
 				expect(result.length).to.eql(insertedIds.length);
 				done();
 			}
+		});
+	});
+
+	it('should get distinct hosts', function(done) {
+		sensor.getUniqueHosts(function(err,result){
+			if (err) {
+				logger.err('sensor.js - error in distinctHosts()');
+				return callback(err, null);
+			};
+			expect(err).to.not.be.ok();
+			expect(result).to.be.ok();
+			expect(result).to.be.an('array');
+			expect(result.length).to.eql(1);
+			done();
 		});
 	});
 });

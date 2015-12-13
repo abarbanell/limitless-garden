@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var logger = require('../util/logger');
-var mongoskin = require('mongoskin');
 var env = process.env.ENVIRONMENT || 'dev';
 var db = require('../util/db');
 

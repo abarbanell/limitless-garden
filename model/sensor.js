@@ -5,40 +5,47 @@ var colname = env + '.sensor';
 
 var sensor = function() { 
 
-	var get = function(id, callback) {
-		db.collection(colname).findOne({"_id": id}, callback);
+	var findOne = function(id, callback) {
+		logger.info('sensor.js - called with id=%s for collection=%s', id, colname);
+		db(function(err, dbObj){
+			if (err) {
+				logger.error('sensor.js - could not open db: %s', err);
+				return callback(err, null);
+			}
+			logger.info('sensor.js - db opened');
+			var collection = dbObj.collection(colname);
+			collection.findOne({"_id": id}, {}, function(err,doc) {
+				dbObj.close();
+				logger.info('sensor.js - db closed');
+				return callback(err,doc);
+			});
+		});
 	};
 
-	var getMulti = function(base, count, callback) {
-		
-		var baseobj = {};
-		if (base) {
-			baseobj._id = { $gte: base };
-		}
-		db.collection(colname).find(baseobj, null, {
-			limit: count
-		}).toArray(callback);
-		//{ 
-		//	"_id": { $gte: base }
-		//}, null,  { 
-		//	limit: count, 
-		//	sort: { 
-		//		"_id": 1 
-		//	}
-		//}, function (err, resultCursor) {
-		//	logger.info('getMulti mongo query result: ' + JSON.stringify(resultCursor));
-		//	resultCursor.toArray(callback);
-		//});
+	var find = function(query, options, callback) {
+		logger.info('sensor.js - converting results toArray()');
+		db(function(err,dbObj){
+			var collection = dbObj.collection(colname);
+			collection.find(query, options).toArray(function(err,docs){
+				dbObj.close();
+				callback(err,docs);
+			});
+		});
 	};
 	
-	var getUniqueHosts = function(callback) {
-		db.collection(colname).distinct("host", callback);
+	var distinctHosts = function(callback) {
+		db(function(err,dbObj){
+			dbObj.collection(colname).distinct("host", function(err,result){
+				dbObj.close();
+				return callback(err,result);
+			});
+		});
 	};
 
 	return {
-		get: get,
-		getMulti: getMulti,
-		getUniqueHosts: getUniqueHosts
+		get: findOne,
+		getMulti: find,
+		getUniqueHosts: distinctHosts
 	}
 }();
 
