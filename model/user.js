@@ -6,7 +6,7 @@ var colname = 'sys.' + env + '.user';
 var user = function() { 
 
 	var get = function(id, callback) {
-		db(function(err,dbObjj){
+		db(function(err,dbObj){
 			dbObj.collection(colname).findOne({"_id": id}, {}, function(err,doc){
 				dbObj.close();
 				return callback(err,doc);
