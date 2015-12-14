@@ -13,8 +13,10 @@ router.get('/hello', function(req, res, next) {
 });
 
 router.param('collectionName', function(req, res, next, collectionName){
-  req.collection = db.collection(env + '.'+  collectionName)
-  return next()
+	db(function(err, dbObj) {
+		req.collection = dbObj.collection(env + '.'+  collectionName)
+		return next()
+	});
 });
 
 router.get('/', function(req, res, next) {
