@@ -1,4 +1,5 @@
 var expect = require('expect.js');
+var util = require('util');
 var user = require('../model/user.js');
 var logger = require('../util/logger');
 var db = require('../util/db');
@@ -54,7 +55,7 @@ describe('User Model ', function() {
 				if (err) {
 					logger.error('droprows() error: '+ err);
 				}
-				logger.info('droprows() - removed data: ' + JSON.stringify(result));
+				logger.info('droprows() - removed data: ' + util.inspect(result));
 				dbObj.close();
 				done();
 			});
@@ -70,7 +71,7 @@ describe('User Model ', function() {
 	it('get a single value - notfound', function(done) {
 		user.get("notexistingid", function(err, result) { 
 			// not found would return both err= null and result = null (or empty object{} )
-			logger.info('user.js - get single - notfound - returns err=%s and result=%s', typeof(err), typeof(result));
+			logger.info('user.js - get single - notfound - returns err=%s and result=%s', util.inspect(err), util.inspect(result));
 			if (err) {
 				logger.info('user.js - err = %s', JSON.stringify(err));
 			}
@@ -80,13 +81,13 @@ describe('User Model ', function() {
 		});
 	});
 	
-it.skip('get a single value - found', function (done) {
-	logger.info('model_user.js - insertedIds = %s', JSON.stringify(insertedIds));
-	user.get(insertedIds[0], function (err, result) {
-		if (err) {
-			logger.error('user.js - err = ' + JSON.stringify(err));
-			return done();
-		} 
+	it.skip('get a single value - found', function (done) {
+		logger.info('model_user.js - insertedIds = %s', JSON.stringify(insertedIds));
+		user.get(insertedIds[0], function (err, result) {
+			if (err) {
+				logger.error('user.js - err = ' + JSON.stringify(err));
+				return done();
+			} 
 			expect(err).to.not.be.ok();
 			logger.info('model_user.js - result = %s', typeof(result));
 			logger.info('model_user.js - result = %s', JSON.stringify(result));
