@@ -3,23 +3,16 @@ var user = require('../model/user.js');
 var logger = require('../util/logger');
 var db = require('../util/db');
 var env = process.env.ENVIRONMENT || 'dev';
-var colname = env + '.user';
+var colname = 'sys.' + env + '.user';
 
 var insertedIds = [];
 var objs = [{
-	"firstname": "john",
-	"name": "smith",
-	"displayName": "john smith",
-	"googleId": "dummy-google-id",
-	"timestamp": "2015-09-29T19:23:12.435121"
-}, {
-	"firstname": "john",
-	"name": "doe",
-	"displayName": "john doe",
-	"googleId": "dummy-google-id",
-	"timestamp": "2015-09-29T19:24:12.435121"
+		profile: { id: "dummyId123", displayName: "John Smith" },
+		"timestamp": "2015-09-29T19:23:12.435121"
+	}, {
+		profile: { id: "dummyId456", displayName: "John Doe" },
+		"timestamp": "2015-09-29T19:24:12.435121"
 	}];
-
 
 describe('User Model ', function() {
 	beforeEach(function(done) {
@@ -80,7 +73,7 @@ describe('User Model ', function() {
 		});
 	});
 	
-it.skip('get a single value - found', function (done) {
+it('get a single value - found', function (done) {
 	logger.info('model_user.js - insertedIds = %s', JSON.stringify(insertedIds));
 	user.get(insertedIds[0], function (err, result) {
 		if (err) {
@@ -98,12 +91,9 @@ it.skip('get a single value - found', function (done) {
 		});
 	});
 
-	it.skip('should findOrCreate an entry - new user', function(done) {
+	it('should findOrCreate an entry - new user', function(done) {
 		newObj = { 
-			"firstname": "jack",
-			"name": "douglas",
-			"displayName": "jack douglas",
-			"googleId": "dummy-google-id-jd",
+			profile: { id: "dummyId456", displayName: "Jack Douglas" },
 			"timestamp": "2015-09-29T19:25:12.435121"
 		};
 		user.findOrCreate(newObj, function (err, result) {
@@ -114,7 +104,7 @@ it.skip('get a single value - found', function (done) {
 				expect(err).to.not.be.ok();
 				expect(result).to.be.ok();
 				logger.info('findOrCreate result: ' + JSON.stringify(result));
-				expect(result.length).to.eql(insertedIds.length);
+				expect(result.googleId).to.eql(newObj.profile.id);
 				done();
 			}
 		});
@@ -130,7 +120,7 @@ it.skip('get a single value - found', function (done) {
 				expect(err).to.not.be.ok();
 				expect(result).to.be.ok();
 				logger.info('findOrCreate result: ' + JSON.stringify(result));
-				expect(result.length).to.eql(insertedIds.length);
+				expect(result._id).to.eql(insertedIds[1]);
 				done();
 			}
 		});

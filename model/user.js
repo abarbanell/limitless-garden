@@ -7,6 +7,7 @@ var user = function() {
 
 	var get = function(id, callback) {
 		db(function(err,dbObj){
+		logger.info('user.js - called with id=%s for collection=%s', id, colname);
 			dbObj.collection(colname).findOne({"_id": id}, {}, function(err,doc){
 				dbObj.close();
 				return callback(err,doc);
