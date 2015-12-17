@@ -7,7 +7,7 @@ var authenticated = require('../util/authenticated');
 /* GET home page. */
 router.get('/', function (req, res, next) {
 
-    sensor.getMulti(null, 10, function (err, result) {
+    sensor.getMulti({}, {limit: 10} , function (err, result) {
 		logger.info('sensor.getMulti returned: err=' + err);
 		if (err) {
 			logger.error(err);
