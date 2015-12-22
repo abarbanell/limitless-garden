@@ -7,10 +7,10 @@ var colname = 'sys.' + env + '.user';
 
 var insertedIds = [];
 var objs = [{
-		profile: { id: "dummyId123", displayName: "John Smith" },
+		googleId: "dummyId123", displayName: "J Smith", name: "John Smith",
 		"timestamp": "2015-09-29T19:23:12.435121"
 	}, {
-		profile: { id: "dummyId456", displayName: "John Doe" },
+		googleId: "dummyId456", displayName: "J Doe" , name: "John Doe",
 		"timestamp": "2015-09-29T19:24:12.435121"
 	}];
 
@@ -104,13 +104,13 @@ it('get a single value - found', function (done) {
 				expect(err).to.not.be.ok();
 				expect(result).to.be.ok();
 				logger.info('findOrCreate result: ' + JSON.stringify(result));
-				expect(result.googleId).to.eql(newObj.profile.id);
+				expect(result.googleId).to.eql(newObj.googleId);
 				done();
 			}
 		});
 	});
 
-	it.skip('should findOrCreate an entry - existing user', function(done) {
+	it('should findOrCreate an entry - existing user', function(done) {
 		newObj = objs[1];
 		user.findOrCreate(newObj, function (err, result) {
 			if (err) {
