@@ -64,7 +64,7 @@ $ sudo dokku plugin:install https://github.com/sseemayer/dokku-letsencrypt.git
 $ dokku letsencrypt myapp
 ```
 
-- now you have an app which can be deployed to. So you go on your development system and connect git to a remote push
+- now you have an app which can be deployed to. So you go on your development system and connect git to a remote:
 
 ```
 $ git remote add dokku dokku@dokku.me:lg
