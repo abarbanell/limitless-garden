@@ -53,7 +53,7 @@ $ dokku config:set lg NEW_RELIC_LOG=stdout
 $ dokku config:set lg THREESCALE_PROVIDER_KEY=<your-3scale-apikey>
 ```
 
-- for google auth we need SSL. We get a certificate with [letsencrypt](https://www.letsencrypt.org] via the dokku plugin 
+- for google auth we need SSL. We get a certificate with [letsencrypt](https://www.letsencrypt.org) via the dokku plugin 
 [sseemayer/dokku-letsencrypt](https://github.com/sseemayer/dokku-letsencrypt)
 described in more detail in this [blog post of the
 author](https://blog.semicolonsoftware.de/securing-dokku-with-lets-encrypt-tls-certificates/)
