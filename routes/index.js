@@ -20,8 +20,13 @@ router.get('/', function (req, res, next) {
 				logger.info('typeof(timestamp) = ' + typeof(obj.timestamp));
 				logger.info('typeof(timespamp) = ' + typeof(obj.timespamp));
 				if(obj.timestamp) {
-					var date = new Date(obj.timestamp);
-					rObj.date = date.toJSON();
+					if (typeof(obj.timestamp) == 'number') { // UNIX timestamp
+						var date = new Date(obj.timestamp * 1000)
+						rObj.date = date.toJSON();
+					} else { 
+						var date = new Date(obj.timestamp);
+						rObj.date = date.toJSON();
+					}
 				}
 				rObj.value = obj.soil;
 				// copy some fields

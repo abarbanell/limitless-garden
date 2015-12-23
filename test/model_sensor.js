@@ -15,16 +15,17 @@ describe('Sensor Model ', function() {
 	
 	function insertrows(done){
 		logger.info('insertrows: insert some data');
+		var today = new Date();
 		var objs = [{
 			"soil": 35,
 			"host": "rpi03",
 			"sensor": "soil",
-			"timestamp": "2015-09-29T19:23:12.435121"
+			"timestamp": Math.floor(Date.now() /1000)
 		}, {
 				"soil": 36,
-				"host": "rpi03",
+				"host": "rpi02",
 				"sensor": "soil",
-				"timestamp": "2015-09-29T19:28:12.435121"
+				"timestamp": today.toISOString()
 			}];
 		db(function(err,dbObj){
 			dbObj.collection(colname).insert(objs, function(err, result) {
@@ -115,7 +116,7 @@ describe('Sensor Model ', function() {
 			expect(err).to.not.be.ok();
 			expect(result).to.be.ok();
 			expect(result).to.be.an('array');
-			expect(result.length).to.eql(1);
+			expect(result.length).to.eql(2);
 			done();
 		});
 	});
