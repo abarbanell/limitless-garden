@@ -3,6 +3,7 @@
 // prerequisites
 var expect = require('expect.js');
 var superagent = require('superagent');
+var supertest = require('supertest');
 var status = require('http-status');
 var logger = require('../util/logger');
 
@@ -33,29 +34,22 @@ describe('API integration tests', function() {
 	});
 
 	it('GET testcollection missing user_key should return BAD_REQUEST', function(done) {
-		superagent.get('http://localhost:'+ port + '/api/collections/test').end(function(err, res) {
-			expect(err).to.be.ok();
-			expect(res).to.be.ok();
-			expect(res.status).to.be.ok();
-			expect(res.status).to.eql(status.BAD_REQUEST);
-			done();
-		});
+		supertest(server)
+		.get('/api/collections/test')
+		.expect(status.BAD_REQUEST, done);
 	});
 
 	it('GET testcollection with user_key should return OK', function(done) {
-		var url = 'http://localhost:'+ port + '/api/collections/test?user_key=' + user_key;
-		superagent.get(url).end(function(err, res) {
-			expect(err).to.not.be.ok();
-			expect(res).to.be.ok();
-			expect(res.status).to.be.ok();
-			expect(res.status).to.eql(status.OK);
-			done();
-		});
+		var url = '/api/collections/test?user_key=' + user_key;
+		supertest(server)
+		.get(url)
+		.expect(status.OK, done);
 	});
 
 	it('GET testcollection with user_key should return array', function(done) {
-		var url = 'http://localhost:'+ port + '/api/collections/test?user_key=' + user_key;
-		superagent.get(url).end(function(err, res) {
+		var url = '/api/collections/test?user_key=' + user_key;
+		supertest(server)
+		.get(url).end(function(err, res) {
 			expect(err).to.not.be.ok();
 			expect(res).to.be.ok();
 			expect(res.status).to.be.ok();
@@ -67,13 +61,10 @@ describe('API integration tests', function() {
 	});
 
 	it('DELETE testcollection should return NOT_FOUND', function(done) {
-		var url = 'http://localhost:' + port + '/api/collections/test?user_key=' + user_key;
-		superagent.delete(url, function(err, res) {
-			expect(err).to.be.ok();
-			expect(res).to.be.ok();
-			expect(res.status).to.eql(status.NOT_FOUND);
-			done();
-		});
+		var url = '/api/collections/test?user_key=' + user_key;
+		supertest(server)
+		.delete(url)
+		.expect(status.NOT_FOUND, done);
 	});
 
 });
