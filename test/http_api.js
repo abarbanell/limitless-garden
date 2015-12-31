@@ -4,6 +4,7 @@
 var expect = require('expect.js');
 var supertest = require('supertest');
 var status = require('http-status');
+var util = require('util');
 var logger = require('../util/logger');
 
 // environment
@@ -67,10 +68,38 @@ describe('API integration tests', function() {
 	});
 
 	it('DELETE testcollection/not-existing-id should return NOT_FOUND', function(done) {
-		var url = '/api/collections/test/no-id?user_key=' + user_key;
+		var url = '/api/collections/test/aabbaabbaabbccddccddccdd?user_key=' + user_key;
 		supertest(server)
 		.delete(url)
 		.expect(status.NOT_FOUND, done);
+	});
+
+	it('DELETE testcollection/malformed-id should return BAD_REQUEST', function(done) {
+		var url = '/api/collections/test/this-is-not-hex?user_key=' + user_key;
+		supertest(server)
+		.delete(url)
+		.expect(status.BAD_REQUEST, done);
+	});
+
+	it('POST testcollection should return OK and insertedId', function(done) {
+		var url = '/api/collections/test?user_key=' + user_key;
+		supertest(server)
+		.post(url)
+		.send({field: "content"})
+		.expect(status.OK)
+		.end(function(err, res) {
+			expect(err).to.not.be.ok();
+			expect(res).to.be.ok();
+			expect(res.body).to.be.an('object');
+			logger.info('insert result=%s', util.inspect(res.body));
+			expect(res.body.insertedIds).to.be.an('array');
+			expect(res.body.insertedIds.length).to.eql(1);
+			var id = res.body.insertedIds[0];
+			var deleteUrl = '/api/collections/test/' + id + '?user_key='+ user_key;
+			supertest(server)
+			.delete(deleteUrl)
+			.expect(status.OK, done);
+		});
 	});
 
 });

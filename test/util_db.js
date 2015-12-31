@@ -32,7 +32,17 @@ describe('util/db tests', function() {
 		logger.info('o2');
 		done();
 	});
-	
+
+ it('mongo has ObjectID.isValid()?', function(done){		
+		var ObjectID = require('mongodb').ObjectID;
+		expect(ObjectID.isValid).to.be.an('function');		
+		expect(ObjectID.isValid('aabbaabbaabbaabbaabbaabb')).to.be.ok();
+		expect(ObjectID.isValid(17)).to.be.ok();
+		expect(ObjectID.isValid('aabbaabbaabbaabbaabb')).to.not.be.ok();
+		expect(ObjectID.isValid('not-a-hex-string')).to.not.be.ok();
+		done();
+	});
+
 	var check_db = function(db, done) {
 		expect(db).to.be.ok();
 		expect(db).to.be.an('object');
