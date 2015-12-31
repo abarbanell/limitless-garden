@@ -39,6 +39,24 @@ describe('API integration tests', function() {
 		.expect(status.BAD_REQUEST, done);
 	});
 
+	it('POST testcollection missing user_key should return BAD_REQUEST', function(done) {
+		supertest(server)
+		.post('/api/collections/test')
+		.expect(status.BAD_REQUEST, done);
+	});
+
+	it('PUT testcollection missing user_key should return BAD_REQUEST', function(done) {
+		supertest(server)
+		.put('/api/collections/test')
+		.expect(status.BAD_REQUEST, done);
+	});
+
+	it('DELETE testcollection missing user_key should return BAD_REQUEST', function(done) {
+		supertest(server)
+		.get('/api/collections/test')
+		.expect(status.BAD_REQUEST, done);
+	});
+
 	it('GET testcollection with user_key should return OK', function(done) {
 		var url = '/api/collections/test?user_key=' + user_key;
 		supertest(server)
@@ -57,6 +75,41 @@ describe('API integration tests', function() {
 			expect(res.body).to.be.an('array');
 			logger.info('body has %s items', res.body.length);
 			done();
+		});
+	});
+
+	it('GET testcollection/not-existing-id with user_key should return NOT_FOUND', function(done) {
+		var url = '/api/collections/test/aabbaabbaabbccddccddccdd?user_key=' + user_key;
+		supertest(server)
+		.get(url)
+		.expect(status.NOT_FOUND, done);
+	});
+
+	it('GET testcollection/malformed-id with user_key should return OK', function(done) {
+		var url = '/api/collections/test/this-is-not-hex?user_key=' + user_key;
+		supertest(server)
+		.get(url)
+		.expect(status.BAD_REQUEST, done);
+	});
+
+	it('POST testcollection with GET', function(done) {
+		var url = '/api/collections/test?user_key=' + user_key;
+		supertest(server)
+		.post(url)
+		.send({field: "content"})
+		.expect(status.OK)
+		.end(function(err, res) {
+			expect(err).to.not.be.ok();
+			expect(res).to.be.ok();
+			expect(res.body).to.be.an('object');
+			logger.info('insert result=%s', util.inspect(res.body));
+			expect(res.body.insertedIds).to.be.an('array');
+			expect(res.body.insertedIds.length).to.eql(1);
+			var id = res.body.insertedIds[0];
+			var getUrl = '/api/collections/test/' + id + '?user_key='+ user_key;
+			supertest(server)
+			.get(getUrl)
+			.expect(status.OK, done);
 		});
 	});
 
@@ -81,7 +134,7 @@ describe('API integration tests', function() {
 		.expect(status.BAD_REQUEST, done);
 	});
 
-	it('POST testcollection should return OK and insertedId', function(done) {
+	it('POST testcollection with DELETE', function(done) {
 		var url = '/api/collections/test?user_key=' + user_key;
 		supertest(server)
 		.post(url)
@@ -102,5 +155,25 @@ describe('API integration tests', function() {
 		});
 	});
 
+	it('POST testcollection with POST again to same id', function(done) {
+		var url = '/api/collections/test?user_key=' + user_key;
+		supertest(server)
+		.post(url)
+		.send({field: "content"})
+		.expect(status.OK)
+		.end(function(err, res) {
+			expect(err).to.not.be.ok();
+			expect(res).to.be.ok();
+			expect(res.body).to.be.an('object');
+			logger.info('insert result=%s', util.inspect(res.body));
+			expect(res.body.insertedIds).to.be.an('array');
+			expect(res.body.insertedIds.length).to.eql(1);
+			var id = res.body.insertedIds[0];
+			var postUrl = '/api/collections/test/' + id + '?user_key='+ user_key;
+			supertest(server)
+			.post(postUrl)
+			.expect(status.NOT_FOUND, done);
+		});
+	});
 });
 

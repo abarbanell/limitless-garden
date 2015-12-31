@@ -43,9 +43,17 @@ router.post('/collections/:collectionName', function(req, res, next) {
 })
 
 router.get('/collections/:collectionName/:id', function(req, res, next) {
-  req.collection.findById(req.params.id, function(e, result){
+	if (!ObjectID.isValid(req.params.id)) {
+		return res.sendStatus(status.BAD_REQUEST);
+	}
+	var oid = ObjectID.createFromHexString(req.params.id);
+  req.collection.findOne( { _id: oid } ,{}, function(e, results){
     if (e) return next(e)
-    res.send(result)
+		if (results) {
+			return res.send(results)
+		} else { 
+			return res.sendStatus(status.NOT_FOUND);
+		}
   })
 })
 
