@@ -2,7 +2,6 @@
 
 // prerequisites
 var expect = require('expect.js');
-var superagent = require('superagent');
 var supertest = require('supertest');
 var status = require('http-status');
 var logger = require('../util/logger');
@@ -62,6 +61,13 @@ describe('API integration tests', function() {
 
 	it('DELETE testcollection should return NOT_FOUND', function(done) {
 		var url = '/api/collections/test?user_key=' + user_key;
+		supertest(server)
+		.delete(url)
+		.expect(status.NOT_FOUND, done);
+	});
+
+	it('DELETE testcollection/not-existing-id should return NOT_FOUND', function(done) {
+		var url = '/api/collections/test/no-id?user_key=' + user_key;
 		supertest(server)
 		.delete(url)
 		.expect(status.NOT_FOUND, done);
