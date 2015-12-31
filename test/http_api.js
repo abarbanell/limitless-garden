@@ -92,6 +92,18 @@ describe('API integration tests', function() {
 		.expect(status.BAD_REQUEST, done);
 	});
 
+	it('GET / with user_key should return array of collections ', function(done) {
+		var url = '/api/collections?user_key=' + user_key;
+		supertest(server)
+		.get(url)
+		.expect(status.OK)
+		.end(function(err, res) {
+			expect(err).to.not.be.ok();
+			expect(res.body).to.be.an('array');
+			done();
+		});
+	});
+
 	it('POST testcollection with GET', function(done) {
 		var url = '/api/collections/test?user_key=' + user_key;
 		supertest(server)

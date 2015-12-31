@@ -26,6 +26,20 @@ router.get('/', function(req, res, next) {
   res.json({ msg: 'please select a collection, e.g., /collections/messages'});
 });
 
+router.get('/collections', function(req, res, next) {
+	// return array of valid collection names 
+	db(function(err, dbObj) {
+		dbObj.collections().then(function(collections) {
+			var names = collections.map(function(item) {
+				return item.s.name;
+			});
+			logger.info('collections: %s ', util.inspect(collections));
+			logger.info('names: %s ', util.inspect(names));
+			res.send(names);
+		});
+  })
+})
+
 router.get('/collections/:collectionName', function(req, res, next) {
   req.collection.find({} ,{limit: 10, sort: {'_id': -1}}).toArray(function(e, results){
     if (e) return next(e)

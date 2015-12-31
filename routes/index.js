@@ -5,7 +5,7 @@ var logger = require('../util/logger');
 var authenticated = require('../util/authenticated');
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/sensor', authenticated, function (req, res, next) {
 
     sensor.getMulti({}, {limit: 10} , function (err, result) {
 		logger.info('sensor.getMulti returned: err=' + err);
@@ -63,8 +63,8 @@ router.get('/about',  function (req, res, next) {
 			});
 });
 
-/* GET hosts page. */
-router.get('/hosts', authenticated, function (req, res, next) {
+/* GET home page. */
+router.get('/', authenticated, function (req, res, next) {
 
     sensor.getUniqueHosts(function (err, result) {
 		if (err) {
