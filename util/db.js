@@ -3,6 +3,7 @@ var mongoClient = require('mongodb').MongoClient;
 var logger = require('./logger');
 var util = require('util');
 var mongourl = process.env.MONGOLAB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/lg';
+var env = process.env.ENVIRONMENT || 'dev';
 
 var connect = function(callback) {
 	mongoClient.connect(mongourl, function(err, db) {
@@ -19,9 +20,15 @@ var connect = function(callback) {
 var collections = function(callback) {
 	connect(function(err, dbObj) {
 		dbObj.collections(function(err, coll) {
-			var names = coll.map(function(item) {
-				return item.s.name;
+			var names = coll
+			.filter(function(value) {
+				return value.s.name.startsWith(env);
+			})
+			.map(function(item) {
+				var n = item.s.name.substring(env.length + 1);
+				return n;
 			});
+			
 			logger.info('collections: %s ', util.inspect(coll));
 			logger.info('names: %s ', util.inspect(names));
 			callback(null, names);
