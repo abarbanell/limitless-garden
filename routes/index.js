@@ -45,9 +45,12 @@ var sensorRoute = function (req, res, next) {
 	});
 };
 
-/* GET home page. */
+/* GET sensor page. */
 router.get('/sensor', authenticated, sensorRoute);
+
+/* temprarily park some routes which will be filled later */ 
 router.get('/sensor/:host', authenticated, sensorRoute);
+router.get('/:host', authenticated, sensorRoute);
 
 /* GET login page. */
 router.get('/login', function (req, res, next) {
