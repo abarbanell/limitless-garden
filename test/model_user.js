@@ -23,7 +23,7 @@ describe('User Model ', function() {
 	
 	function insertrows(done){
 		logger.info('insertrows: insert some data');
-		db(function(err,dbObj){
+		db.connect(function(err,dbObj){
 			dbObj.collection(colname).insert(objs, function(err, result) {
 				if (err) {
 					logger.error('insertrows Error: ' + err);
@@ -42,7 +42,7 @@ describe('User Model ', function() {
 	});	
 	
 	function droprows(done) {
-		db(function(err,dbObj){
+		db.connect(function(err,dbObj){
 			dbObj.collection(colname).remove({}, function(err, result) {
 				if (err) {
 					logger.error('droprows() error: '+ err);

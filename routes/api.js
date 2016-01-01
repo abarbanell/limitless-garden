@@ -16,7 +16,7 @@ router.get('/hello', function(req, res, next) {
 });
 
 router.param('collectionName', function(req, res, next, collectionName){
-	db(function(err, dbObj) {
+	db.connect(function(err, dbObj) {
 		req.collection = dbObj.collection(env + '.'+  collectionName)
 		return next()
 	});
@@ -28,7 +28,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/collections', function(req, res, next) {
 	// return array of valid collection names 
-	db(function(err, dbObj) {
+	db.connect(function(err, dbObj) {
 		dbObj.collections().then(function(collections) {
 			var names = collections.map(function(item) {
 				return item.s.name;
@@ -83,7 +83,7 @@ router.delete('/collections/:collectionName/:id', function(req, res, next) {
 		return res.sendStatus(status.BAD_REQUEST);
 	}
 	var oid = ObjectID.createFromHexString(req.params.id);
-	db(function(err, dbObj) {
+	db.connect(function(err, dbObj) {
 		req.collection.deleteOne({_id: oid}, function(e, r) {
 			if (e) return next(e);
 			if (r.deletedCount === 0) { 

@@ -49,27 +49,14 @@ describe('util/db tests', function() {
 		expect(db.close).to.be.an('function');
 		db.close();
 		done();
-/****
-		expect(db.bind).to.be.an('function');
-		db.bind('testcollection');
-		expect(db.testcollection).to.be.an('object');
-		expect(db.testcollection.find).to.be.an('function');
-		db.testcollection.find().toArray(function(err, items) {
-			if (err) console.log('err: ' + err);
-			expect(err).to.not.be.ok();
-			expect(items).to.be.an('array');
-			done();
-		});
-*****/
 	};
 
 	it('open DB via MONGOLAB_URI in util/db.js?', function(done) {
 		process.env.MONGOLAB_URI = mongo_url;
 		var db = rewire('../util/db');
-		logger.info('m0 - typeof(db): %s', typeof(db));
-		expect(db).to.be.an('function');
+		expect(db.connect).to.be.an('function');
 		logger.info('m1');
-		db(function(err,db1){
+		db.connect(function(err,db1){
 			logger.info('m2');
 			expect(err).to.not.be.ok();
 			logger.info('m3');
@@ -83,13 +70,9 @@ describe('util/db tests', function() {
 		}
 		process.env.MONGO_URL = mongo_url;
 		var db = rewire('../util/db');
-		logger.info('m0 - typeof(db): %s', typeof(db));
-		expect(db).to.be.an('function');
-		logger.info('m1');
-		db(function(err,db1){
-			logger.info('m2');
+		expect(db.connect).to.be.an('function');
+		db.connect(function(err,db1){
 			expect(err).to.not.be.ok();
-			logger.info('m3');
 			check_db(db1, done);
 		});
 	});  

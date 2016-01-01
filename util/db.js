@@ -3,7 +3,7 @@ var mongoClient = require('mongodb').MongoClient;
 var logger = require('./logger');
 var mongourl = process.env.MONGOLAB_URI || process.env.MONGO_URL || 'mongodb://localhost:27017/lg';
 
-module.exports = function(callback) {
+var connectFunction = function(callback) {
 	mongoClient.connect(mongourl, function(err, db) {
 		if (err) {
 			logger.error('db.js - connection to %s failed', mongourl);
@@ -14,5 +14,13 @@ module.exports = function(callback) {
 		}
 	});
 };
+
+var collectionsFunction = function(callback) {
+	logger.error('util/b.js: collcions() not implemented');
+}
 		
+module.exports = {	
+	connect: connectFunction,
+	collections: collectionsFunction
+};
 

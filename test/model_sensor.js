@@ -27,7 +27,7 @@ describe('Sensor Model ', function() {
 				"sensor": "soil",
 				"timestamp": today.toISOString()
 			}];
-		db(function(err,dbObj){
+		db.connect(function(err,dbObj){
 			dbObj.collection(colname).insert(objs, function(err, result) {
 				if (err) {
 					logger.error('insertrows Error: ' + err);
@@ -46,7 +46,7 @@ describe('Sensor Model ', function() {
 	});	
 	
 	function droprows(done) {
-		db(function(err,dbObj){
+		db.connect(function(err,dbObj){
 			dbObj.collection(colname).remove({}, function(err, result) {
 				if (err) {
 					logger.error('droprows() error: '+ err);

@@ -6,7 +6,7 @@ var colname = 'sys.' + env + '.user';
 var user = function() { 
 
 	var get = function(id, callback) {
-		db(function(err,dbObj){
+		db.connect(function(err,dbObj){
 		logger.info('user.js - called with id=%s for collection=%s', id, colname);
 			dbObj.collection(colname).findOne({"_id": id}, {}, function(err,doc){
 				dbObj.close();
@@ -18,7 +18,7 @@ var user = function() {
 var findOrCreate = function(obj, callback) {
 	logger.info('findOrCreate obj: ' + JSON.stringify(obj));
 	var userObj = obj;
-	db(function(err,dbObj) {
+	db.connect(function(err,dbObj) {
 		dbObj.collection(colname).findOne( { "id": userObj.profile.id }, {}, function(err, result) {
 			if (err) {
 				logger.error('find user err: ' + err);
