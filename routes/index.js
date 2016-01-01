@@ -4,9 +4,7 @@ var sensor = require('../model/sensor');
 var logger = require('../util/logger');
 var authenticated = require('../util/authenticated');
 
-/* GET home page. */
-router.get('/sensor', authenticated, function (req, res, next) {
-
+var sensorRoute = function (req, res, next) {
     sensor.getMulti({}, {limit: 10} , function (err, result) {
 		logger.info('sensor.getMulti returned: err=' + err);
 		if (err) {
@@ -45,7 +43,11 @@ router.get('/sensor', authenticated, function (req, res, next) {
 			});
 		};
 	});
-});
+};
+
+/* GET home page. */
+router.get('/sensor', authenticated, sensorRoute);
+router.get('/sensor/:host', authenticated, sensorRoute);
 
 /* GET login page. */
 router.get('/login', function (req, res, next) {
