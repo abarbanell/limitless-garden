@@ -28,15 +28,8 @@ router.get('/', function(req, res, next) {
 
 router.get('/collections', function(req, res, next) {
 	// return array of valid collection names 
-	db.connect(function(err, dbObj) {
-		dbObj.collections().then(function(collections) {
-			var names = collections.map(function(item) {
-				return item.s.name;
-			});
-			logger.info('collections: %s ', util.inspect(collections));
-			logger.info('names: %s ', util.inspect(names));
-			res.send(names);
-		});
+	db.collections(function(err, names) {
+		res.send(names);
   })
 })
 
