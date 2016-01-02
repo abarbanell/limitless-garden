@@ -64,6 +64,24 @@ describe('API integration tests', function() {
 		.expect(status.OK, done);
 	});
 
+	it('GET testcollection with user_key should return X-Total-Count header', function(done) {
+		var url = '/api/collections/test?user_key=' + user_key;
+		supertest(server)
+		.get(url).end(function(err, res) {
+			expect(err).to.not.be.ok();
+			expect(res).to.be.ok();
+			expect(res.headers).to.be.ok();
+			logger.info('res.headers = %s ', util.inspect(res.headers));
+			expect(res.headers['x-total-count']).to.be.ok();
+			logger.info('x-total-count = %s', res.headers['x-total-count']);
+			expect(res.status).to.be.ok();
+			expect(res.status).to.eql(status.OK);
+			expect(res.body).to.be.an('array');
+			logger.info('body has %s items', res.body.length);
+			done();
+		});
+	});
+
 	it('GET testcollection with user_key should return array', function(done) {
 		var url = '/api/collections/test?user_key=' + user_key;
 		supertest(server)
