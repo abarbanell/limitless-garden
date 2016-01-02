@@ -3,6 +3,7 @@ var router = express.Router();
 var db = require('../util/db');
 var sensor = require('../model/sensor');
 var logger = require('../util/logger');
+var util = require('util');
 var authenticated = require('../util/authenticated');
 
 var sensorRoute = function (req, res, next) {
@@ -64,17 +65,28 @@ var collectionsListRoute = function (req, res, next) {
 };
 
 var collectionsRoute = function (req, res, next) {
-	req.collection.find({}, { limit: 10 }, function(err, result) {
+	req.collection.count(function(err, count) {
 		if (err) {
-			logger.error('error in collectionRoute(); %s', util.inspect(err));
+			logger.error('error in collectionRoute() - count; %s', util.inspect(err));
 			res.status(500).render(error, { err: err});
 		} else {
-			result.toArray(function(err, arr) {
-				res.render('index', { 
-					title: 'Limitless Garden - Collection: ' + req.params.id, 
-					data: arr,
-					user: req.user
-				});
+			req.collection.find({}, { limit: 10 }, function(err, result) {
+				if (err) {
+					logger.error('error in collectionRoute(); %s', util.inspect(err));
+					res.status(500).render(error, { err: err});
+				} else {
+					result.toArray(function(err, arr) {
+						var mapped = arr.map(function(obj) {
+							return util.inspect(obj);
+						});
+						res.render('index', { 
+							title: 'Limitless Garden - Collection: ' + req.params.colectionName, 
+							data: mapped,
+							count: count,
+							user: req.user
+						});
+					});
+				}
 			});
 		}
 	});
