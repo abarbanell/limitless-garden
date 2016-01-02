@@ -77,4 +77,14 @@ describe('util/db tests', function() {
 		});
 	});  
 
+	it('count is a function returning a number', function(done) {
+		var db = rewire('../util/db');
+		expect(db.count).to.be.an('function');
+		db.count('test', function(err, result) {
+			expect(err).to.not.be.ok();
+			expect(result).to.be.an('number');
+			done();
+		});
+	});
+
 });

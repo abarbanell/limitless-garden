@@ -35,9 +35,17 @@ var collections = function(callback) {
 		});
   })
 }
+
+var count = function(name, callback) {
+	connect(function(err,db) { 
+		if (err) return callback(err, null);	
+		return callback(null, 0);
+	});
+}
 		
 module.exports = {	
 	connect: connect,
-	collections: collections
+	collections: collections,
+	count: count
 };
 

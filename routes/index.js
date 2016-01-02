@@ -47,6 +47,22 @@ var sensorRoute = function (req, res, next) {
 	});
 };
 
+var collectionsListRoute = function (req, res, next) {
+	db.collections(function(err, names) {
+		if (err) {
+			logger.error(err);
+			res.status(500).render(error, { err: err});
+		} else {
+			res.render('index', { 
+				title: 'Limitless Garden - Collections list', 
+				data: names,
+				user: req.user,
+				count: names.length
+			});
+		}
+	});
+};
+
 var collectionsRoute = function (req, res, next) {
 	db.collections(function(err, names) {
 		if (err) {
@@ -54,10 +70,7 @@ var collectionsRoute = function (req, res, next) {
 			res.status(500).render(error, { err: err});
 		} else {
 			res.render('index', { 
-				title: 'Limitless Garden - Collections', 
-				dataTable: false, 
-				hostsTable: false, 
-				collectionsTable: true,
+				title: 'Limitless Garden - Collection: ' + req.params.id, 
 				data: names,
 				user: req.user
 			});
@@ -86,7 +99,7 @@ var hostsRoute = function (req, res, next) {
 
 
 /* GET home page. */
-router.get('/', authenticated, collectionsRoute);
+router.get('/', authenticated, collectionsListRoute);
 router.get('/collections/:id', collectionsRoute);
 
 /* GET sensor page. */
