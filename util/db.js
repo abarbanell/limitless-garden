@@ -22,7 +22,7 @@ var collections = function(callback) {
 		dbObj.collections(function(err, coll) {
 			var names = coll
 			.filter(function(value) {
-				return value.s.name.startsWith(env);
+				return (value.s.name.startsWith(env) && (value.s.name.length > env.length));;
 			})
 			.map(function(item) {
 				var n = item.s.name.substring(env.length + 1);

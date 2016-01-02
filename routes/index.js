@@ -102,7 +102,7 @@ var hostsRoute = function (req, res, next) {
 
 router.param('collectionName', function(req, res, next, collectionName){
 	db.connect(function(err, dbObj) {
-		req.collection = dbObj.collection(env + '.'+  collectionName)
+		req.collection = dbObj.collection(db.collectionName(collectionName));
 		return next()
 	});
 });
