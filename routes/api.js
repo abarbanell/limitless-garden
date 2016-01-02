@@ -3,7 +3,6 @@ var router = express.Router();
 var logger = require('../util/logger');
 var util = require('util');
 var status = require('http-status');
-var env = process.env.ENVIRONMENT || 'dev';
 var db = require('../util/db');
 var ObjectID = require('mongodb').ObjectID;
 
@@ -17,7 +16,7 @@ router.get('/hello', function(req, res, next) {
 
 router.param('collectionName', function(req, res, next, collectionName){
 	db.connect(function(err, dbObj) {
-		req.collection = dbObj.collection(env + '.'+  collectionName)
+		req.collection = dbObj.collection(db.collectionName(collectionName));
 		return next()
 	});
 });

@@ -7,6 +7,7 @@ var rewire = require('rewire');
 var mongo_url = process.env.TEST_MONGO_URL; 
 var mongoClient = require('mongodb').MongoClient;
 var logger = require('../util/logger');
+var util = require('util');
 
 describe('util/db tests', function() {
 	
@@ -77,6 +78,28 @@ describe('util/db tests', function() {
 		});
 	});  
 
+	it('insert into DB via MONGO_URL in util/db.js?', function(done) {
+		if(process.env.MONGOLAB_URI) {
+			delete process.env.MONGOLAB_URI;
+		}
+		process.env.MONGO_URL = mongo_url;
+		var db = rewire('../util/db');
+		expect(db.connect).to.be.an('function');
+		db.connect(function(err,db1){
+			expect(err).to.not.be.ok();
+			var col = db1.collection('test');
+			col.insert({"data": "unit test" }, function(err,r) {
+				expect(err).to.not.be.ok();
+				expect(r).to.be.an('object');
+				expect(r.result).to.be.an('object');
+				logger.info('r.result: %s', util.inspect(r.result));
+				expect(r.result.ok).to.eql(1);
+				expect(r.result.n).to.eql(1);
+				check_db(db1, done);
+			})
+		});
+	});  
+
 	it('count is a function returning a number', function(done) {
 		var db = rewire('../util/db');
 		expect(db.count).to.be.an('function');
@@ -86,5 +109,25 @@ describe('util/db tests', function() {
 			done();
 		});
 	});
+
+	it('collectionName is a function returning a string', function(done) {
+		var db = rewire('../util/db');
+		expect(db.collectionName).to.be.an('function');
+		expect(db.collectionName('test')).to.be.an('string');
+		done();
+	});
+
+	it('collectionName starts with environemnt', function(done) {
+		var env = process.env.ENVIRONMENT;
+		process.env.ENVIRONMENT='mocha';
+		var db = rewire('../util/db');
+		expect(db.collectionName).to.be.an('function');
+		var s = db.collectionName('test');
+		expect(s).to.be.an('string');
+		expect(s.startsWith(process.env.ENVIRONMENT)).to.eql(true);
+		process.env.ENVIRONMENT = env;
+		done();
+	});
+	
 
 });

@@ -64,15 +64,17 @@ var collectionsListRoute = function (req, res, next) {
 };
 
 var collectionsRoute = function (req, res, next) {
-	db.collections(function(err, names) {
+	req.collection.find({}, { limit: 10 }, function(err, result) {
 		if (err) {
-			logger.error(err);
+			logger.error('error in collectionRoute(); %s', util.inspect(err));
 			res.status(500).render(error, { err: err});
 		} else {
-			res.render('index', { 
-				title: 'Limitless Garden - Collection: ' + req.params.id, 
-				data: names,
-				user: req.user
+			result.toArray(function(err, arr) {
+				res.render('index', { 
+					title: 'Limitless Garden - Collection: ' + req.params.id, 
+					data: arr,
+					user: req.user
+				});
 			});
 		}
 	});
@@ -98,9 +100,16 @@ var hostsRoute = function (req, res, next) {
 };
 
 
+router.param('collectionName', function(req, res, next, collectionName){
+	db.connect(function(err, dbObj) {
+		req.collection = dbObj.collection(env + '.'+  collectionName)
+		return next()
+	});
+});
+
 /* GET home page. */
 router.get('/', authenticated, collectionsListRoute);
-router.get('/collections/:id', collectionsRoute);
+router.get('/collections/:collectionName', collectionsRoute);
 
 /* GET sensor page. */
 router.get('/sensor', authenticated, sensorRoute);

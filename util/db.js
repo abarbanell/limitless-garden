@@ -42,10 +42,15 @@ var count = function(name, callback) {
 		return callback(null, 0);
 	});
 }
+
+var collectionName = function(n) {
+		return env + '.'+ n;
+}
 		
 module.exports = {	
 	connect: connect,
 	collections: collections,
-	count: count
+	count: count,
+	collectionName: collectionName
 };
 
