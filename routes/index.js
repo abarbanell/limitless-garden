@@ -79,7 +79,7 @@ var collectionsRoute = function (req, res, next) {
 						var mapped = arr.map(function(obj) {
 							return util.inspect(obj);
 						});
-						res.render('index', { 
+						res.render('collection', { 
 							title: 'Limitless Garden - Collection: ' + req.params.colectionName, 
 							data: mapped,
 							count: count,
