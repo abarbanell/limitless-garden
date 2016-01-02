@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var db = require('../util/db');
 var sensor = require('../model/sensor');
 var logger = require('../util/logger');
 var authenticated = require('../util/authenticated');
@@ -34,16 +35,59 @@ var sensorRoute = function (req, res, next) {
 				return rObj;
 			});
 			logger.info('mapped = ' + JSON.stringify(mapped));
-			res.render('index', { 
+			res.render('sensor', { 
 				title: 'Limitless Garden', 
 				dataTable: true, 
 				hostsTable: false, 
+				collectionsTable: false,
 				data: mapped, 
 				user: req.user 
 			});
 		};
 	});
 };
+
+var collectionsRoute = function (req, res, next) {
+	db.collections(function(err, names) {
+		if (err) {
+			logger.error(err);
+			res.status(500).render(error, { err: err});
+		} else {
+			res.render('index', { 
+				title: 'Limitless Garden - Collections', 
+				dataTable: false, 
+				hostsTable: false, 
+				collectionsTable: true,
+				data: names,
+				user: req.user
+			});
+		}
+	});
+};
+
+var hostsRoute = function (req, res, next) {
+	sensor.getUniqueHosts(function (err, result) {
+		if (err) {
+			logger.error(err);
+			res.status(500).render(error, { err: err});
+		} else {
+			logger.info('result = ' + JSON.stringify(result));	
+			res.render('sensor', { 
+				title: 'Limitless Garden - Hosts', 
+				dataTable: false, 
+				hostsTable: true, 
+				collectionsTable: false,
+				data: result,
+				user: req.user
+			});
+		}
+	});
+};
+
+
+/* GET home page. */
+router.get('/', authenticated, collectionsRoute);
+router.get('/collections/:id', collectionsRoute);
 
 /* GET sensor page. */
 router.get('/sensor', authenticated, sensorRoute);
@@ -66,26 +110,6 @@ router.get('/about',  function (req, res, next) {
 				 title: 'Limitless Garden',
 				 user: req.user
 			});
-});
-
-/* GET home page. */
-router.get('/', authenticated, function (req, res, next) {
-
-    sensor.getUniqueHosts(function (err, result) {
-		if (err) {
-			logger.error(err);
-			res.status(500).render(error, { err: err});
-		} else {
-			logger.info('result = ' + JSON.stringify(result));	
-			res.render('index', { 
-				title: 'Limitless Garden - Hosts', 
-				dataTable: false, 
-				hostsTable: true, 
-				data: result,
-				user: req.user
-			});
-		}
-	});
 });
 
 router.get('/logout', function(req, res){

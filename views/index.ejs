@@ -15,76 +15,39 @@
 				<p>Welcome to <%= title %></p>
       </div>
       
-      <% if(dataTable) { %>
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
 					<table class="table table-striped ">
 						<thead class="lgstyle-inverse">
-							<td>Date</td>
-							<td><a href="/hosts">Host</a></td>
-							<td>Sensor</td>
-							<td>Value</td>
+							<td>Collection</td>
 						</thead>
 
 					<% for(var i=0; i<data.length; i++) { %>
 						<tr>
-							<td><%= data[i].date %></td>
-							<td><%= data[i].host %></td>
-							<td><%= data[i].sensor %></td>
-							<td><%= data[i].value %></td>
+							<td>
+								<a href="/collections/<%= data[i] %>"> 
+									<%= data[i] %> 
+								</a>
+							</td>
 						</tr>
 					<% } %>
 
 					</table>
-				</div>
-			</div>	
-      <% } %>
       
-      <% if(hostsTable) { %>
-      	<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<table class="table table-striped ">
-						<thead class="lgstyle-inverse">
-							<td>Host</td>
-						</thead>
-
-					<% for(var i=0; i<data.length; i++) { %>
-						<tr>
-							<td><a href="sensor/<%= data[i] %>"> <%= data[i] %> </a></td>
-						</tr>
-					<% } %>
-
-					</table>
+					<!-- Adsense footer-responsive -->
+					<ins class="adsbygoogle"
+							 style="display:block"
+							 data-ad-client="ca-pub-7050521248314797"
+							 data-ad-slot="7800919864"
+							 data-ad-format="auto">
+					</ins>
 				</div>
-			</div>	
-      <% } %>
-      
       <div class="row">
-      <!-- footer-responsive -->
-	<ins class="adsbygoogle"
-			 style="display:block"
-			 data-ad-client="ca-pub-7050521248314797"
-			 data-ad-slot="7800919864"
-			 data-ad-format="auto">
-	</ins>
-  </div>
-  <div class="row">
-  	<footer>
-		<% include partials/footer %>
-	</footer>
   </div>
   
 
     </div><!-- /.container -->
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+		<% include partials/footer %>
   </body>
 </html>
