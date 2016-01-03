@@ -80,7 +80,7 @@ var collectionsRoute = function (req, res, next) {
 							return util.inspect(obj);
 						});
 						res.render('collection', { 
-							title: 'Limitless Garden - Collection: ' + req.params.colectionName, 
+							title: 'Limitless Garden - Collection: ' + req.params.collectionName, 
 							data: mapped,
 							count: count,
 							user: req.user
