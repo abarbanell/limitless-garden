@@ -121,7 +121,7 @@ router.param('collectionName', function(req, res, next, collectionName){
 
 /* GET home page. */
 router.get('/', authenticated, collectionsListRoute);
-router.get('/collections/:collectionName', collectionsRoute);
+router.get('/collections/:collectionName', authenticated, collectionsRoute);
 
 /* GET sensor page. */
 router.get('/sensor', authenticated, sensorRoute);
