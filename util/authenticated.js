@@ -1,4 +1,4 @@
-
+var status = require('http-status');
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
@@ -10,7 +10,19 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
+function ensureApiKey(req, res, next) {
+  if (req.query.user_key) { return next(); }
+  res.status(status.FORBIDDEN).send(status[status.FORBIDDEN]);
+}
 
-module.exports = ensureAuthenticated;
+function ensureCookieOrApikey(req, res, next) {
+  if (req.isAuthenticated() || req.query.user_key) { return next(); }
+  res.redirect('/login');
+}
+module.exports = {
+	cookie: ensureAuthenticated,
+	apikey: ensureApiKey,
+	cookieOrApikey: ensureCookieOrApikey
+}
 
 

@@ -120,15 +120,15 @@ router.param('collectionName', function(req, res, next, collectionName){
 });
 
 /* GET home page. */
-router.get('/', authenticated, collectionsListRoute);
-router.get('/collections/:collectionName', authenticated, collectionsRoute);
+router.get('/', authenticated.cookie, collectionsListRoute);
+router.get('/collections/:collectionName', authenticated.cookie, collectionsRoute);
 
 /* GET sensor page. */
-router.get('/sensor', authenticated, sensorRoute);
+router.get('/sensor', authenticated.cookie, sensorRoute);
 
 /* temprarily park some routes which will be filled later */ 
-router.get('/sensor/:host', authenticated, sensorRoute);
-router.get('/hosts', authenticated, sensorRoute);
+router.get('/sensor/:host', authenticated.cookie, sensorRoute);
+router.get('/hosts', authenticated.cookie, sensorRoute);
 
 /* GET login page. */
 router.get('/login', function (req, res, next) {
