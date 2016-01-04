@@ -38,7 +38,9 @@ router.get('/collections/:collectionName', function(req, res, next) {
 			logger.error('get error: %s', util.inspect(err));
 			return next(err);
 		}
-		req.collection.find({} ,{limit: 10, sort: {'_id': -1}}).toArray(function(e, results){
+		var limit = req.query.limit || 10;
+		var offset = req.query.offset || 0;
+		req.collection.find({} ,{limit: limit, offset: offset, sort: {'_id': -1}}).toArray(function(e, results){
 			if (e) return next(e)
 			res.set('X-Total-Count', count).send(results)
 		});
