@@ -30,7 +30,8 @@
     "winston": "^2.1.1"
   },
   "pre-commit": [
-    "jshint"
+    "jshint",
+		"test"
   ],
   "devDependencies": {
     "expect.js": "^0.3.1",
