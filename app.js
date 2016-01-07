@@ -20,12 +20,12 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 //   have a database of user records, the complete Google profile is
 //   serialized and deserialized.
 passport.serializeUser(function(user, done) {
-  logger.info("serialize user: " + JSON.stringify(user));
+  logger.info('serialize user: ' + JSON.stringify(user));
   done(null, user);
 });
 
 passport.deserializeUser(function(obj, done) {
-  logger.info("deserialize user: " + JSON.stringify(obj));
+  logger.info('deserialize user: ' + JSON.stringify(obj));
   done(null, obj);
 });
 
@@ -38,15 +38,14 @@ passport.use(new GoogleStrategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.GOOGLE_RETURN_URL_HOST + '/auth/google/callback'
 },
-  function (accessToken, refreshToken, profile, done) {
-		logger.info('callback from google: profile = %s', JSON.stringify(profile));
-    user.findOrCreate({ profile: profile }, function (err, user) {
+  function(accessToken, refreshToken, profile, done) {
+    logger.info('callback from google: profile = %s', JSON.stringify(profile));
+    user.findOrCreate({profile: profile}, function(err, user) {
       return done(err, user);
     });
   }
-  ));
-  
-  
+));
+
 var routes = require('./routes/index');
 var api = require('./routes/api');
 var auth = require('./routes/auth');
@@ -61,12 +60,16 @@ app.set('view engine', 'ejs');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(session({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(session({
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-  
+
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
 app.use(passport.initialize());
@@ -110,6 +113,5 @@ app.use(function(err, req, res, next) {
     user: req.user
   });
 });
-
 
 module.exports = app;
