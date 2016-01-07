@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+		"jshint": "jshint **.js",
     "test": "./node_modules/.bin/mocha -u tdd -R spec"
   },
   "dependencies": {
@@ -27,9 +28,14 @@
     "util": "^0.10.3",
     "winston": "^2.1.1"
   },
+	"pre-commit": [
+		"jshint"
+	],
   "devDependencies": {
     "expect.js": "^0.3.1",
+    "jshint": "^2.8.0",
     "mocha": "^2.3.2",
+    "pre-commit": "^1.1.2",
     "rewire": "^2.3.4",
     "superagent": "^1.6.1",
     "supertest": "^1.1.0"
