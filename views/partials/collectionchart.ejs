@@ -1,0 +1,25 @@
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+<div class="collection-chart"> 
+	<h4> Data for Sensor </h4>
+</div>
+
+<script>
+
+var data = [ 
+		200,
+		210,
+		250,
+		230,
+		200
+];
+
+var chart = d3.select(".collection-chart");
+var bar = chart.selectAll("div");
+var barUpdate = bar.data(data);
+var barEnter = barUpdate.enter().append("div");
+barEnter.style("width", function(d) { return d * 2 + "px"; });
+barEnter.style("background-color", "#f88");
+barEnter.text(function(d) { return d; });
+
+</script>
