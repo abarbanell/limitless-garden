@@ -151,4 +151,11 @@ router.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+router.get('/dashboard', authenticated.cookie, function(req, res) {
+		res.render('dashboard', { 
+			title: 'Limitless Garden Dashboard',
+			user: req.user
+		});
+});
+
 module.exports = router;
