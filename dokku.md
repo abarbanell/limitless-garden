@@ -18,8 +18,9 @@ myserver         IN      A       127.0.0.1
 - go with a browser to your dokku server and you should see the
 setup screen. Upload your ssh key and fill out the other fields and
 save.
+- change the hostname on the dokku setup screen and enable virtual host naming
 - set up your own sudo user so that you do not need to use the root account
-- put public ssh keys into your $HOME/.ssh/authorized_keys file
+- optional: put additional public ssh keys into your $HOME/.ssh/authorized_keys file if you are connecting from multiple desktop PC's
 - optional: install [new relic server](http://www.newrelic.com)
 - create a mongo backing store with 
 
@@ -34,6 +35,11 @@ $ dokku app:create lg
 $ dokku mongo:link mongo lg
 ```
 
+- you will need to set the DNS with a plain and a wildcard A record
+(see
+[here](https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-dokku-application). On my DNS provider 
+there is now support for wildcard A records, so I have set up one record for each application subdomain, 
+all with the same host address.
 - we need to set some environment variables in the app like so: 
 
 ```
@@ -47,15 +53,24 @@ $ dokku config:set lg NEW_RELIC_LOG=stdout
 $ dokku config:set lg THREESCALE_PROVIDER_KEY=<your-3scale-apikey>
 ```
 
-- now you have an app which can be deployed to. So you go on your development system and connect git to a remote push
+- for google auth we need SSL. We get a certificate with [letsencrypt](https://www.letsencrypt.org) via the dokku plugin 
+[sseemayer/dokku-letsencrypt](https://github.com/sseemayer/dokku-letsencrypt)
+described in more detail in this [blog post of the
+author](https://blog.semicolonsoftware.de/securing-dokku-with-lets-encrypt-tls-certificates/)
+
+
+```
+$ sudo dokku plugin:install https://github.com/sseemayer/dokku-letsencrypt.git
+$ dokku letsencrypt myapp
+```
+
+- now you have an app which can be deployed to. So you go on your development system and connect git to a remote:
 
 ```
 $ git remote add dokku dokku@dokku.me:lg
 $ git push dokku master
 ```
 
-- you will need to set the DNS with a plainand a wildcard A record (see [here](https://www.digitalocean.com/community/tutorials/how-to-use-the-digitalocean-dokku-application)
-- change the hostname on the dokku setup screen and check virtual host naming
 
 
 

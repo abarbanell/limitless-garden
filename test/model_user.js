@@ -4,23 +4,16 @@ var user = require('../model/user.js');
 var logger = require('../util/logger');
 var db = require('../util/db');
 var env = process.env.ENVIRONMENT || 'dev';
-var colname = env + '.user';
+var colname = 'sys.' + env + '.user';
 
 var insertedIds = [];
 var objs = [{
-	"firstname": "john",
-	"name": "smith",
-	"displayName": "john smith",
-	"googleId": "dummy-google-id",
-	"timestamp": "2015-09-29T19:23:12.435121"
-}, {
-	"firstname": "john",
-	"name": "doe",
-	"displayName": "john doe",
-	"googleId": "dummy-google-id",
-	"timestamp": "2015-09-29T19:24:12.435121"
+		profile: { id: "dummyId123", displayName: "J Smith", name: "John Smith"}, 
+		"timestamp": "2015-09-29T19:23:12.435121"
+	}, {
+		profile: { id: "dummyId456", displayName: "J Doe" , name: "John Doe"},
+		"timestamp": "2015-09-29T19:24:12.435121"
 	}];
-
 
 describe('User Model ', function() {
 	beforeEach(function(done) {
@@ -31,7 +24,7 @@ describe('User Model ', function() {
 	
 	function insertrows(done){
 		logger.info('insertrows: insert some data');
-		db(function(err,dbObj){
+		db.connect(function(err,dbObj){
 			dbObj.collection(colname).insert(objs, function(err, result) {
 				if (err) {
 					logger.error('insertrows Error: ' + err);
@@ -50,7 +43,7 @@ describe('User Model ', function() {
 	});	
 	
 	function droprows(done) {
-		db(function(err,dbObj){
+		db.connect(function(err,dbObj){
 			dbObj.collection(colname).remove({}, function(err, result) {
 				if (err) {
 					logger.error('droprows() error: '+ err);
@@ -81,13 +74,13 @@ describe('User Model ', function() {
 		});
 	});
 	
-	it.skip('get a single value - found', function (done) {
-		logger.info('model_user.js - insertedIds = %s', JSON.stringify(insertedIds));
-		user.get(insertedIds[0], function (err, result) {
-			if (err) {
-				logger.error('user.js - err = ' + JSON.stringify(err));
-				return done();
-			} 
+it('get a single value - found', function (done) {
+	logger.info('model_user.js - insertedIds = %s', JSON.stringify(insertedIds));
+	user.get(insertedIds[0], function (err, result) {
+		if (err) {
+			logger.error('user.js - err = ' + JSON.stringify(err));
+			return done();
+		} 
 			expect(err).to.not.be.ok();
 			logger.info('model_user.js - result = %s', typeof(result));
 			logger.info('model_user.js - result = %s', JSON.stringify(result));
@@ -99,12 +92,9 @@ describe('User Model ', function() {
 		});
 	});
 
-	it.skip('should findOrCreate an entry - new user', function(done) {
+	it('should findOrCreate an entry - new user', function(done) {
 		newObj = { 
-			"firstname": "jack",
-			"name": "douglas",
-			"displayName": "jack douglas",
-			"googleId": "dummy-google-id-jd",
+			profile: { id: "dummyId456", displayName: "Jack Douglas" },
 			"timestamp": "2015-09-29T19:25:12.435121"
 		};
 		user.findOrCreate(newObj, function (err, result) {
@@ -115,13 +105,13 @@ describe('User Model ', function() {
 				expect(err).to.not.be.ok();
 				expect(result).to.be.ok();
 				logger.info('findOrCreate result: ' + JSON.stringify(result));
-				expect(result.length).to.eql(insertedIds.length);
+				expect(result.profile.id).to.eql(newObj.profile.id);
 				done();
 			}
 		});
 	});
 
-	it.skip('should findOrCreate an entry - existing user', function(done) {
+	it('should findOrCreate an entry - existing user', function(done) {
 		newObj = objs[1];
 		user.findOrCreate(newObj, function (err, result) {
 			if (err) {
@@ -131,7 +121,7 @@ describe('User Model ', function() {
 				expect(err).to.not.be.ok();
 				expect(result).to.be.ok();
 				logger.info('findOrCreate result: ' + JSON.stringify(result));
-				expect(result.length).to.eql(insertedIds.length);
+				expect(result._id).to.eql(insertedIds[1]);
 				done();
 			}
 		});

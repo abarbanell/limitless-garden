@@ -13,22 +13,20 @@
       <div class="starter-template">
 				<h1><%= title %></h1>
 				<p>Welcome to <%= title %></p>
-				<p>We have the following <%= count %> collections available for you. </p>
+				<p>We have the following <%= count %> of objects  available for you. </p>
       </div>
       
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
 					<table class="table table-striped ">
 						<thead class="lgstyle-inverse">
-							<td>Collection</td>
+							<td>Object</td>
 						</thead>
 
 					<% for(var i=0; i<data.length; i++) { %>
 						<tr>
 							<td>
-								<a href="/collections/<%= data[i] %>"> 
-									<%= data[i] %> 
-								</a>
+								<%= data[i] %> 
 							</td>
 						</tr>
 					<% } %>
@@ -43,8 +41,13 @@
 							 data-ad-format="auto">
 					</ins>
 				</div>
+			</div>
       <div class="row">
-  </div>
+		
+				<div class="col-md-8 col-md-offset-2">
+				<% include partials/collectionchart %>
+				</div>
+			</div>
   
 
     </div><!-- /.container -->

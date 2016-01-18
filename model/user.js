@@ -7,7 +7,8 @@ var colname = 'sys.' + env + '.user';
 var user = function() { 
 
 	var get = function(id, callback) {
-		db(function(err,dbObj){
+		db.connect(function(err,dbObj){
+		logger.info('user.js - called with id=%s for collection=%s', id, colname);
 			dbObj.collection(colname).findOne({"_id": id}, {}, function(err,doc){
 				dbObj.close();
 				logger.info('user.get(%s) - err=%s, doc=%s', id.toString(), util.inspect(err), util.inspect(doc));
@@ -18,10 +19,9 @@ var user = function() {
 
 var findOrCreate = function(obj, callback) {
 	logger.info('findOrCreate obj: ' + JSON.stringify(obj));
-	var userObj = { "googleId": obj.profile.id, "displayName": obj.profile.displayName,
-		"name": obj.profile.name };
-	db(function(err,dbObj) {
-		dbObj.collection(colname).findOne( { "googleId": userObj.googleId }, {}, function(err, result) {
+	var userObj = obj;
+	db.connect(function(err,dbObj) {
+		dbObj.collection(colname).findOne( { "id": userObj.profile.id }, {}, function(err, result) {
 			if (err) {
 				logger.error('find user err: ' + err);
 				dbObj.close();
@@ -41,7 +41,7 @@ var findOrCreate = function(obj, callback) {
 						return callback(err, null);
 					}			
 					// created
-					logger.info('create user result: ' + JSON.stringify(result));
+						logger.info('did not find user %s, create new user result: %s', userObj.id,  JSON.stringify(result));
 					dbObj.close();
 					callback(null, result.ops[0]);
 				});

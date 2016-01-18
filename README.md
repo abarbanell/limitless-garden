@@ -3,8 +3,7 @@
 This is a small backend using 
 Heroku / node.js / 3scale / MongoLab / Newrelic
 
-Continuous Integration is using travis-ci.org
-
+Continuous Integration is using [travis](https://travis-ci.org/abarbanell/limitless-garden)
 
 It is deployed via heroku/github integration to 
 http://limitless-garden-9668.herokuapp.com
