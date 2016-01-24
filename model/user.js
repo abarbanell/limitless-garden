@@ -1,4 +1,5 @@
 var logger = require('../util/logger');
+var util = require('util');
 var db = require('../util/db');
 var env = process.env.ENVIRONMENT || 'dev';
 var colname = 'sys.' + env + '.user';
@@ -10,6 +11,7 @@ var user = function() {
 		logger.info('user.js - called with id=%s for collection=%s', id, colname);
 			dbObj.collection(colname).findOne({"_id": id}, {}, function(err,doc){
 				dbObj.close();
+				logger.info('user.get(%s) - err=%s, doc=%s', id.toString(), util.inspect(err), util.inspect(doc));
 				return callback(err,doc);
 			});
 		});
