@@ -48,7 +48,7 @@ var collectionName = function(n) {
 }
 		
 module.exports = {	
-	connect: connect,
+	connect: connect, // tested?
 	collections: collections,
 	count: count,
 	collectionName: collectionName

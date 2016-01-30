@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "start:watch": "watch 'npm start'", 
     "jshint": "jshint **.js",
     "jscs": "jscs --preset=google **.js",
-    "test": "./node_modules/.bin/mocha -u tdd -R spec"
+    "test": "./node_modules/.bin/mocha -u tdd -R spec",
+    "test:watch": "watch 'npm run test'"
   },
   "dependencies": {
     "3scale": "^0.6.1",
@@ -31,7 +33,7 @@
   },
   "pre-commit": [
     "jshint",
-		"test"
+    "test"
   ],
   "devDependencies": {
     "expect.js": "^0.3.1",
@@ -41,6 +43,7 @@
     "pre-commit": "^1.1.2",
     "rewire": "^2.3.4",
     "superagent": "^1.6.1",
-    "supertest": "^1.1.0"
+    "supertest": "^1.1.0",
+    "watch": "0.17.1"
   }
 }

@@ -129,5 +129,14 @@ describe('util/db tests', function() {
 		done();
 	});
 	
+    it('collections function return array', function (done) {
+        var db = rewire('../util/db');
+        expect(db.collections).to.be.an('function');
+        db.collections(function (err, arr) {
+            expect(err).to.not.be.ok();
+            expect(arr).to.be.an('array');
+            done();
+        })
+    })
 
 });
