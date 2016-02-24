@@ -26,6 +26,28 @@
 						var dataset = [5, 10, 15, 20, 25 ];
 
 						d3.select("body")
+							.append("h1")
+							.text("Here are some d3 tests");
+
+						d3.select("body")
+							.append("h2")
+							.text("Text");
+
+						d3.select("body")
+							.selectAll("p")
+							.data(dataset)
+							.enter()
+							.append("p")
+							.text(function(d) {
+								var barHeight = d * 5;
+								return barHeight + "px";
+							});
+
+						d3.select("body")
+							.append("h2")
+							.text("Bar chart with div sections");
+
+						d3.select("body")
 							.selectAll("div")
 							.data(dataset)
 							.enter()
