@@ -23,7 +23,15 @@
 
         <script type="text/javascript">
             // Your beautiful D3 code will go here
-						var dataset = [5, 10, 15, 20, 25 ];
+
+						var w = 500;
+						var h = 300;
+
+						var dataset = [];                        //Initialize empty array
+						for (var i = 0; i < 10; i++) {           //Loop 10 times
+								var newNumber = Math.round(Math.random() * 30);  //New random number (0-30)
+								dataset.push(newNumber);             //Add new number to array
+						}
 
 						d3.select("body")
 							.append("h1")
@@ -57,6 +65,19 @@
 								var barHeight = d * 5;
 								return barHeight + "px";
 							});
+
+						d3.select("body")
+							.append("h2")
+							.text("SVG graph goes below");
+
+						var svg = d3.select("body")
+							.append("svg");
+
+						svg.attr("width", w)
+							.attr("height", h);
+
+					
+
         </script>
     </body>
 </html> 
