@@ -26,12 +26,14 @@
 
 						var w = 500;
 						var h = 300;
+						var pad = 1;
 
 						var dataset = [];                        //Initialize empty array
 						for (var i = 0; i < 10; i++) {           //Loop 10 times
 								var newNumber = Math.round(Math.random() * 30);  //New random number (0-30)
 								dataset.push(newNumber);             //Add new number to array
 						}
+						var dmax = Math.max(...dataset) 
 
 						d3.select("body")
 							.append("h1")
@@ -68,7 +70,7 @@
 
 						d3.select("body")
 							.append("h2")
-							.text("SVG graph goes below");
+							.text("SVG circle graph goes below");
 
 						var svg = d3.select("body")
 							.append("svg");
@@ -93,6 +95,31 @@
 							.attr("stroke-width", function(d) {
 								return (d/2)
 							});
+
+						d3.select("body")
+							.append("h2")
+							.text("SVG bar graph goes below");
+
+						var s = d3.select("body").append("svg").attr("width", w).attr("height", h);
+
+						s.selectAll("rect")
+							.data(dataset)
+							.enter()
+							.append("rect")
+							.attr("x", function(d, i) {
+								return i * (w / dataset.length);
+							})
+							.attr("y", function (d) {
+								return h - (d * h / dmax);
+							})
+							.attr("width", w / dataset.length - pad)
+							.attr("height", function(d) {
+								return d * h / dmax;
+							})
+							.attr("fill", function(d) {
+								return "rgb(0, 0, " + (d*10) + ")";
+							});
+
 
         </script>
     </body>
