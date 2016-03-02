@@ -29,9 +29,11 @@
 						var pad = 1;
 
 						var dataset = [];                        //Initialize empty array
+						var dataset2d = [];				
 						for (var i = 0; i < 10; i++) {           //Loop 10 times
 								var newNumber = Math.round(Math.random() * 30);  //New random number (0-30)
 								dataset.push(newNumber);             //Add new number to array
+								dataset2d.push([i, newNumber]);
 						}
 						var dmax = Math.max(...dataset) 
 
@@ -100,7 +102,10 @@
 							.append("h2")
 							.text("SVG bar graph goes below");
 
-						var s = d3.select("body").append("svg").attr("width", w).attr("height", h);
+						var s = d3.select("body")
+							.append("svg")
+							.attr("width", w)
+							.attr("height", h);
 
 						s.selectAll("rect")
 							.data(dataset)
@@ -120,6 +125,44 @@
 								return "rgb(0, 0, " + (d*10) + ")";
 							});
 
+						s.selectAll("text")
+							.data(dataset)
+							.enter()
+							.append("text")
+							.text(function(d) {
+								return d;
+							})
+							.attr("text-anchor", "middle")
+							.attr("x", function(d, i) {
+								return i * (w / dataset.length) + (w / dataset.length - pad) / 2;
+							})
+							.attr("y", function(d) {
+								return h - (d * h/dmax) + 14;
+							})
+							.attr("font-family", "sans-serif")
+							.attr("font-size", "11px")
+							.attr("fill", "white");
+
+						d3.select("body")
+							.append("h2")
+							.text("SVG scatterplot goes below");
+
+						var scatter = d3.select("body")
+							.append("svg")
+							.attr("width", w)
+							.attr("height", h);
+
+						scatter.selectAll("circle")
+							.data(dataset2d)
+							.enter()
+							.append("circle")
+							.attr("cx", function(d) {
+								return d[0];
+							})
+							.attr("cy", function(d) {
+								return(d[1]);
+							})
+							.attr("r", 5);
 
         </script>
     </body>
