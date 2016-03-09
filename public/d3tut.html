@@ -161,27 +161,6 @@
 							.append("h2")
 							.text("SVG scatterplot goes below - http://alignedleft.com/tutorials/d3/making-a-scatterplot");
 
-						var scatter = d3.select("body")
-							.append("svg")
-							.attr("width", w)
-							.attr("height", h);
-
-						scatter.selectAll("circle")
-							.data(dataset2d)
-							.enter()
-							.append("circle")
-							.attr("cx", function(d) {
-								return d[0];
-							})
-							.attr("cy", function(d) {
-								return(d[1]);
-							})
-							.attr("r", 5);
-
-						d3.select("body")
-							.append("h2")
-							.text("SVG scale");
-
 						var scalex = d3.scale.linear()
 							.domain([0, dataset2d.length])
 							.range([scatterPad, w-scatterPad]);
