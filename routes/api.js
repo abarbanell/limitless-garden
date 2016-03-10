@@ -40,12 +40,24 @@ router.get('/collections/:collectionName', function(req, res, next) {
 		}
 		var limit = req.query.limit || 10;
 		var offset = req.query.offset || 0;
+		var fillDate = req.query.filldate || 0;
 		req.collection.find({} ,{limit: limit, offset: offset, sort: {'_id': -1}}).toArray(function(e, results){
 			if (e) return next(e)
-			res.set('X-Total-Count', count).send(results)
+			fillResults(req, res, fillDate, count, results);
 		});
 	});
 })
+
+var fillResults = function(req, res, fill, count, results) {
+	if (fill) {
+		for (var i = 0; i< results.length; i++) {
+			if (! results[i].hasOwnProperty("date")) {
+				results[i].date = ObjectID(results[i]._id).getTimestamp();
+			}	
+		}
+	};
+	res.set('X-Total-Count', count).send(results);
+}
 
 router.post('/collections/:collectionName', function(req, res, next) {
 	logger.info('POST: ' + util.inspect(req.body));
