@@ -11,6 +11,7 @@ var getdata = function(err, data) {
 		dataset.push({ x: new Date(data[i].date),  y: data[i].soil });
 	}
 	visualize(dataset);
+	tabulate(dataset);
 }
 d3.json(url, getdata);
 
@@ -68,3 +69,33 @@ var visualize = function(dataset) {
         .attr("class", "y axis")
         .call(yAxis);
 }
+
+var tabulate = function(dataset) {
+	var table = d3.select(".d3table")
+		.append("table")
+		.attr("class", "table table-striped");
+	var header = table.append("thead");
+	var body = table.append("tbody");
+	var row = header.append("tr");
+	row.append("td").text("Date");
+	row.append("td").text("sensor");
+	row.append("td").text("count");
+
+	var bodyrow = body.selectAll("tr")
+		.data(dataset)
+		.enter()
+		.append("tr");
+
+	bodyrow.append("td")
+		.text(function(d) {
+			return d.x.toUTCString();
+		});
+	bodyrow.append("td")
+		.text(function(d) {
+			return d.y;
+		});
+	bodyrow.append("td")
+		.text(function(d,i) { 
+			return i;
+		});
+} 
