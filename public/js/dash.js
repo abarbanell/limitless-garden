@@ -79,23 +79,46 @@ var tabulate = function(dataset) {
 	var row = header.append("tr");
 	row.append("td").text("Date");
 	row.append("td").text("sensor");
-	row.append("td").text("count");
+	row.append("td").text("n");
+	row.append("td").text("sum");
+	row.append("td").text("mean");
 
 	var bodyrow = body.selectAll("tr")
 		.data(dataset)
 		.enter()
 		.append("tr");
 
+	// Date
 	bodyrow.append("td")
 		.text(function(d) {
 			return d.x.toUTCString();
 		});
+
+	// sensor value
 	bodyrow.append("td")
 		.text(function(d) {
 			return d.y;
 		});
+
+	// n 
 	bodyrow.append("td")
 		.text(function(d,i) { 
-			return i;
+			
+			return i+1;
+		});
+
+	// sum 
+	var sum = 0;
+	bodyrow.append("td")
+		.text(function(d,i) { 
+			sum = sum + d.y;
+			return sum;
+		});
+
+	// mean 
+	bodyrow.append("td")
+		.text(function(d,i) { 
+			var mean = sum / (i+1);
+			return mean;
 		});
 } 
