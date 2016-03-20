@@ -9,7 +9,7 @@ var getdata = function(err, data) {
 	console.log("getdata callback");
 	var sum = 0;
 	for (i=0; i< data.length; i++) {
-		dataset.push({ x: new Date(data[i].date),  y: data[i].soil, n: i+1, sum: sum+=data[i].soil, mean: sum/n });
+		dataset.push({ x: new Date(data[i].date),  y: data[i].soil, n: i+1, sum: sum+=data[i].soil, mean: sum/(i+1) });
 	}
 	visualize(dataset);
 	tabulate(dataset);
