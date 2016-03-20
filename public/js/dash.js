@@ -39,8 +39,8 @@ d3.json(url, getdata);
 var visualize = function(dataset) {
 	// Set the dimensions of the canvas / graph
 	var margin = {top: 30, right: 20, bottom: 30, left: 50},
-    width = 600 - margin.left - margin.right,
-    height = 270 - margin.top - margin.bottom;
+    width = 800 - margin.left - margin.right,
+    height = 480 - margin.top - margin.bottom;
 
 	// Set the ranges
 	var x = d3.time.scale().range([0, width]);
@@ -57,6 +57,11 @@ var visualize = function(dataset) {
 	var valueline = d3.svg.line()
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.y); });
+
+	// Define the mean line
+	var meanline = d3.svg.line()
+    .x(function(d) { return x(d.x); })
+    .y(function(d) { return y(d.mean); });
 
 	// Adds the svg canvas
 	var svg = d3.select(".d3canvas")
@@ -76,6 +81,11 @@ var visualize = function(dataset) {
     svg.append("path")
         .attr("class", "line")
         .attr("d", valueline(dataset));
+
+    // Add the meanline path.
+    svg.append("path")
+        .attr("class", "mline")
+        .attr("d", meanline(dataset));
 
     // Add the X Axis
     svg.append("g")
