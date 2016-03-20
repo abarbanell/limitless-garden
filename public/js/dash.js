@@ -15,7 +15,7 @@ var getdata = function(err, data) {
 		sum += soil;
 		var mean = (n>0) ? (sum/n) : soil;
 		sumsq += (soil*soil);
-		var variance = (n > 1) ? (sumsq - (sum*sum)/n)/(n-1) : 0;
+		var variance = (n > 1) ? (sumsq - (sum*sum)/n)/n : 0;
 		var sigma = Math.sqrt(variance);
 		var sigval = (sigma > 0) ? (soil-mean) / sigma : 0;
 		dataset.push({ 
