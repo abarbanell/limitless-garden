@@ -108,7 +108,12 @@ var tabulate = function(dataset) {
 	var bodyrow = body.selectAll("tr")
 		.data(dataset)
 		.enter()
-		.append("tr");
+		.append("tr")
+		.attr("font-color", function(d) {
+			if (d.sigval > 1) return "red";
+			if (d.sigval < -1) return "green";
+			return "blue";
+		});
 
 	// Date
 	bodyrow.append("td")
