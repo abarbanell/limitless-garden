@@ -7,8 +7,9 @@ var url = "/api/collections/sensor?limit=100000&filldate=true";
 var getdata = function(err, data) {
 	var dataset = [];
 	console.log("getdata callback");
+	var sum = 0;
 	for (i=0; i< data.length; i++) {
-		dataset.push({ x: new Date(data[i].date),  y: data[i].soil });
+		dataset.push({ x: new Date(data[i].date),  y: data[i].soil, n: i+1, sum: sum+=data[i].soil, mean: sum/n });
 	}
 	visualize(dataset);
 	tabulate(dataset);
@@ -103,22 +104,18 @@ var tabulate = function(dataset) {
 	// n 
 	bodyrow.append("td")
 		.text(function(d,i) { 
-			
-			return i+1;
+			return d.n
 		});
 
 	// sum 
-	var sum = 0;
 	bodyrow.append("td")
 		.text(function(d,i) { 
-			sum = sum + d.y;
-			return sum;
+			return d.sum;
 		});
 
 	// mean 
 	bodyrow.append("td")
 		.text(function(d,i) { 
-			var mean = sum / (i+1);
-			return mean;
+			return d.mean;
 		});
 } 
