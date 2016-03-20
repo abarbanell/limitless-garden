@@ -96,6 +96,25 @@ describe('API integration tests', function() {
 		});
 	});
 
+	it('GET testcollection with filldate should return array with date fields', function(done) {
+		var url = '/api/collections/test?filldate=1&user_key=' + user_key;
+		supertest(server)
+		.get(url).end(function(err, res) {
+			expect(err).to.not.be.ok();
+			expect(res).to.be.ok();
+			expect(res.status).to.be.ok();
+			expect(res.status).to.eql(status.OK);
+			expect(res.body).to.be.an('array');
+			logger.info('body has %s items', res.body.length);
+			res.body.forEach(function(item, index, arr) {
+				expect(item.date).to.be.ok();
+				if ((index+1) == arr.length) { 
+					done();
+				}
+			});
+		});
+	});
+
 	it('GET testcollection/not-existing-id with user_key should return NOT_FOUND', function(done) {
 		var url = '/api/collections/test/aabbaabbaabbccddccddccdd?user_key=' + user_key;
 		supertest(server)

@@ -41,7 +41,7 @@ router.get('/collections/:collectionName', function(req, res, next) {
 		var limit = req.query.limit || 10;
 		var offset = req.query.offset || 0;
 		var fillDate = req.query.filldate || 0;
-		req.collection.find({} ,{limit: limit, offset: offset, sort: {'_id': -1}}).toArray(function(e, results){
+		req.collection.find({} ,{limit: limit, offset: offset, sort: {'_id': 1}}).toArray(function(e, results){
 			if (e) return next(e)
 			fillResults(req, res, fillDate, count, results);
 		});
