@@ -16,7 +16,8 @@ var getdata = function(err, data) {
 		var mean = (n>0) ? (sum/n) : soil;
 		sumsq += (soil*soil);
 		var variance = (n > 1) ? (sumsq - (sum*sum)/n)/(n-1) : 0;
-		var sigma = (variance > 0) ? (soil-mean) / variance : 0;
+		var sigma = Math.sqrt(variance);
+		var sigval = (sigma > 0) ? (soil-mean) / sigma : 0;
 		dataset.push({ 
 			x: new Date(data[i].date),  
 			y: soil, 
@@ -25,7 +26,8 @@ var getdata = function(err, data) {
 			sumsq: sumsq, 
 			mean: sum/(i+1), 
 			variance: variance, 
-			sigma: sigma });
+			sigma: sigma,
+			sigval: sigval });
 	}
 	visualize(dataset);
 	tabulate(dataset);
@@ -101,6 +103,7 @@ var tabulate = function(dataset) {
 	row.append("td").text("mean");
 	row.append("td").text("var");
 	row.append("td").text("sigma");
+	row.append("td").text("sigval");
 
 	var bodyrow = body.selectAll("tr")
 		.data(dataset)
@@ -147,5 +150,11 @@ var tabulate = function(dataset) {
 	bodyrow.append("td")
 		.text(function(d,i) { 
 			return d.sigma;
+		});
+
+	// sigval
+	bodyrow.append("td")
+		.text(function(d,i) { 
+			return d.sigval;
 		});
 } 
