@@ -8,8 +8,23 @@ var getdata = function(err, data) {
 	var dataset = [];
 	console.log("getdata callback");
 	var sum = 0;
+	var sumsq = 0;
 	for (i=0; i< data.length; i++) {
-		dataset.push({ x: new Date(data[i].date),  y: data[i].soil, n: i+1, sum: sum+=data[i].soil, mean: sum/(i+1) });
+		var soil = data[i].soil;
+		var n = i+1;
+		sum += soil;
+		sumsq + (soil*soil);
+		var variance = (n > 1) ? (sumsq - (sum*sum)/n)/(n-1) : 0;
+		var sigma = (variance > 0) ? (soil-mean) / variance : 0;
+		dataset.push({ 
+			x: new Date(data[i].date),  
+			y: soil, 
+			n: n, 
+			sum: sum, 
+			sumsq: sumsq, 
+			mean: sum/(i+1), 
+			variance: variance, 
+			sigma: sigma });
 	}
 	visualize(dataset);
 	tabulate(dataset);
@@ -83,6 +98,8 @@ var tabulate = function(dataset) {
 	row.append("td").text("n");
 	row.append("td").text("sum");
 	row.append("td").text("mean");
+	row.append("td").text("var");
+	row.append("td").text("sigma");
 
 	var bodyrow = body.selectAll("tr")
 		.data(dataset)
@@ -117,5 +134,17 @@ var tabulate = function(dataset) {
 	bodyrow.append("td")
 		.text(function(d,i) { 
 			return d.mean;
+		});
+
+	// variance
+	bodyrow.append("td")
+		.text(function(d,i) { 
+			return d.variance;
+		});
+
+	// sigma
+	bodyrow.append("td")
+		.text(function(d,i) { 
+			return d.sigma;
 		});
 } 
