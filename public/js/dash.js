@@ -110,9 +110,9 @@ var tabulate = function(dataset) {
 		.enter()
 		.append("tr")
 		.attr("style", function(d) {
-			if (d.sigval > 1) return "font-color: red;";
-			if (d.sigval < -1) return "font-color: blue;";
-			return "font-color: green;";
+			if (d.sigval > 1) return "color: red;";
+			if (d.sigval < -1) return "color: blue;";
+			return "color: green;";
 		});
 
 	// Date
