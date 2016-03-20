@@ -2,7 +2,7 @@
 
 // part one - get dataset - some random data
 
-var url = "/api/collections/sensor?limit=100000&filldate=true";
+var url = "/api/collections/sensor?limit=100&filldate=true";
 
 var getdata = function(err, data) {
 	var dataset = [];
