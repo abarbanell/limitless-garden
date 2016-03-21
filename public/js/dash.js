@@ -30,7 +30,7 @@ var getdata = function(err, data) {
 			sigval: sigval });
 	}
 	visualize(dataset);
-	tabulate(dataset);
+	// tabulate(dataset);
 }
 d3.json(url, getdata);
 
