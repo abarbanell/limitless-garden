@@ -106,10 +106,13 @@ describe('API integration tests', function() {
 			expect(res.status).to.eql(status.OK);
 			expect(res.body).to.be.an('array');
 			logger.info('body has %s items', res.body.length);
+			if (res.body.length == 0) {
+				return done();
+			};
 			res.body.forEach(function(item, index, arr) {
 				expect(item.date).to.be.ok();
 				if ((index+1) == arr.length) { 
-					done();
+					return done();
 				}
 			});
 		});
