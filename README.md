@@ -1,7 +1,7 @@
 # limitless-garden ![Build status](https://travis-ci.org/abarbanell/limitless-garden.svg)
 
 This is a small backend using 
-Heroku / node.js / 3scale / MongoLab / Newrelic
+Heroku / node.js / 3scale / MongoLab / Newrelic / d3.js
 
 Continuous Integration is using [travis](https://travis-ci.org/abarbanell/limitless-garden)
 
@@ -35,4 +35,11 @@ GOOGLE_CLIENT_SECRET:    <yourkey>
 GOOGLE_RETURN_URL_HOST:  <yourkey>
 ```
 
+*Note: the threescale test will time out if you have no network, 
+they need access to the threescale backend for authentication 
+of the userkey* 
 
+*Note: the local development environment via 
+[devenv](https://github.com/abarbanell/devenv) can run without network 
+but needs network to pull new images from docker for VM creation and start. 
+So you need network to start the devenv VM, but then you can continue to work offline.*
