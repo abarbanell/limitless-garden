@@ -1,26 +1,26 @@
 
 
-		<nav class="navbar lgstyle-inverse navbar-fixed-top">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">  
         <div class="navbar-header">
           
+					<!-- this is the hamburger menu -->
           <button type="button" class="navbar-toggle" data-toggle="collapse" 
 									data-target="#navbar">
             <span class="sr-only">Toggle Navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
           </button>
             
-          <a class="navbar-brand lgstyle-brand" href="/">
+          <a class="navbar-brand" href="/">
 					  <img src="/img/logo.png" alt="Limitless Garden" height="50" width="50"></img>
           </a>
         </div>
 
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li><a href="/dashboard">Dashboard</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/about#contact">Contact</a></li>
@@ -30,7 +30,7 @@
             <% if (user && user.profile && user.profile.id ) { %>
                <a href=".">logged in as <%= user.profile.displayName %> </a>
             <% } else { %>
-               <a href="/login">Login</a>
+               <a href="/auth/google">Login</a>
             <% } %>
 						</li>
           </ul>

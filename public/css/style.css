@@ -6,13 +6,13 @@ body {
   text-align: center;
 }
 
-.lgstyle-inverse { 
+.navbar-inverse { 
 	color: #fff;
 	background-color: #6CD886;
 	border-color: #080808;
 }
 
-.lgstyle-brand { 
+.navbar-brand { 
 	padding-top: 0px;
 }
 
@@ -24,4 +24,8 @@ body {
 .lgerror-trace {
   color: #000;
   text-align: left;
+}
+
+.navbar-toggle .icon-bar {
+	background-color: black;
 }
