@@ -99,11 +99,8 @@ var hostsRoute = function (req, res, next) {
 			res.status(500).render(error, { err: err});
 		} else {
 			logger.info('result = ' + JSON.stringify(result));	
-			res.render('sensor', { 
+			res.render('hosts', { 
 				title: 'Limitless Garden - Hosts', 
-				dataTable: false, 
-				hostsTable: true, 
-				collectionsTable: false,
 				data: result,
 				user: req.user
 			});
@@ -132,7 +129,7 @@ router.get('/sensor', authenticated.cookie, sensorRoute);
 
 /* temprarily park some routes which will be filled later */ 
 router.get('/sensor/:host', authenticated.cookie, sensorRoute);
-router.get('/hosts', authenticated.cookie, sensorRoute);
+router.get('/hosts', authenticated.cookie, hostsRoute);
 
 /* GET login page. */
 router.get('/login', function (req, res, next) {
