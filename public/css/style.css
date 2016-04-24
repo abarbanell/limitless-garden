@@ -12,6 +12,9 @@ body {
 	border-color: #080808;
 }
 
+.navbar-inverse .navbar-nav>li>a {
+  color: black;
+}
 .navbar-brand { 
 	padding-top: 0px;
 }
