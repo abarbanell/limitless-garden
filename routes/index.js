@@ -131,7 +131,7 @@ var hostDataRoute = function (req, res, next) {
 						rObj.date = date.toJSON();
 					}
 				}
-				rObj.value = obj.soil;
+				rObj.soil = obj.soil;
 				// copy some fields
 				rObj.host = obj.host;
 				rObj.sensor = obj.sensor;
@@ -139,11 +139,8 @@ var hostDataRoute = function (req, res, next) {
 				return rObj;
 			});
 			logger.info('mapped = ' + JSON.stringify(mapped));
-			res.render('sensor', { 
+			res.render('hostdata', { 
 				title: 'Limitless Garden', 
-				dataTable: true, 
-				hostsTable: false, 
-				collectionsTable: false,
 				data: mapped, 
 				user: req.user 
 			});

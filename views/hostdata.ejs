@@ -13,31 +13,12 @@
       <div class="starter-template">
 				<h1><%= title %></h1>
 				<p>Welcome to <%= title %></p>
-				<p> This page is deprecated and only holds tables to be moved somewhere else. 
-						Refactoring in progress. 
+				<p> This page is holds host data. More work needed here.
 				</p>
 
       </div>
       
-			<% if(collectionsTable) { %>
-			<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<table class="table table-striped ">
-						<thead class="lgstyle-inverse">
-							<td>Collection</td>
-						</thead>
 
-					<% for(var i=0; i<data.length; i++) { %>
-						<tr>
-							<td><%= data[i] %></td>
-						</tr>
-					<% } %>
-
-					</table>
-				</div>
-			<% } %>
-
-      <% if(dataTable) { %>
 			<div class="row">
 				<div class="col-md-8 col-md-offset-2">
 					<table class="table table-striped ">
@@ -45,7 +26,7 @@
 							<td>Date</td>
 							<td><a href="/hosts">Host</a></td>
 							<td>Sensor</td>
-							<td>Value</td>
+							<td>Soil</td>
 						</thead>
 
 					<% for(var i=0; i<data.length; i++) { %>
@@ -53,33 +34,16 @@
 							<td><%= data[i].date %></td>
 							<td><%= data[i].host %></td>
 							<td><%= data[i].sensor %></td>
-							<td><%= data[i].value %></td>
+							<td><%= data[i].soil %></td>
 						</tr>
 					<% } %>
 
 					</table>
 				</div>
 			</div>	
-      <% } %>
+
       
-      <% if(hostsTable) { %>
-      	<div class="row">
-				<div class="col-md-8 col-md-offset-2">
-					<table class="table table-striped ">
-						<thead class="lgstyle-inverse">
-							<td>Host</td>
-						</thead>
-
-					<% for(var i=0; i<data.length; i++) { %>
-						<tr>
-							<td><a href="sensor/<%= data[i] %>"> <%= data[i] %> </a></td>
-						</tr>
-					<% } %>
-
-					</table>
-				</div>
-			</div>	
-      <% } %>
+  
       
       <div class="row">
       <!-- footer-responsive -->
