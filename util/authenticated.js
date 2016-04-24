@@ -19,10 +19,19 @@ function ensureCookieOrApikey(req, res, next) {
   if (req.isAuthenticated() || req.query.user_key) { return next(); }
   res.redirect('/login');
 }
+
+function isAdmin(req, res, next) {
+  if (req.user && req.user.profile && (req.user.profile.id == process.env.GOOGLE_ID_ADMIN)) { 
+    req.user.admin = true;
+  }
+  return next();
+}
+
 module.exports = {
 	cookie: ensureAuthenticated,
 	apikey: ensureApiKey,
-	cookieOrApikey: ensureCookieOrApikey
+	cookieOrApikey: ensureCookieOrApikey,
+  admin: isAdmin
 }
 
 

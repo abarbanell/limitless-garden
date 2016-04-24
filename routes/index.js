@@ -119,6 +119,10 @@ router.param('collectionName', function(req, res, next, collectionName){
 	});
 });
 
+/* Middleware */
+//router.use(authenticated.cookie);
+router.use(authenticated.admin);
+
 /* GET home page. */
 router.get('/', authenticated.cookie, collectionsListRoute);
 router.get('/collections/:collectionName', authenticated.cookie, collectionsRoute);
