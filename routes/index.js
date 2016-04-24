@@ -108,6 +108,48 @@ var hostsRoute = function (req, res, next) {
 	});
 };
 
+var hostDataRoute = function (req, res, next) {
+	var host = req.params.host;
+    sensor.getMulti({host: host}, {limit: 10} , function (err, result) {
+		logger.info('sensor.getMulti returned: err=' + err);
+		if (err) {
+			logger.error(err);
+			res.status(500).render(error, { err: err });
+		} else {
+			logger.info('result = ' + JSON.stringify(result));
+			var mapped = result.map(function(obj) {
+				var rObj = {};
+				//rename some fields
+				logger.info('typeof(timestamp) = ' + typeof(obj.timestamp));
+				logger.info('typeof(timespamp) = ' + typeof(obj.timespamp));
+				if(obj.timestamp) {
+					if (typeof(obj.timestamp) == 'number') { // UNIX timestamp
+						var date = new Date(obj.timestamp * 1000)
+						rObj.date = date.toJSON();
+					} else { 
+						var date = new Date(obj.timestamp);
+						rObj.date = date.toJSON();
+					}
+				}
+				rObj.value = obj.soil;
+				// copy some fields
+				rObj.host = obj.host;
+				rObj.sensor = obj.sensor;
+				// ignore all other fields and return
+				return rObj;
+			});
+			logger.info('mapped = ' + JSON.stringify(mapped));
+			res.render('sensor', { 
+				title: 'Limitless Garden', 
+				dataTable: true, 
+				hostsTable: false, 
+				collectionsTable: false,
+				data: mapped, 
+				user: req.user 
+			});
+		};
+	});
+};
 
 router.param('collectionName', function(req, res, next, collectionName){
 	db.connect(function(err, dbObj) {
@@ -128,7 +170,7 @@ router.get('/collections/:collectionName', authenticated.cookie, collectionsRout
 router.get('/sensor', authenticated.cookie, sensorRoute);
 
 /* temprarily park some routes which will be filled later */ 
-router.get('/hosts/:host', authenticated.cookie, sensorRoute);
+router.get('/hosts/:host', authenticated.cookie, hostDataRoute);
 router.get('/hosts', authenticated.cookie, hostsRoute);
 
 /* GET login page. */
