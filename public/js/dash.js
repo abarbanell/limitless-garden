@@ -1,6 +1,6 @@
 // dashboard chart with d3.js
 
-// part one - get dataset - some random data
+// part one - get dataset - some data from all sensors mixed
 
 var url = "/api/collections/sensor?limit=30000&filldate=true";
 
