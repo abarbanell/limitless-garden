@@ -5,6 +5,7 @@ var sensor = require('../model/sensor');
 var logger = require('../util/logger');
 var util = require('util');
 var authenticated = require('../util/authenticated');
+var ObjectID = require('mongodb').ObjectID;
 
 var sensorRoute = function (req, res, next) {
     sensor.getMulti({}, {limit: 10} , function (err, result) {
@@ -120,8 +121,6 @@ var hostDataRoute = function (req, res, next) {
 			var mapped = result.map(function(obj) {
 				var rObj = {};
 				//rename some fields
-				logger.info('typeof(timestamp) = ' + typeof(obj.timestamp));
-				logger.info('typeof(timespamp) = ' + typeof(obj.timespamp));
 				if(obj.timestamp) {
 					if (typeof(obj.timestamp) == 'number') { // UNIX timestamp
 						var date = new Date(obj.timestamp * 1000)
@@ -130,6 +129,9 @@ var hostDataRoute = function (req, res, next) {
 						var date = new Date(obj.timestamp);
 						rObj.date = date.toJSON();
 					}
+				} else { 
+					// no timestamp, generate from Obejct ID
+					rObj.date = ObjectID(obj._id).getTimestamp();
 				}
 				rObj.soil = obj.soil;
 				// copy some fields
