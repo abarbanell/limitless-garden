@@ -128,7 +128,7 @@ router.get('/collections/:collectionName', authenticated.cookie, collectionsRout
 router.get('/sensor', authenticated.cookie, sensorRoute);
 
 /* temprarily park some routes which will be filled later */ 
-router.get('/sensor/:host', authenticated.cookie, sensorRoute);
+router.get('/hosts/:host', authenticated.cookie, sensorRoute);
 router.get('/hosts', authenticated.cookie, hostsRoute);
 
 /* GET login page. */
