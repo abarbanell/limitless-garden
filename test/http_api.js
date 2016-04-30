@@ -227,5 +227,18 @@ describe('API integration tests', function() {
 			.expect(status.NOT_FOUND, done);
 		});
 	});
+
+	it('GET sensor/host/soil', function(done) {
+		var url = '/api/sensor/rpi03/soil?user_key=' + user_key;
+		supertest(server)
+		.get(url)
+		.expect(status.OK)
+		.end(function(err,res) {
+			expect(err).to.not.be.ok();
+			expect(res).to.be.ok();
+			logger.info('res = %s', util.inspect(res.body));
+			done();
+		});
+	});
 });
 

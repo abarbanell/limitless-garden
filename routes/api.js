@@ -6,6 +6,8 @@ var status = require('http-status');
 var db = require('../util/db');
 var ObjectID = require('mongodb').ObjectID;
 
+var sensor = require('../model/sensor.js');
+
 var threescale = require('../util/threescale');
 router.use(threescale);
 
@@ -106,5 +108,14 @@ router.delete('/collections/:collectionName/:id', function(req, res, next) {
 		});			
 	});
 });
+
+// routes based on model, no direct DB queries
+
+router.get('/sensor/:host/soil', function(req, res, next) {
+	sensor.getSoilByHost(req.params.host, function(err, docs) {
+		res.set('X-Total-Count', docs.length).send(docs);
+	});
+});
+
 
 module.exports = router;

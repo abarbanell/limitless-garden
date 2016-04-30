@@ -32,7 +32,7 @@ var sensor = function() {
 			});
 		});
 	};
-	
+
 	var distinctHosts = function(callback) {
 		db.connect(function(err,dbObj){
 			dbObj.collection(colname).distinct("host", function(err,result){
@@ -42,10 +42,23 @@ var sensor = function() {
 		});
 	};
 
+	var findSoilByHost = function(host, callback) {
+		db.connect(function(err,dbObj){
+			var collection = dbObj.collection(colname);
+			var query = { host: host, soil: { $gt: 0 } };
+			var options = {};
+			collection.find(query, options).toArray(function(err,docs){
+				dbObj.close();
+				callback(err,docs);
+			});
+		});
+	}
+
 	return {
 		get: findOne,
 		getMulti: find,
-		getUniqueHosts: distinctHosts
+		getUniqueHosts: distinctHosts,
+		getSoilByHost: findSoilByHost
 	}
 }();
 

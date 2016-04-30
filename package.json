@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "start:watch": "watch 'npm start'", 
+    "start:watch": "watch 'npm start'",
     "jshint": "jshint **.js",
     "jscs": "jscs --preset=google **.js",
     "test": "./node_modules/.bin/mocha -u tdd -R spec",
-    "test:watch": "watch 'npm run test'"
+    "test:watch": "watch 'npm run test'",
+    "coverage": "./node_modules/.bin/istanbul cover _mocha"
   },
   "dependencies": {
     "3scale": "^0.6.1",
@@ -37,6 +38,7 @@
   ],
   "devDependencies": {
     "expect.js": "^0.3.1",
+    "istanbul": "0.4.3",
     "jscs": "^2.8.0",
     "jshint": "^2.8.0",
     "mocha": "^2.3.2",
