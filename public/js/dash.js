@@ -2,7 +2,7 @@
 
 // part one - get dataset - some data from all sensors mixed
 
-var url = "/api/collections/sensor?limit=30000&filldate=true";
+var url = "/api/sensor/' + host + '/soil";
 
 var getdata = function(err, data) {
 	var dataset = [];

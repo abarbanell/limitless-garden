@@ -20,11 +20,13 @@
 					<table class="table table-striped ">
 						<thead class="lgstyle-inverse">
 							<td>Host</td>
+							<td>Actions</td>
 						</thead>
 
 					<% for(var i=0; i<data.length; i++) { %>
 						<tr>
 							<td> <a href="/hosts/<%= data[i] %>"><%= data[i] %></a> </td>
+							<td> <a href="/dashboard/<%= data[i] %>"> dashboard </a> </td> 
 						</tr>
 					<% } %>
 

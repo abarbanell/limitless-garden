@@ -193,9 +193,10 @@ router.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-router.get('/dashboard', authenticated.cookie, function(req, res) {
+router.get('/dashboard/:host', authenticated.cookie, function(req, res) {
 		res.render('dashboard', { 
 			title: 'Limitless Garden Dashboard',
+			host: req.params.host,
 			user: req.user
 		});
 });
