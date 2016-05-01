@@ -14,7 +14,7 @@ var user_key = process.env.THREESCALE_USER_KEY;
 // system under test
 var server = require('../bin/www');
 
-describe('API integration tests', function() {
+describe('collections API integration tests', function() {
   it('server should be valid', function(done){
       expect(server).to.be.ok();
 			expect(server.listen).to.be.an('function');
@@ -225,19 +225,6 @@ describe('API integration tests', function() {
 			supertest(server)
 			.post(postUrl)
 			.expect(status.NOT_FOUND, done);
-		});
-	});
-
-	it('GET sensor/host/soil', function(done) {
-		var url = '/api/sensor/rpi03/soil?user_key=' + user_key;
-		supertest(server)
-		.get(url)
-		.expect(status.OK)
-		.end(function(err,res) {
-			expect(err).to.not.be.ok();
-			expect(res).to.be.ok();
-			logger.info('res = %s', util.inspect(res.body));
-			done();
 		});
 	});
 });

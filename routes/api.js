@@ -113,7 +113,18 @@ router.delete('/collections/:collectionName/:id', function(req, res, next) {
 
 router.get('/sensor/:host/soil', function(req, res, next) {
 	sensor.getSoilByHost(req.params.host, function(err, docs) {
-		res.set('X-Total-Count', docs.length).send(docs);
+		var mapped = docs.map(function(item) {
+			var rObj = {};
+			rObj.soil = item.soil;
+			rObj.host = item.host;
+			if (! item.hasOwnProperty("date")) {
+				rObj.date = ObjectID(item._id).getTimestamp();
+			}	else { 
+				rObj.date = item.date;
+			}
+			return rObj;
+		});
+		res.send(mapped);
 	});
 });
 
