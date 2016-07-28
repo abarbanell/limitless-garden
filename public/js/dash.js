@@ -96,11 +96,11 @@ var visualize = function(dataset) {
     y.domain([0, d3.max(dataset, function(d) { return d.y; })]);
 
 		// add the lines for values, mean, upper and lower sigma
-		for (l in lines) {
+		for (var i=0; i< lines.length; i++ ) {
 			svg.append("path")
 				.attr("class", "line")
-				.attr("stroke" , l.c)
-				.attr("d", l.f(dataset));
+				.attr("stroke" , lines[i].c)
+				.attr("d", lines[i].f(dataset));
 		} 
 
     // Add the X Axis
