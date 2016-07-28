@@ -60,16 +60,19 @@ var visualize = function(dataset) {
 
 	// Define the mean line
 	var meanline = d3.svg.line()
+		.attr("color", "grey")
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.mean); });
 
 	// Define the lower sigma line
 	var lowerline = d3.svg.line()
+		.attr("color", "green")
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.mean - d.sigma); });
 
 	// Define the mean line
 	var upperline = d3.svg.line()
+		.attr("color", "red")
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.mean + d.sigma); });
 
