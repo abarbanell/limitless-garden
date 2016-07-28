@@ -99,7 +99,7 @@ var visualize = function(dataset) {
 		for (l in lines) {
 			svg.append("path")
 				.attr("class", "line")
-				.attr("stroke: , l.c)
+				.attr("stroke" , l.c)
 				.attr("d", l.f(dataset));
 		} 
 
