@@ -60,19 +60,16 @@ var visualize = function(dataset) {
 
 	// Define the mean line
 	var meanline = d3.svg.line()
-		.attr("color", "grey")
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.mean); });
 
 	// Define the lower sigma line
 	var lowerline = d3.svg.line()
-		.attr("color", "green")
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.mean - d.sigma); });
 
 	// Define the mean line
 	var upperline = d3.svg.line()
-		.attr("color", "red")
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.mean + d.sigma); });
 
@@ -98,16 +95,19 @@ var visualize = function(dataset) {
     // Add the meanline path.
     svg.append("path")
         .attr("class", "line")
+				.attr("color", "grey")
         .attr("d", meanline(dataset));
 
     // Add the upperline path.
     svg.append("path")
         .attr("class", "line")
+				.attr("color", "red")
         .attr("d", upperline(dataset));
 
     // Add the lowerline path.
     svg.append("path")
         .attr("class", "line")
+				.attr("color", "green")
         .attr("d", lowerline(dataset));
 
     // Add the X Axis
