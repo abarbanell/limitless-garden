@@ -111,7 +111,7 @@ var hostsRoute = function (req, res, next) {
 
 var hostDataRoute = function (req, res, next) {
 	var host = req.params.host;
-    sensor.getMulti({host: host}, {limit: 10, sort: { "_id": -1}} , function (err, result) {
+    sensor.getMulti({host: host}, {limit: 20, sort: { "_id": -1}} , function (err, result) {
 		logger.info('sensor.getMulti returned: err=' + err);
 		if (err) {
 			logger.error(err);
