@@ -73,6 +73,14 @@ var visualize = function(dataset) {
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.mean + d.sigma); });
 
+	// set up an array for the four lines
+	var lines = [
+		{f: valueline, c: "blue"},
+		{f: meanline,  c: "grey"},
+		{f: lowerline, c: "black"},
+		{f: upperline, c: "red"}
+	];
+
 	// Adds the svg canvas
 	var svg = d3.select(".d3canvas")
     .append("svg")
@@ -87,28 +95,13 @@ var visualize = function(dataset) {
 			d3.max(dataset, function(d) { return d.x; })]);
     y.domain([0, d3.max(dataset, function(d) { return d.y; })]);
 
-    // Add the valueline path.
-    svg.append("path")
-        .attr("class", "line")
-        .attr("d", valueline(dataset));
-
-    // Add the meanline path.
-    svg.append("path")
-        .attr("class", "line")
-				.attr("color", "grey")
-        .attr("d", meanline(dataset));
-
-    // Add the upperline path.
-    svg.append("path")
-        .attr("class", "line")
-				.attr("color", "red")
-        .attr("d", upperline(dataset));
-
-    // Add the lowerline path.
-    svg.append("path")
-        .attr("class", "line")
-				.attr("color", "green")
-        .attr("d", lowerline(dataset));
+		// add the lines for values, mean, upper and lower sigma
+		for (l in lines) {
+			svg.append("path")
+				.attr("class", "line")
+				.attr("stroke: , l.c)
+				.attr("d", l.f(dataset));
+		} 
 
     // Add the X Axis
     svg.append("g")
