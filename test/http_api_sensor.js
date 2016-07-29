@@ -29,17 +29,23 @@ describe('sensor API tests', function() {
 	function insertrows(done){
 		logger.info('insertrows: insert some data');
 		var today = new Date();
-		var objs = [{
-			"soil": 35,
+		var objs = [];
+		for (var i=0; i<20; i++) {
+			var m1 = {
+			"soil": 35 +i ,
 			"host": "rpi03",
 			"sensor": "soil",
 			"timestamp": Math.floor(Date.now() /1000)
-		}, {
-				"soil": 36,
+			};
+			var m2 =  {
+				"soil": 36 - i,
 				"host": "rpi02",
 				"sensor": "soil",
 				"timestamp": today.toISOString()
-			}];
+			};
+			objs.push(m1);
+			objs.push(m2);
+		}
 		db.connect(function(err,dbObj){
 			dbObj.collection(colname).insert(objs, function(err, result) {
 				if (err) {
@@ -82,9 +88,26 @@ describe('sensor API tests', function() {
 			expect(res).to.be.ok();
 			logger.info('res = %s', util.inspect(res.body));
 			expect(res.body[0].soil).to.eql(36);
+			expect(res.body.length).to.eql(20);
 			done();
 		});
 	});
+
+	it('GET sensor/host/soil with limit', function(done) {
+		var url = '/api/sensor/rpi02/soil?user_key=' + user_key + '&limit=5';
+		supertest(server)
+		.get(url)
+		.expect(status.OK)
+		.end(function(err,res) {
+			expect(err).to.not.be.ok();
+			expect(res).to.be.ok();
+			logger.info('res = %s', util.inspect(res.body));
+			expect(res.body[0].soil).to.eql(36);
+			expect(res.body.length).to.eql(5);
+			done();
+		});
+	});
+
 });
 
 

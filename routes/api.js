@@ -124,7 +124,9 @@ router.get('/sensor/:host/soil', function(req, res, next) {
 			}
 			return rObj;
 		});
-		res.send(mapped);
+		var offset = req.query.offset || 0;
+		var limit = req.query.limit || (mapped.length - offset);
+		res.send(mapped.slice(offset, offset+limit));
 	});
 });
 
