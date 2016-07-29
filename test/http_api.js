@@ -64,8 +64,15 @@ describe('collections API integration tests', function() {
 		.expect(status.OK, done);
 	});
 
+	it('GET testcollection with development user_key should return OK', function(done) {
+		var url = '/api/collections/test?user_key=true';
+		supertest(server)
+		.get(url)
+		.expect(status.OK, done);
+	});
+
 	it('GET testcollection with user_key should return X-Total-Count header', function(done) {
-		var url = '/api/collections/test?user_key=' + user_key;
+		var url = '/api/collections/test?user_key=true';
 		supertest(server)
 		.get(url).end(function(err, res) {
 			expect(err).to.not.be.ok();
@@ -83,7 +90,7 @@ describe('collections API integration tests', function() {
 	});
 
 	it('GET testcollection with user_key should return array', function(done) {
-		var url = '/api/collections/test?user_key=' + user_key;
+		var url = '/api/collections/test?user_key=true';
 		supertest(server)
 		.get(url).end(function(err, res) {
 			expect(err).to.not.be.ok();
@@ -97,7 +104,7 @@ describe('collections API integration tests', function() {
 	});
 
 	it('GET testcollection with filldate should return array with date fields', function(done) {
-		var url = '/api/collections/test?filldate=1&user_key=' + user_key;
+		var url = '/api/collections/test?filldate=1&user_key=true';
 		supertest(server)
 		.get(url).end(function(err, res) {
 			expect(err).to.not.be.ok();
@@ -119,21 +126,21 @@ describe('collections API integration tests', function() {
 	});
 
 	it('GET testcollection/not-existing-id with user_key should return NOT_FOUND', function(done) {
-		var url = '/api/collections/test/aabbaabbaabbccddccddccdd?user_key=' + user_key;
+		var url = '/api/collections/test/aabbaabbaabbccddccddccdd?user_key=true';
 		supertest(server)
 		.get(url)
 		.expect(status.NOT_FOUND, done);
 	});
 
 	it('GET testcollection/malformed-id with user_key should return OK', function(done) {
-		var url = '/api/collections/test/this-is-not-hex?user_key=' + user_key;
+		var url = '/api/collections/test/this-is-not-hex?user_key=true';
 		supertest(server)
 		.get(url)
 		.expect(status.BAD_REQUEST, done);
 	});
 
 	it('GET / with user_key should return array of collections ', function(done) {
-		var url = '/api/collections?user_key=' + user_key;
+		var url = '/api/collections?user_key=true';
 		supertest(server)
 		.get(url)
 		.expect(status.OK)
@@ -145,7 +152,7 @@ describe('collections API integration tests', function() {
 	});
 
 	it('POST testcollection with GET', function(done) {
-		var url = '/api/collections/test?user_key=' + user_key;
+		var url = '/api/collections/test?user_key=true';
 		supertest(server)
 		.post(url)
 		.send({field: "content"})
@@ -158,7 +165,7 @@ describe('collections API integration tests', function() {
 			expect(res.body.insertedIds).to.be.an('array');
 			expect(res.body.insertedIds.length).to.eql(1);
 			var id = res.body.insertedIds[0];
-			var getUrl = '/api/collections/test/' + id + '?user_key='+ user_key;
+			var getUrl = '/api/collections/test/' + id + '?user_key=true';
 			supertest(server)
 			.get(getUrl)
 			.expect(status.OK, done);
@@ -166,28 +173,28 @@ describe('collections API integration tests', function() {
 	});
 
 	it('DELETE testcollection should return NOT_FOUND', function(done) {
-		var url = '/api/collections/test?user_key=' + user_key;
+		var url = '/api/collections/test?user_key=true';
 		supertest(server)
 		.delete(url)
 		.expect(status.NOT_FOUND, done);
 	});
 
 	it('DELETE testcollection/not-existing-id should return NOT_FOUND', function(done) {
-		var url = '/api/collections/test/aabbaabbaabbccddccddccdd?user_key=' + user_key;
+		var url = '/api/collections/test/aabbaabbaabbccddccddccdd?user_key=true';
 		supertest(server)
 		.delete(url)
 		.expect(status.NOT_FOUND, done);
 	});
 
 	it('DELETE testcollection/malformed-id should return BAD_REQUEST', function(done) {
-		var url = '/api/collections/test/this-is-not-hex?user_key=' + user_key;
+		var url = '/api/collections/test/this-is-not-hex?user_key=true';
 		supertest(server)
 		.delete(url)
 		.expect(status.BAD_REQUEST, done);
 	});
 
 	it('POST testcollection with DELETE', function(done) {
-		var url = '/api/collections/test?user_key=' + user_key;
+		var url = '/api/collections/test?user_key=true';
 		supertest(server)
 		.post(url)
 		.send({field: "content"})
@@ -200,7 +207,7 @@ describe('collections API integration tests', function() {
 			expect(res.body.insertedIds).to.be.an('array');
 			expect(res.body.insertedIds.length).to.eql(1);
 			var id = res.body.insertedIds[0];
-			var deleteUrl = '/api/collections/test/' + id + '?user_key='+ user_key;
+			var deleteUrl = '/api/collections/test/' + id + '?user_key=true';
 			supertest(server)
 			.delete(deleteUrl)
 			.expect(status.OK, done);
@@ -208,7 +215,7 @@ describe('collections API integration tests', function() {
 	});
 
 	it('POST testcollection with POST again to same id', function(done) {
-		var url = '/api/collections/test?user_key=' + user_key;
+		var url = '/api/collections/test?user_key=true';
 		supertest(server)
 		.post(url)
 		.send({field: "content"})
@@ -221,7 +228,7 @@ describe('collections API integration tests', function() {
 			expect(res.body.insertedIds).to.be.an('array');
 			expect(res.body.insertedIds.length).to.eql(1);
 			var id = res.body.insertedIds[0];
-			var postUrl = '/api/collections/test/' + id + '?user_key='+ user_key;
+			var postUrl = '/api/collections/test/' + id + '?user_key=true';
 			supertest(server)
 			.post(postUrl)
 			.expect(status.NOT_FOUND, done);

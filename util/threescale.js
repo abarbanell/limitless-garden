@@ -17,6 +17,9 @@ var threescale = function(req, res, next) {
   if (!req.query.user_key) {
     res.status(status.BAD_REQUEST).send('Bad Request - user_key missing');
   } else {
+		if ((req.app.get('env') === 'development') && (req.query.user_key === 'true')) {
+			return next();
+		}
     client.authorize_with_user_key({
         "user_key": req.query.user_key
     }, function(response){
