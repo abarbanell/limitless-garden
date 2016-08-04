@@ -45,4 +45,4 @@ but needs network to pull new images from docker for VM creation and start.
 So you need network to start the devenv VM, but then you can continue to work offline.*
 
 *Note: sometimes the dokku application just hangs and responds with
-error 503 from nginx. Have not yet found out why.*
+error 502 or 503 from nginx. Have not yet found out why.*
