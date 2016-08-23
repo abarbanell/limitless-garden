@@ -14,7 +14,7 @@ router.get('/google',
     'https://www.googleapis.com/auth/plus.login', 
     'https://www.googleapis.com/auth/plus.me'
     ] }),
-  function(req, res){
+  /* istanbul ignore next */ function(req, res){
     logger.err('/auth/google - should not reach this line');
     // The request will be redirected to Google for authentication, so this
     // function will not be called.
@@ -27,7 +27,7 @@ router.get('/google',
 //   which, in this example, will redirect the user to the home page.
 router.get('/google/callback', 
   passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
+  /* istanbul ignore next */ function(req, res) {
     logger.info('google auth callback successful, now redirecting to home page');
     res.redirect('/');
   });

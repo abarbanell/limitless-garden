@@ -8,6 +8,7 @@ var util = require('util');
 var logger = require('../util/logger');
 var httpMocks = require('node-mocks-http');
 var rewire = require('rewire');
+var sensorHelper = require('./helper/sensor.js');
 
 // environment
 var port = process.env.PORT || 4321;
@@ -39,19 +40,30 @@ describe('collections index.js route supertests', function() {
 
 });
 
-
 describe('Middleware test for for index routes', function() {
-	it('check sensorRoute - happy path', function(done) {
-		var request = httpMocks.createRequest({
+	var request, response; 
+
+	beforeEach(function(done) {
+		request = httpMocks.createRequest({
 			rethod: 'GET',
 			url: '/api/sensor',
 			isAuthenticated: function(){ return true;}
 		});
-		var response = httpMocks.createResponse();
+		response = httpMocks.createResponse();
+		sensorHelper.droprows(function() {
+			sensorHelper.insertrows(done);
+		});
+	});
+
+	after(function(done) {
+		sensorHelper.droprows(done);
+	});
+
+	it('check sensorRoute - happy path', function(done) {
 		// we want to catch the res.render function
 		response.render = function(view, obj) { 
-			util.inspect(view);
-			util.inspect(obj);
+			expect(view).to.be.ok();
+			expect(obj).to.be.ok();
 			done();
 		};
 		var sr = indexrouter.__get__('sensorRoute');
@@ -64,6 +76,44 @@ describe('Middleware test for for index routes', function() {
 		});
 	});
 
+	it('collectionsListRoute - happy path', function(done) {
+		// we want to catch the res.render function
+		response.render = function(view, obj) { 
+			expect(view).to.be.eql('index');
+			expect(obj).to.be.ok();
+			done();
+		};
+		var sr = indexrouter.__get__('collectionsListRoute');
+		sr(request, response, function next(error) {
+			if (error) {
+				logger.error("error received");
+			};
+			expect("you should not get here").to.eql("true");
+			done();
+		});
+	});
+
+	it('collectionsRoute - happy path', function(done) {
+		// we need to add a db collection obj to the request object
+		sensorHelper.getCollection(function(collection) {
+			request.collection = collection;
+			// we want to catch the res.render function
+			response.render = function(view, obj) { 
+				expect(view).to.be.eql('collection');
+				expect(obj).to.be.ok();
+				done();
+			};
+			var sr = indexrouter.__get__('collectionsRoute');
+			sr(request, response, function next(error) {
+				if (error) {
+					logger.error("error received");
+				};
+				expect("you should not get here").to.eql("true");
+				done();
+			});
+		});
+	});
+		
 });		
 	
 

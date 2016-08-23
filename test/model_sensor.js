@@ -4,64 +4,29 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 var env = process.env.ENVIRONMENT || 'dev';
 var colname = env + '.sensor';
-var insertedIds = [];
+var sensorHelper = require('./helper/sensor.js');
 
 describe('Sensor Model ', function() {
 	beforeEach(function(done) {
-		droprows(function(){
-			insertrows(done);
+		sensorHelper.droprows(function(){
+			sensorHelper.insertrows(done);
 		});
 	});
 	
-	function insertrows(done){
-		logger.info('insertrows: insert some data');
-		var today = new Date();
-		var objs = [{
-			"soil": 35,
-			"host": "rpi03",
-			"sensor": "soil",
-			"timestamp": Math.floor(Date.now() /1000)
-		}, {
-				"soil": 36,
-				"host": "rpi02",
-				"sensor": "soil",
-				"timestamp": today.toISOString()
-			}];
-		db.connect(function(err,dbObj){
-			dbObj.collection(colname).insert(objs, function(err, result) {
-				if (err) {
-					logger.error('insertrows Error: ' + err);
-					done();
-				} 
-				logger.info('insertrows result: ' + JSON.stringify(result));
-				insertedIds = result.insertedIds;
-				dbObj.close();
-				done();
-			});
-		});
-	};
-	
 	after(function(done){
-		droprows(done);
+		sensorHelper.droprows(done);
 	});	
-	
-	function droprows(done) {
-		db.connect(function(err,dbObj){
-			dbObj.collection(colname).remove({}, function(err, result) {
-				if (err) {
-					logger.error('droprows() error: '+ err);
-				}
-				logger.info('droprows() - removed data: ' + JSON.stringify(result));
-				dbObj.close();
-				done();
-			});
-		});
-	};
 	
   it('should contain get and getMulti methods ', function(){
       expect(sensor).to.be.an('object');
       expect(sensor.get).to.be.an('function');
       expect(sensor.getMulti).to.be.an('function');	
+  });
+
+  it('should insert 2 rows in beforeEach ', function(){
+      expect(sensorHelper.insertedIds).to.be.an('function');
+      expect(sensorHelper.insertedIds()).to.be.an('array');
+      expect(sensorHelper.insertedIds().length).to.be.eql(2);
   });
 
 	it('get a single value - notfound', function(done) {
@@ -78,14 +43,14 @@ describe('Sensor Model ', function() {
 	});
 	
 	it('get a single value - found', function (done) {
-		sensor.get(insertedIds[0], function (err, result) {
+		sensor.get(sensorHelper.insertedIds()[0], function (err, result) {
 			if (err) {
 				logger.error('err = ' + JSON.stringify(err));
 				done();
 			} else {
 				expect(err).to.not.be.ok();
 				expect(result).to.be.ok();
-				expect(result._id).to.eql(insertedIds[0]);
+				expect(result._id).to.eql(sensorHelper.insertedIds()[0]);
 				done();
 			}
 		});
@@ -101,7 +66,7 @@ describe('Sensor Model ', function() {
 				expect(err).to.not.be.ok();
 				expect(result).to.be.ok();
 				logger.info('getMulti result: ' + JSON.stringify(result));
-				expect(result.length).to.eql(insertedIds.length);
+				expect(result.length).to.eql(sensorHelper.insertedIds().length);
 				done();
 			}
 		});
