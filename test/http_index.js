@@ -114,6 +114,48 @@ describe('Middleware test for for index routes', function() {
 		});
 	});
 		
+	it('hostsRoute - happy path', function(done) {
+		// we need to add a db collection obj to the request object
+		sensorHelper.getCollection(function(collection) {
+			// we want to catch the res.render function
+			response.render = function(view, obj) { 
+				expect(view).to.be.eql('hosts');
+				expect(obj).to.be.ok();
+				done();
+			};
+			var sr = indexrouter.__get__('hostsRoute');
+			sr(request, response, function next(error) {
+				if (error) {
+					logger.error("error received");
+				};
+				expect("you should not get here").to.eql("true");
+				done();
+			});
+		});
+	});
+		
+	it('hostDataRoute - happy path', function(done) {
+		// we need to add a db collection obj to the request object
+		sensorHelper.getCollection(function(collection) {
+			expect(request.params).to.be.ok();
+			request.params.host = "rpi02";
+			// we want to catch the res.render function
+			response.render = function(view, obj) { 
+				expect(view).to.be.eql('hostdata');
+				expect(obj).to.be.ok();
+				done();
+			};
+			var sr = indexrouter.__get__('hostDataRoute');
+			sr(request, response, function next(error) {
+				if (error) {
+					logger.error("error received");
+				};
+				expect("you should not get here").to.eql("true");
+				done();
+			});
+		});
+	});
+		
 });		
 	
 
