@@ -71,7 +71,7 @@ var collectionsRoute = function (req, res, next) {
 			logger.error('error in collectionRoute() - count; %s', util.inspect(err));
 			res.status(500).render('error', { err: err});
 		} else {
-			req.collection.find({}, { limit: 10 }, function(err, result) {
+			req.collection.find({}, { limit: 20, sort: { "_id": -1 }}, function(err, result) {
 				if (err) {
 					logger.error('error in collectionRoute(); %s', util.inspect(err));
 					res.status(500).render(error, { err: err});
