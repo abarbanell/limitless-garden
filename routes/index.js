@@ -133,10 +133,12 @@ var hostDataRoute = function (req, res, next) {
 					// no timestamp, generate from Obejct ID
 					rObj.date = ObjectID(obj._id).getTimestamp();
 				}
-				rObj.soil = obj.soil;
 				// copy some fields
-				rObj.host = obj.host;
-				rObj.sensor = obj.sensor;
+				if (obj.soil) rObj.soil = obj.soil;
+				if (obj.host) rObj.host = obj.host;
+				if (obj.sensor) rObj.sensor = obj.sensor;
+				if (obj.capacitance) rObj.capacitance = obj.capacitance;
+				if (obj.light) rObj.light = obj.light;
 				// ignore all other fields and return
 				return rObj;
 			});
