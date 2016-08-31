@@ -3,7 +3,7 @@
 // part one - get dataset - some data from all sensors mixed
 
 // limit 30000 is roughly 100 days 
-var url = "/api/sensor/" + host + "/" + (value || "soil") + "?limit=30000";
+var url = "/api/sensor/" + host + "/" + value + "?limit=30000";
 
 var getdata = function(err, data) {
 	var dataset = [];
@@ -11,17 +11,18 @@ var getdata = function(err, data) {
 	var sum = 0;
 	var sumsq = 0;
 	for (i=0; i< data.length; i++) {
-		var soil = data[i].soil;
+		var rec = data[i];
+		var val = rec[value];
 		var n = i+1;
-		sum += soil;
-		var mean = (n>0) ? (sum/n) : soil;
-		sumsq += (soil*soil);
+		sum += val;
+		var mean = (n>0) ? (sum/n) : val;
+		sumsq += (val*val);
 		var variance = (n > 1) ? (sumsq - (sum*sum)/n)/n : 0;
 		var sigma = Math.sqrt(variance);
-		var sigval = (sigma > 0) ? (soil-mean) / sigma : 0;
+		var sigval = (sigma > 0) ? (val-mean) / sigma : 0;
 		dataset.push({ 
 			x: new Date(data[i].date),  
-			y: soil, 
+			y: val, 
 			n: n, 
 			sum: sum, 
 			sumsq: sumsq, 
