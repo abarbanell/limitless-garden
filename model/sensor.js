@@ -42,6 +42,32 @@ var sensor = function() {
 		});
 	};
 
+
+	var findValuesByHost = function(host, value, callback) {
+		logger.info('model/sensor.js - findValuesByHost, host: ' + host + ', value: ' + value);
+		db.connect(function(err,dbObj){
+			if (err) {
+				logger.error('model/sensor.js - db.connect() err: ' + err);
+			}
+			var collection = dbObj.collection(colname);
+			var query = { };
+			query['host'] = host;
+			query[value] = { $gt: 0 };
+			var options = {};
+			options['host'] = 1;
+			options[value] = 1;
+			options['timestamp'] = 1;
+			collection.find(query, options).toArray(function(err,docs){
+				if (err) {
+					logger.error('model/sensor.js - collection.find() err: ' + err);
+				}
+				dbObj.close();
+				callback(err,docs);
+			});
+		});
+	}
+
+// Obsolete...
 	var findSoilByHost = function(host, callback) {
 		db.connect(function(err,dbObj){
 			var collection = dbObj.collection(colname);
@@ -58,7 +84,8 @@ var sensor = function() {
 		get: findOne,
 		getMulti: find,
 		getUniqueHosts: distinctHosts,
-		getSoilByHost: findSoilByHost
+		getSoilByHost: findSoilByHost,
+		getValuesByHost: findValuesByHost
 	}
 }();
 

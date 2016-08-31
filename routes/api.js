@@ -111,11 +111,15 @@ router.delete('/collections/:collectionName/:id', function(req, res, next) {
 
 // routes based on model, no direct DB queries
 
-router.get('/sensor/:host/soil', function(req, res, next) {
-	sensor.getSoilByHost(req.params.host, function(err, docs) {
+router.get('/sensor/:host/:value', function(req, res, next) {
+	logger.info('routes/api.js - value: ' + req.params.value);
+	sensor.getValuesByHost(req.params.host, req.params.value, function(err, docs) {
+		if (err) { 
+			logger.error('routes/api.js - error: ' + err);
+		}
 		var mapped = docs.map(function(item) {
 			var rObj = {};
-			rObj.soil = item.soil;
+			rObj[req.params.value] = item[req.params.value];
 			rObj.host = item.host;
 			if (! item.hasOwnProperty("date")) {
 				rObj.date = ObjectID(item._id).getTimestamp();
@@ -124,6 +128,7 @@ router.get('/sensor/:host/soil', function(req, res, next) {
 			}
 			return rObj;
 		});
+		logger.info('routes/api.js - mapped document length: ' + mapped.length);
 		var offset = req.query.offset || 0;
 		var limit = req.query.limit || (mapped.length - offset);
 		res.send(mapped.slice(offset, offset+limit));

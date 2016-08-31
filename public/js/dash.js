@@ -3,7 +3,7 @@
 // part one - get dataset - some data from all sensors mixed
 
 // limit 30000 is roughly 100 days 
-var url = "/api/sensor/" + host + "/soil?limit=30000";
+var url = "/api/sensor/" + host + "/" + (value || "soil") + "?limit=30000";
 
 var getdata = function(err, data) {
 	var dataset = [];
