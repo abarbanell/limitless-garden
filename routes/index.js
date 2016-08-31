@@ -195,11 +195,20 @@ router.get('/logout', function(req, res){
   res.redirect('/');
 });
 
+router.get('/dashboard/:host/:field', authenticated.cookie, function(req, res) {
+		res.render('dashboard', { 
+			title: 'Limitless Garden Dashboard',
+			host: req.params.host,
+			user: req.user,
+			field: req.params.field
+		});
+});
 router.get('/dashboard/:host', authenticated.cookie, function(req, res) {
 		res.render('dashboard', { 
 			title: 'Limitless Garden Dashboard',
 			host: req.params.host,
-			user: req.user
+			user: req.user,
+			field: "soil"
 		});
 });
 
