@@ -99,7 +99,7 @@ var hostsRoute = function (req, res, next) {
 			logger.error(err);
 			res.status(500).render(error, { err: err});
 		} else {
-			logger.info('result = ' + JSON.stringify(result));	
+			logger.info('routes/index.js hostsRoute(), result = ' + JSON.stringify(result));	
 			res.render('hosts', { 
 				title: 'Limitless Garden - Hosts', 
 				data: result,
@@ -117,7 +117,7 @@ var hostDataRoute = function (req, res, next) {
 			logger.error(err);
 			res.status(500).render(error, { err: err });
 		} else {
-			logger.info('result = ' + JSON.stringify(result));
+			logger.info('routes/index.js hostsDataRoute(), result = ' + JSON.stringify(result));	
 			var mapped = result.map(function(obj) {
 				var rObj = {};
 				//rename some fields
@@ -139,6 +139,7 @@ var hostDataRoute = function (req, res, next) {
 				if (obj.sensor) rObj.sensor = obj.sensor;
 				if (obj.capacitance) rObj.capacitance = obj.capacitance;
 				if (obj.light) rObj.light = obj.light;
+				if (obj.temperature) rObj.temperature = obj.temperature;
 				// ignore all other fields and return
 				return rObj;
 			});

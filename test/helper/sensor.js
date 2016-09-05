@@ -11,7 +11,7 @@ var insertedIds = [];
 		var objs = [{
 			"soil": 35,
 			"host": "rpi03",
-			"sensor": "soil",
+			"sensor": ["soil", "temperature"],
 			"timestamp": Math.floor(Date.now() /1000)
 		}, {
 				"soil": 36,
