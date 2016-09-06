@@ -33,6 +33,9 @@ npm-debug.log
 .env
 .env.test
 
+# local .lg.rc startup file
+.lg.rc
+
 # Settings directories for eclipse and vscode
 .settings
 .vscode
