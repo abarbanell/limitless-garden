@@ -67,24 +67,10 @@ var sensor = function() {
 		});
 	}
 
-// Obsolete...
-	var findSoilByHost = function(host, callback) {
-		db.connect(function(err,dbObj){
-			var collection = dbObj.collection(colname);
-			var query = { host: host, soil: { $gt: 0 } };
-			var options = {host: 1, soil: 1, timestamp: 1};
-			collection.find(query, options).toArray(function(err,docs){
-				dbObj.close();
-				callback(err,docs);
-			});
-		});
-	}
-
 	return {
 		get: findOne,
 		getMulti: find,
 		getUniqueHosts: distinctHosts,
-		getSoilByHost: findSoilByHost,
 		getValuesByHost: findValuesByHost
 	}
 }();

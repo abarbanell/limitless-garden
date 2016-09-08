@@ -16,7 +16,7 @@ var insertedIds = [];
 		}, {
 				"soil": 36,
 				"host": "rpi02",
-				"sensor": "soil",
+				"sensor": ["soil"],
 				"timestamp": today.toISOString()
 			}];
 		db.connect(function(err,dbObj){

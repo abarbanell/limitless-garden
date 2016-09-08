@@ -26,14 +26,26 @@
 							<td><a href="/hosts">Host</a></td>
 							<td>Sensor</td>
 							<td>Soil</td>
+							<td>capacitance</td>
+							<td>temperature</td>
+							<td>humidity</td>
+							<td>light</td>
 						</thead>
 
 					<% for(var i=0; i<data.length; i++) { %>
 						<tr>
 							<td><%= data[i].date %></td>
 							<td><%= data[i].host %></td>
-							<td><%= data[i].sensor %> typeof(sensor) = <%= typeof(data[i].sensor %> </td>
+							<td><% data[i].sensor.forEach(function(element, index, array) {  %>
+								<a href="<%= dashurl %>/<%= element %>"> [<%= element %>] </a> 
+								<% }); %>
+							</td>
+			
 							<td><%= data[i].soil %></td>
+							<td><%= data[i].capacitance %></td>
+							<td><%= data[i].temperature %></td>
+							<td><%= data[i].humidity %></td>
+							<td><%= data[i].light %></td>
 						</tr>
 					<% } %>
 

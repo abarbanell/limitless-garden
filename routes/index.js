@@ -134,9 +134,19 @@ var hostDataRoute = function (req, res, next) {
 					rObj.date = ObjectID(obj._id).getTimestamp();
 				}
 				// copy some fields
-				if (obj.soil) rObj.soil = obj.soil;
 				if (obj.host) rObj.host = obj.host;
-				if (obj.sensor) rObj.sensor = obj.sensor;
+				if (obj.sensor) { 
+					if (Array.isArray(obj.sensor)) {
+						logger.info('routes/index.js hostDataRoute: sensor detected as array');
+						rObj.sensor = obj.sensor;
+					} else { 
+						logger.error('routes/index.js hostDataRoute: sensor is not detected as array, will be wrapped. type: ' + 
+								typeof(obj.sensor) + ', JSON before wrapping: ' + util.inspect(obj.sensor));
+						rObj.sensor = [ obj.sensor ];
+					}
+				}
+				if (obj.soil) rObj.soil = obj.soil;
+				if (obj.humidity) rObj.humidity = obj.humidity;
 				if (obj.capacitance) rObj.capacitance = obj.capacitance;
 				if (obj.light) rObj.light = obj.light;
 				if (obj.temperature) rObj.temperature = obj.temperature;
@@ -147,7 +157,8 @@ var hostDataRoute = function (req, res, next) {
 			res.render('hostdata', { 
 				title: 'Limitless Garden', 
 				data: mapped, 
-				user: req.user 
+				user: req.user,
+				dashurl: "/dashboard/"+ host
 			});
 		};
 	});
@@ -201,15 +212,8 @@ router.get('/dashboard/:host/:field', authenticated.cookie, function(req, res) {
 			title: 'Limitless Garden Dashboard',
 			host: req.params.host,
 			user: req.user,
-			field: req.params.field
-		});
-});
-router.get('/dashboard/:host', authenticated.cookie, function(req, res) {
-		res.render('dashboard', { 
-			title: 'Limitless Garden Dashboard',
-			host: req.params.host,
-			user: req.user,
-			field: "soil"
+			field: req.params.field,
+			dataurl: "/hosts/" + req.params.host
 		});
 });
 

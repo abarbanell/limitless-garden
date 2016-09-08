@@ -147,7 +147,8 @@ describe('Middleware test for for index routes', function() {
 				expect(obj).to.be.ok();
 				expect(obj.title).to.be.an('string');
 				expect(obj.data).to.be.an('array');
-				expect(obj.data[0].sensor).to.be.an('string');
+				expect(obj.data[0].sensor).to.be.an('array');
+				expect(obj.data[0].sensor.length).to.eql(1);
 				done();
 			};
 			var sr = indexrouter.__get__('hostDataRoute');
@@ -174,6 +175,8 @@ describe('Middleware test for for index routes', function() {
 				expect(obj.data).to.be.an('array');
 				expect(obj.data[0].sensor).to.be.an('array');
 				expect(obj.data[0].sensor[0]).to.be.an('string');
+				logger.info('sensor.length: ' + obj.data[0].sensor.length);
+				expect(obj.data[0].sensor.length).to.be.greaterThan(1);
 				done();
 			};
 			var sr = indexrouter.__get__('hostDataRoute');
