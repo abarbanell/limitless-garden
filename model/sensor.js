@@ -29,7 +29,7 @@ var sensor = function() {
 		// sensor MUST be an array of strings
 		rObj.sensor = [];
 		if (Array.isArray(obj.sensor)) { 
-			for (const val of obj.sensor) {
+			for (val in obj.sensor) {
 				if (typeof(val) == 'string') {
 					rObj.sensor.push(val);
 				} else { 
