@@ -5,6 +5,44 @@ var colname = env + '.sensor';
 
 var sensor = function() { 
 
+	// validate object returned from DB. should never leak inconsitent objects
+	var validateObj = function(obj) {
+		// a null obj yields a null.
+		if (! obj) return null;
+		var rObj = {}; 
+		rObj._id = obj._id;
+		//rename some fields
+		logger.info('typeof(timestamp) = ' + typeof(obj.timestamp));
+		logger.info('typeof(timespamp) = ' + typeof(obj.timespamp));
+		if(obj.timestamp) {
+			if (typeof(obj.timestamp) == 'number') { // UNIX timestamp
+				var date = new Date(obj.timestamp * 1000)
+				rObj.date = date.toJSON();
+			} else { 
+				var date = new Date(obj.timestamp);
+				rObj.date = date.toJSON();
+			}   
+		}   
+		rObj.value = obj.soil;
+		// copy some fields
+		rObj.host = obj.host;
+		// sensor MUST be an array of strings
+		rObj.sensor = [];
+		if (Array.isArray(obj.sensor)) { 
+			for (const val of obj.sensor) {
+				if (typeof(val) == 'string') {
+					rObj.sensor.push(val);
+				} else { 
+					logger.error('model/sensor.js validateObj: sensor contains non-string value: ' + util.inspect(val));
+				}
+			}
+		} else {
+			logger.error('model/sensor.js validateObj: sensor is not an array: ' + util.inspect(val));
+		}
+		// ignore all other fields and return
+		return rObj;
+	}; 
+
 	var findOne = function(id, callback) {
 		logger.info('sensor.js - called with id=%s for collection=%s', id, colname);
 		db.connect(function(err, dbObj){
@@ -17,7 +55,12 @@ var sensor = function() {
 			collection.findOne({"_id": id}, {}, function(err,doc) {
 				dbObj.close();
 				logger.info('sensor.js - db closed');
-				return callback(err,doc);
+				if (err) {
+					return callback(err,null);
+				} else {
+					var vObj = validateObj(doc);
+					return callback(err,vObj);
+				}
 			});
 		});
 	};
@@ -28,7 +71,8 @@ var sensor = function() {
 			var collection = dbObj.collection(colname);
 			collection.find(query, options).toArray(function(err,docs){
 				dbObj.close();
-				callback(err,docs);
+				var mapped = docs.map(validateObj);
+				callback(err,mapped);
 			});
 		});
 	};
@@ -71,7 +115,8 @@ var sensor = function() {
 		get: findOne,
 		getMulti: find,
 		getUniqueHosts: distinctHosts,
-		getValuesByHost: findValuesByHost
+		getValuesByHost: findValuesByHost,
+		validateObj: validateObj
 	}
 }();
 
