@@ -1,4 +1,5 @@
 var logger = require('../util/logger');
+var util = require('util');
 var db = require('../util/db');
 var env = process.env.ENVIRONMENT || 'dev';
 var colname = env + '.sensor';
@@ -28,12 +29,14 @@ var sensor = function() {
 		rObj.host = obj.host;
 		// sensor MUST be an array of strings
 		rObj.sensor = [];
+		logger.info('obj.sensor = ' + util.inspect(obj.sensor));
 		if (Array.isArray(obj.sensor)) { 
-			for (val in obj.sensor) {
-				if (typeof(val) == 'string') {
-					rObj.sensor.push(val);
+			for (var i=0; i < obj.sensor.length; i++ ) {
+				if (typeof(obj.sensor[i]) == 'string') {
+					logger.info('obj.sensor[i] = ' + util.inspect(obj.sensor[i]));
+					rObj.sensor.push(obj.sensor[i]);
 				} else { 
-					logger.error('model/sensor.js validateObj: sensor contains non-string value: ' + util.inspect(val));
+					logger.error('model/sensor.js validateObj: sensor contains non-string value: ' + util.inspect(obj.sensor[i]));
 				}
 			}
 		} else {
