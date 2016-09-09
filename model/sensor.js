@@ -40,7 +40,7 @@ var sensor = function() {
 				}
 			}
 		} else {
-			logger.error('model/sensor.js validateObj: sensor is not an array: ' + util.inspect(val));
+			logger.error('model/sensor.js validateObj: sensor is not an array: ' + util.inspect(obj.sensor));
 		}
 		// ignore all other fields and return
 		return rObj;

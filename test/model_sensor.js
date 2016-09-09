@@ -1,4 +1,5 @@
 var expect = require('expect.js');
+var util = require('util');
 var sensor = require('../model/sensor.js');
 var logger = require('../util/logger');
 var db = require('../util/db');
@@ -23,10 +24,10 @@ describe('Sensor Model ', function() {
       expect(sensor.getMulti).to.be.an('function');	
   });
 
-  it('should insert 2 rows in beforeEach ', function(){
+  it('should insert 3 rows in beforeEach ', function(){
       expect(sensorHelper.insertedIds).to.be.an('function');
       expect(sensorHelper.insertedIds()).to.be.an('array');
-      expect(sensorHelper.insertedIds().length).to.be.eql(2);
+      expect(sensorHelper.insertedIds().length).to.be.eql(3);
   });
 
 	it('get a single value - notfound', function(done) {
@@ -51,6 +52,23 @@ describe('Sensor Model ', function() {
 				expect(err).to.not.be.ok();
 				expect(result).to.be.ok();
 				expect(result._id).to.eql(sensorHelper.insertedIds()[0]);
+				done();
+			}
+		});
+	});
+		
+	it('get a single value - broken sensor field', function (done) {
+		sensor.get(sensorHelper.insertedIds()[2], function (err, result) {
+			if (err) {
+				logger.error('err = ' + JSON.stringify(err));
+				done();
+			} else {
+				expect(err).to.not.be.ok();
+				expect(result).to.be.ok();
+				expect(result._id).to.eql(sensorHelper.insertedIds()[2]);
+				logger.info('model_sensor test with broken sensor field: '+ util.inspect(util.sensor));
+				expect(result.sensor).to.be.an('array'); // broken sensor value should be converted to empty array
+				expect(result.sensor.length).to.eql(0); 
 				done();
 			}
 		});
@@ -81,7 +99,7 @@ describe('Sensor Model ', function() {
 			expect(err).to.not.be.ok();
 			expect(result).to.be.ok();
 			expect(result).to.be.an('array');
-			expect(result.length).to.eql(2);
+			expect(result.length).to.eql(3);
 			done();
 		});
 	});

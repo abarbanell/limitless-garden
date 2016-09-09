@@ -18,6 +18,10 @@ var insertedIds = [];
 				"host": "rpi02",
 				"sensor": ["soil"],
 				"timestamp": today.toISOString()
+		}, {
+				"host": "no-array",
+				"sensor": "stringshouldbearray",
+				"timestamp": today.toISOString()
 			}];
 		db.connect(function(err,dbObj){
 			dbObj.collection(colname).insert(objs, function(err, result) {
