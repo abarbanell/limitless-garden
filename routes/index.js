@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../util/db');
 var sensor = require('../model/sensor');
+var photo = require('../model/photo');
 var logger = require('../util/logger');
 var util = require('util');
 var authenticated = require('../util/authenticated');
@@ -175,6 +176,17 @@ router.get('/login', function (req, res, next) {
 router.get('/about',  function (req, res, next) {
 			res.render('about', { 
 				 title: 'Limitless Garden',
+				 user: req.user
+			});
+});
+
+/* GET photos page. */
+router.get('/photos',  authenticated.cookie, function (req, res, next) {
+			photo.get(10, function(err, doc) {
+				logger.error('api call got back to surface');
+			})
+			res.render('photos', { 
+				 title: 'Photos',
 				 user: req.user
 			});
 });
