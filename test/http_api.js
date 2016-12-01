@@ -234,5 +234,54 @@ describe('collections API integration tests', function() {
 			.expect(status.NOT_FOUND, done);
 		});
 	});
+
+	 it('POST testcollection with empty payload', function(done) {
+                var url = '/api/collections/test?user_key=true';
+                supertest(server)
+                .post(url)
+		.type('json')
+                .send()
+                .expect(status.OK)
+                .end(function(err, res) {
+                        expect(err).to.not.be.ok();
+                        expect(res).to.be.ok();
+                        expect(res.body).to.be.an('object');
+                        logger.info('insert result=%s', util.inspect(res.body));
+			done();
+                });
+        });
+
+	 it('POST testcollection with json string payload', function(done) {
+                var url = '/api/collections/test?user_key=true';
+                supertest(server)
+                .post(url)
+		.type('json')
+                .send('{ "truncated": 0, "string": 1 }')
+                .expect(status.OK)
+                .end(function(err, res) {
+                        expect(err).to.not.be.ok();
+                        expect(res).to.be.ok();
+                        expect(res.body).to.be.an('object');
+                        logger.info('insert result=%s', util.inspect(res.body));
+			done();
+                });
+        });
+
+	 it('POST testcollection with invalid payload', function(done) {
+                var url = '/api/collections/test?user_key=true';
+                supertest(server)
+                .post(url)
+		.type('json')
+                .send("{truncated: ")
+                .expect(status.BAD_REQUEST)
+                .end(function(err, res) {
+                        expect(err).to.not.be.ok();
+                        expect(res).to.be.ok();
+                        expect(res.body).to.be.an('object');
+                        logger.info('insert result=%s', util.inspect(res.body));
+			done();
+                });
+        });
+
 });
 

@@ -13,6 +13,9 @@ var http = require('http');
  */
 
 var port = normalizePort(process.env.PORT || '3000');
+if (process.env.ENVIRONMENT == "test") {
+	var port = normalizePort(process.env.TESTPORT || port);
+} 
 app.set('port', port);
 
 /**
