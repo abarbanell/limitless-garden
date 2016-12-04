@@ -65,7 +65,7 @@ router.post('/collections/:collectionName', function(req, res, next) {
 	logger.info('POST: ' + util.inspect(req.body));
   req.collection.insert(req.body, {}, function(e, results){
     if (e) return next(e)
-		logger.info('POST result=%s', util.inspect(results));
+		logger.info('POST result is %s', util.inspect(results));
     res.send(results)
   })
 })
