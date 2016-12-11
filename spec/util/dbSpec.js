@@ -5,7 +5,7 @@
 var rewire = require('rewire');
 var mongo_url = process.env.TEST_MONGO_URL; 
 var mongoClient = require('mongodb').MongoClient;
-var logger = require('../util/logger');
+var logger = require('../../util/logger');
 var util = require('util');
 
 describe('util/db tests', function() {
@@ -53,7 +53,7 @@ describe('util/db tests', function() {
 
 	it('open DB via MONGOLAB_URI in util/db.js?', function(done) {
 		process.env.MONGOLAB_URI = mongo_url;
-		var db = rewire('../util/db');
+		var db = rewire('../../util/db');
 		expect(typeof(db.connect)).toEqual('function');
 		logger.info('m1');
 		db.connect(function(err,db1){
@@ -69,7 +69,7 @@ describe('util/db tests', function() {
 			delete process.env.MONGOLAB_URI;
 		}
 		process.env.MONGO_URL = mongo_url;
-		var db = rewire('../util/db');
+		var db = rewire('../../util/db');
 		expect(db.connect).toBeA(Function);
 		db.connect(function(err,db1){
 			expect(err).not.toBeTruthy();
@@ -82,7 +82,7 @@ describe('util/db tests', function() {
 			delete process.env.MONGOLAB_URI;
 		}
 		process.env.MONGO_URL = mongo_url;
-		var db = rewire('../util/db');
+		var db = rewire('../../util/db');
 		expect(db.connect).toBeA(Function);
 		db.connect(function(err,db1){
 			expect(err).not.toBeTruthy();
@@ -100,7 +100,7 @@ describe('util/db tests', function() {
 	});  
 
 	it('count is a function returning a number', function(done) {
-		var db = rewire('../util/db');
+		var db = rewire('../../util/db');
 		expect(db.count).toBeA(Function);
 		db.count('test', function(err, result) {
 			expect(err).not.toBeTruthy();
@@ -110,7 +110,7 @@ describe('util/db tests', function() {
 	});
 
 	it('collectionName is a function returning a string', function(done) {
-		var db = rewire('../util/db');
+		var db = rewire('../../util/db');
 		expect(db.collectionName).toBeA(Function);
 		expect(db.collectionName('test')).toBeA(String);
 		done();
@@ -119,7 +119,7 @@ describe('util/db tests', function() {
 	it('collectionName starts with environemnt', function(done) {
 		var env = process.env.ENVIRONMENT;
 		process.env.ENVIRONMENT='jsm';
-		var db = rewire('../util/db');
+		var db = rewire('../../util/db');
 		expect(db.collectionName).toBeA(Function);
 		var s = db.collectionName('test');
 		expect(s).toBeA(String);
@@ -129,7 +129,7 @@ describe('util/db tests', function() {
 	});
 	
     it('collections function return array', function (done) {
-        var db = rewire('../util/db');
+        var db = rewire('../../util/db');
         expect(db.collections).toBeA(Function);
         db.collections(function (err, arr) {
             expect(err).not.toBeTruthy();
