@@ -7,7 +7,7 @@
     "start:watch": "watch 'npm start'",
     "jshint": "jshint **.js",
     "jscs": "jscs --preset=google **.js",
-    "test": "./node_modules/.bin/mocha -u tdd -R spec",
+    "test": "./node_modules/.bin/jasmine",
     "test:watch": "watch 'npm run test'",
     "coverage": "./node_modules/.bin/istanbul cover _mocha"
   },
@@ -39,9 +39,9 @@
   "devDependencies": {
     "expect.js": "^0.3.1",
     "istanbul": "0.4.3",
+    "jasmine": "^2.5.2",
     "jscs": "^2.8.0",
     "jshint": "^2.8.0",
-    "mocha": "^2.3.2",
     "node-mocks-http": "1.5.3",
     "pre-commit": "^1.1.2",
     "rewire": "^2.3.4",
