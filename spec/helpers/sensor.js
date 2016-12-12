@@ -1,4 +1,3 @@
-var expect = require('expect.js');
 var logger = require('../../util/logger');
 var db = require('../../util/db');
 var env = process.env.ENVIRONMENT || 'dev';
