@@ -160,7 +160,7 @@ router.get('/collections/:collectionName', authenticated.cookie, collectionsRout
 /* GET sensor page. */
 router.get('/sensor', authenticated.cookie, sensorRoute);
 
-router.get('/spa', function(req, res, next) {
+router.get('/spa', authenticated.cookie, function(req, res, next) {
 	res.render('spa', {
 		title: 'Limitless Garden and Spa',
 		user: req.user
