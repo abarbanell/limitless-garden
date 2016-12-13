@@ -57,7 +57,9 @@ describe('Sensor Model ', function() {
 	});
 		
 	it('get a single value - broken sensor field', function (done) {
+		spyOn(logger, 'error');
 		sensor.get(sensorHelper.insertedIds()[2], function (err, result) {
+			expect(logger.error).toHaveBeenCalled();
 			if (err) {
 				logger.error('err = ' + JSON.stringify(err));
 				done();
@@ -74,7 +76,9 @@ describe('Sensor Model ', function() {
 	});
 
 	it('should get an array of values', function(done) {
+		spyOn(logger, 'error');
 		sensor.getMulti({}, {}, function (err, result) {
+			expect(logger.error).toHaveBeenCalled();
 			logger.info('model_sensor test: getmulti callback reached');
 			if (err) {
 				logger.error('err = ' + JSON.stringify(err));

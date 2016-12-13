@@ -160,6 +160,13 @@ router.get('/collections/:collectionName', authenticated.cookie, collectionsRout
 /* GET sensor page. */
 router.get('/sensor', authenticated.cookie, sensorRoute);
 
+router.get('/spa', function(req, res, next) {
+	res.render('spa', {
+		title: 'Limitless Garden and Spa',
+		user: req.user
+	});
+})
+
 /* temprarily park some routes which will be filled later */ 
 router.get('/hosts/:host', authenticated.cookie, hostDataRoute);
 router.get('/hosts', authenticated.cookie, hostsRoute);

@@ -7,7 +7,7 @@
     "start:watch": "watch 'npm start'",
     "jshint": "jshint **.js",
     "jscs": "jscs --preset=google **.js",
-    "test": "./node_modules/.bin/jasmine",
+    "test": "node ./jasmine.js",
     "test:watch": "watch 'npm run test'",
     "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec"
   },
@@ -39,6 +39,7 @@
   "devDependencies": {
     "istanbul": "^0.4.3",
     "jasmine": "^2.5.2",
+    "jasmine-console-reporter": "1.2.7",
     "jasmine-node": "^1.14.5",
     "jscs": "^2.8.0",
     "jshint": "^2.8.0",

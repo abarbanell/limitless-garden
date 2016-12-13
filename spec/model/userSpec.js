@@ -111,8 +111,10 @@ it('get a single value - found', function (done) {
 	});
 
 	it('should findOrCreate an entry - existing user', function(done) {
+		spyOn(logger, 'error');
 		newObj = objs[1];
 		user.findOrCreate(newObj, function (err, result) {
+			expect(logger.error).toHaveBeenCalled();
 			if (err) {
 				logger.error('err = ' + JSON.stringify(err));
 				done();
