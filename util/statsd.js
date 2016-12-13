@@ -1,4 +1,4 @@
-var status = require('http-status');
+var logger = require('./logger');
 
 // Simple route middleware to ensure user is authenticated.
 //   Use this route middleware on any resource that needs to be protected.  If
@@ -6,13 +6,22 @@ var status = require('http-status');
 //   the request will proceed.  Otherwise, the user will be redirected to the
 //   login page.
 
-var Client = require('node-statsd-client').Client;
+var Statsd = require('node-statsd');
 
-var client = new Client(process.env.STATSD_HOST, process.env.STATSD_PORT);
+var client = new Statsd({
+  host: process.env.STATSD_HOST, 
+  port: process.env.STATSD_PORT
+});
 var prefix = process.env.ENVIRONMENT
 
 function statsdHits(req, res, next) {
-  // client.increment(prefix)
+  var c1 = prefix + ".http";
+  var c2 = prefix + "." + req.method;
+  var c3 = prefix + ".route" + (req.originalUrl || "/");
+  client.increment(c1);
+  client.increment(c2);
+  client.increment(c3);
+  logger.info("statsd increment: " + c1 + ", " + c2 + ", "+ c3);
   next();
 }
 

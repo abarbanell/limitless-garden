@@ -71,7 +71,7 @@ app.use(session({
 }));
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-// app.use(statsd.statsdHits);
+app.use(statsd.statsdHits);
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
