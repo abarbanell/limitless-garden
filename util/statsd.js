@@ -18,9 +18,9 @@ function statsdHits(req, res, next) {
   var c1 = prefix + ".http";
   var c2 = prefix + "." + req.method;
   var c3 = prefix + ".route" + (req.originalUrl || "/");
-  client.increment(c1);
-  client.increment(c2);
-  client.increment(c3);
+  client.increment(c1,1);
+  client.increment(c2,1);
+  client.increment(c3,1);
   logger.info("statsd increment: " + c1 + ", " + c2 + ", "+ c3);
   next();
 }
