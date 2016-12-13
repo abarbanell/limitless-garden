@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var user = require('./model/user');
 var session = require('express-session');
 var logger = require('./util/logger');
+var statsd = require('./util/statsd');
+
 
 //set auth startegy
 var passport = require('passport');
@@ -69,6 +71,7 @@ app.use(session({
 }));
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+// app.use(statsd.statsdHits);
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
