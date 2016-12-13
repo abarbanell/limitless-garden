@@ -1,22 +1,21 @@
 // API integration tests
 
 // prerequisites
-var expect = require('expect.js');
 var supertest = require('supertest');
 var status = require('http-status');
 var util = require('util');
-var logger = require('../util/logger');
+var logger = require('../../util/logger');
 var httpMocks = require('node-mocks-http');
 var rewire = require('rewire');
-var sensorHelper = require('./helper/sensor.js');
+var sensorHelper = require('../helpers/sensor.js');
 
 // environment
 var port = process.env.PORT || 4321;
 var user_key = process.env.THREESCALE_USER_KEY;
 
 // system under test
-var server = require('../bin/www');
-var indexrouter = rewire('../routes/index.js');
+var server = require('../../bin/www');
+var indexrouter = rewire('../../routes/index.js');
 
 describe('collections index.js route supertests', function() {
 
@@ -55,15 +54,15 @@ describe('Middleware test for for index routes', function() {
 		});
 	});
 
-	after(function(done) {
+	afterAll(function(done) {
 		sensorHelper.droprows(done);
 	});
 
 	it('check sensorRoute - happy path', function(done) {
 		// we want to catch the res.render function
 		response.render = function(view, obj) { 
-			expect(view).to.be.ok();
-			expect(obj).to.be.ok();
+			expect(view).toBeTruthy();
+			expect(obj).toBeTruthy();
 			done();
 		};
 		var sr = indexrouter.__get__('sensorRoute');
@@ -71,7 +70,7 @@ describe('Middleware test for for index routes', function() {
 			if (error) {
 				logger.error("error received");
 			};
-			expect("you should not get here").to.eql("true");
+			expect("you should not get here").toEqual("Never");
 			done();
 		});
 	});
@@ -79,8 +78,8 @@ describe('Middleware test for for index routes', function() {
 	it('collectionsListRoute - happy path', function(done) {
 		// we want to catch the res.render function
 		response.render = function(view, obj) { 
-			expect(view).to.be.eql('index');
-			expect(obj).to.be.ok();
+			expect(view).toEqual('index');
+			expect(obj).toBeTruthy();
 			done();
 		};
 		var sr = indexrouter.__get__('collectionsListRoute');
@@ -88,7 +87,7 @@ describe('Middleware test for for index routes', function() {
 			if (error) {
 				logger.error("error received");
 			};
-			expect("you should not get here").to.eql("true");
+			expect("you should not get here").toEqual("Never");
 			done();
 		});
 	});
@@ -99,8 +98,8 @@ describe('Middleware test for for index routes', function() {
 			request.collection = collection;
 			// we want to catch the res.render function
 			response.render = function(view, obj) { 
-				expect(view).to.be.eql('collection');
-				expect(obj).to.be.ok();
+				expect(view).toEqual('collection');
+				expect(obj).toBeTruthy();
 				done();
 			};
 			var sr = indexrouter.__get__('collectionsRoute');
@@ -108,7 +107,7 @@ describe('Middleware test for for index routes', function() {
 				if (error) {
 					logger.error("error received");
 				};
-				expect("you should not get here").to.eql("true");
+				expect("you should not get here").toEqual("Never");
 				done();
 			});
 		});
@@ -119,10 +118,10 @@ describe('Middleware test for for index routes', function() {
 		sensorHelper.getCollection(function(collection) {
 			// we want to catch the res.render function
 			response.render = function(view, obj) { 
-				expect(view).to.be.eql('hosts');
-				expect(obj).to.be.ok();
-				expect(obj.title).to.be.an('string');
-				expect(obj.data).to.be.an('array');
+				expect(view).toEqual('hosts');
+				expect(obj).toBeTruthy();
+				expect(obj.title).toBeA(String);
+				expect(obj.data).toBeA(Array);
 				done();
 			};
 			var sr = indexrouter.__get__('hostsRoute');
@@ -130,7 +129,7 @@ describe('Middleware test for for index routes', function() {
 				if (error) {
 					logger.error("error received");
 				};
-				expect("you should not get here").to.eql("true");
+				expect("you should not get here").toEqual("Never");
 				done();
 			});
 		});
@@ -139,16 +138,16 @@ describe('Middleware test for for index routes', function() {
 	it('hostDataRoute - happy path single sensor', function(done) {
 		// we need to add a db collection obj to the request object
 		sensorHelper.getCollection(function(collection) {
-			expect(request.params).to.be.ok();
+			expect(request.params).toBeTruthy();
 			request.params.host = "rpi02";
 			// we want to catch the res.render function
 			response.render = function(view, obj) { 
-				expect(view).to.be.eql('hostdata');
-				expect(obj).to.be.ok();
-				expect(obj.title).to.be.an('string');
-				expect(obj.data).to.be.an('array');
-				expect(obj.data[0].sensor).to.be.an('array');
-				expect(obj.data[0].sensor.length).to.eql(1);
+				expect(view).toEqual('hostdata');
+				expect(obj).toBeTruthy();
+				expect(obj.title).toBeA(String);
+				expect(obj.data).toBeA(Array);
+				expect(obj.data[0].sensor).toBeA(Array);
+				expect(obj.data[0].sensor.length).toEqual(1);
 				done();
 			};
 			var sr = indexrouter.__get__('hostDataRoute');
@@ -156,7 +155,7 @@ describe('Middleware test for for index routes', function() {
 				if (error) {
 					logger.error("error received");
 				};
-				expect("you should not get here").to.eql("true");
+				expect("you should not get here").toEqual("Never");
 				done();
 			});
 		});
@@ -165,18 +164,18 @@ describe('Middleware test for for index routes', function() {
 	it('hostDataRoute - happy path multi sensor', function(done) {
 		// we need to add a db collection obj to the request object
 		sensorHelper.getCollection(function(collection) {
-			expect(request.params).to.be.ok();
+			expect(request.params).toBeTruthy();
 			request.params.host = "rpi03";
 			// we want to catch the res.render function
 			response.render = function(view, obj) { 
-				expect(view).to.be.eql('hostdata');
-				expect(obj).to.be.ok();
-				expect(obj.title).to.be.an('string');
-				expect(obj.data).to.be.an('array');
-				expect(obj.data[0].sensor).to.be.an('array');
-				expect(obj.data[0].sensor[0]).to.be.an('string');
+				expect(view).toEqual('hostdata');
+				expect(obj).toBeTruthy();
+				expect(obj.title).toBeA(String);
+				expect(obj.data).toBeA(Array);
+				expect(obj.data[0].sensor).toBeA(Array);
+				expect(obj.data[0].sensor[0]).toBeA(String);
 				logger.info('sensor.length: ' + obj.data[0].sensor.length);
-				expect(obj.data[0].sensor.length).to.be.greaterThan(1);
+				expect(obj.data[0].sensor.length).toBeGreaterThan(1);
 				done();
 			};
 			var sr = indexrouter.__get__('hostDataRoute');
@@ -184,7 +183,7 @@ describe('Middleware test for for index routes', function() {
 				if (error) {
 					logger.error("error received");
 				};
-				expect("you should not get here").to.eql("true");
+				expect("you should not get here").toEqual("Never");
 				done();
 			});
 		});

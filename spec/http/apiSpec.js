@@ -1,34 +1,33 @@
 // API integration tests
 
 // prerequisites
-var expect = require('expect.js');
 var supertest = require('supertest');
 var status = require('http-status');
 var util = require('util');
-var logger = require('../util/logger');
+var logger = require('../../util/logger');
 
 // environment
 var port = process.env.PORT || 4321;
 var user_key = process.env.THREESCALE_USER_KEY;
 
 // system under test
-var server = require('../bin/www');
+var server = require('../../bin/www');
 
 describe('collections API integration tests', function() {
   it('server should be valid', function(done){
-      expect(server).to.be.ok();
-			expect(server.listen).to.be.an('function');
+      expect(server).toBeTruthy();
+			expect(server.listen).toBeA(Function);
 			done();
   });
 	
 	it('port should be set', function(done) {
-		expect(port).to.be.ok();
+		expect(port).toBeTruthy();
 		logger.info('port=%s', port);
 		done();
 	});
 
 	it('user_key should be set', function(done) {
-		expect(user_key).to.be.ok();
+		expect(user_key).toBeTruthy();
 		logger.info('user_key=%s', user_key);
 		done();
 	});
@@ -75,15 +74,15 @@ describe('collections API integration tests', function() {
 		var url = '/api/collections/test?user_key=true';
 		supertest(server)
 		.get(url).end(function(err, res) {
-			expect(err).to.not.be.ok();
-			expect(res).to.be.ok();
-			expect(res.headers).to.be.ok();
+			expect(err).not.toBeTruthy();
+			expect(res).toBeTruthy();
+			expect(res.headers).toBeTruthy();
 			logger.info('res.headers = %s ', util.inspect(res.headers));
-			expect(res.headers['x-total-count']).to.be.ok();
+			expect(res.headers['x-total-count']).toBeTruthy();
 			logger.info('x-total-count = %s', res.headers['x-total-count']);
-			expect(res.status).to.be.ok();
-			expect(res.status).to.eql(status.OK);
-			expect(res.body).to.be.an('array');
+			expect(res.status).toBeTruthy();
+			expect(res.status).toEqual(status.OK);
+			expect(res.body).toBeA(Array);
 			logger.info('body has %s items', res.body.length);
 			done();
 		});
@@ -93,11 +92,11 @@ describe('collections API integration tests', function() {
 		var url = '/api/collections/test?user_key=true';
 		supertest(server)
 		.get(url).end(function(err, res) {
-			expect(err).to.not.be.ok();
-			expect(res).to.be.ok();
-			expect(res.status).to.be.ok();
-			expect(res.status).to.eql(status.OK);
-			expect(res.body).to.be.an('array');
+			expect(err).not.toBeTruthy();
+			expect(res).toBeTruthy();
+			expect(res.status).toBeTruthy();
+			expect(res.status).toEqual(status.OK);
+			expect(res.body).toBeA(Array);
 			logger.info('body has %s items', res.body.length);
 			done();
 		});
@@ -107,17 +106,17 @@ describe('collections API integration tests', function() {
 		var url = '/api/collections/test?filldate=1&user_key=true';
 		supertest(server)
 		.get(url).end(function(err, res) {
-			expect(err).to.not.be.ok();
-			expect(res).to.be.ok();
-			expect(res.status).to.be.ok();
-			expect(res.status).to.eql(status.OK);
-			expect(res.body).to.be.an('array');
+			expect(err).not.toBeTruthy();
+			expect(res).toBeTruthy();
+			expect(res.status).toBeTruthy();
+			expect(res.status).toEqual(status.OK);
+			expect(res.body).toBeA(Array);
 			logger.info('body has %s items', res.body.length);
 			if (res.body.length == 0) {
 				return done();
 			};
 			res.body.forEach(function(item, index, arr) {
-				expect(item.date).to.be.ok();
+				expect(item.date).toBeTruthy();
 				if ((index+1) == arr.length) { 
 					return done();
 				}
@@ -145,8 +144,8 @@ describe('collections API integration tests', function() {
 		.get(url)
 		.expect(status.OK)
 		.end(function(err, res) {
-			expect(err).to.not.be.ok();
-			expect(res.body).to.be.an('array');
+			expect(err).not.toBeTruthy();
+			expect(res.body).toBeA(Array);
 			done();
 		});
 	});
@@ -158,12 +157,12 @@ describe('collections API integration tests', function() {
 		.send({field: "content"})
 		.expect(status.OK)
 		.end(function(err, res) {
-			expect(err).to.not.be.ok();
-			expect(res).to.be.ok();
-			expect(res.body).to.be.an('object');
+			expect(err).not.toBeTruthy();
+			expect(res).toBeTruthy();
+			expect(res.body).toBeA(Object);
 			logger.info('insert result=%s', util.inspect(res.body));
-			expect(res.body.insertedIds).to.be.an('array');
-			expect(res.body.insertedIds.length).to.eql(1);
+			expect(res.body.insertedIds).toBeA(Array);
+			expect(res.body.insertedIds.length).toEqual(1);
 			var id = res.body.insertedIds[0];
 			var getUrl = '/api/collections/test/' + id + '?user_key=true';
 			supertest(server)
@@ -200,12 +199,12 @@ describe('collections API integration tests', function() {
 		.send({field: "content"})
 		.expect(status.OK)
 		.end(function(err, res) {
-			expect(err).to.not.be.ok();
-			expect(res).to.be.ok();
-			expect(res.body).to.be.an('object');
+			expect(err).not.toBeTruthy();
+			expect(res).toBeTruthy();
+			expect(res.body).toBeA(Object);
 			logger.info('insert result=%s', util.inspect(res.body));
-			expect(res.body.insertedIds).to.be.an('array');
-			expect(res.body.insertedIds.length).to.eql(1);
+			expect(res.body.insertedIds).toBeA(Array);
+			expect(res.body.insertedIds.length).toEqual(1);
 			var id = res.body.insertedIds[0];
 			var deleteUrl = '/api/collections/test/' + id + '?user_key=true';
 			supertest(server)
@@ -221,12 +220,12 @@ describe('collections API integration tests', function() {
 		.send({field: "content"})
 		.expect(status.OK)
 		.end(function(err, res) {
-			expect(err).to.not.be.ok();
-			expect(res).to.be.ok();
-			expect(res.body).to.be.an('object');
+			expect(err).not.toBeTruthy();
+			expect(res).toBeTruthy();
+			expect(res.body).toBeA(Object);
 			logger.info('insert result=%s', util.inspect(res.body));
-			expect(res.body.insertedIds).to.be.an('array');
-			expect(res.body.insertedIds.length).to.eql(1);
+			expect(res.body.insertedIds).toBeA(Array);
+			expect(res.body.insertedIds.length).toEqual(1);
 			var id = res.body.insertedIds[0];
 			var postUrl = '/api/collections/test/' + id + '?user_key=true';
 			supertest(server)
@@ -239,15 +238,15 @@ describe('collections API integration tests', function() {
                 var url = '/api/collections/test?user_key=true';
                 supertest(server)
                 .post(url)
-		.type('json')
+				.type('json')
                 .send()
                 .expect(status.OK)
                 .end(function(err, res) {
-                        expect(err).to.not.be.ok();
-                        expect(res).to.be.ok();
-                        expect(res.body).to.be.an('object');
+                        expect(err).not.toBeTruthy();
+                        expect(res).toBeTruthy();
+                        expect(res.body).toBeA(Object);
                         logger.info('insert result=%s', util.inspect(res.body));
-			done();
+						done();
                 });
         });
 
@@ -255,15 +254,15 @@ describe('collections API integration tests', function() {
                 var url = '/api/collections/test?user_key=true';
                 supertest(server)
                 .post(url)
-		.type('json')
+				.type('json')
                 .send('{ "truncated": 0, "string": 1 }')
                 .expect(status.OK)
                 .end(function(err, res) {
-                        expect(err).to.not.be.ok();
-                        expect(res).to.be.ok();
-                        expect(res.body).to.be.an('object');
+                        expect(err).not.toBeTruthy();
+                        expect(res).toBeTruthy();
+                        expect(res.body).toBeA(Object);
                         logger.info('insert result=%s', util.inspect(res.body));
-			done();
+						done();
                 });
         });
 
@@ -275,11 +274,11 @@ describe('collections API integration tests', function() {
                 .send("{truncated: ")
                 .expect(status.BAD_REQUEST)
                 .end(function(err, res) {
-                        expect(err).to.not.be.ok();
-                        expect(res).to.be.ok();
-                        expect(res.body).to.be.an('object');
+                        expect(err).not.toBeTruthy();
+                        expect(res).toBeTruthy();
+                        expect(res.body).toBeA(Object);
                         logger.info('insert result=%s', util.inspect(res.body));
-			done();
+						done();
                 });
         });
 

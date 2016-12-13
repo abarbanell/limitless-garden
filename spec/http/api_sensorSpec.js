@@ -1,13 +1,12 @@
 // API integration tests
 
 // prerequisites
-var expect = require('expect.js');
-var sensor = require('../model/sensor.js');
+var sensor = require('../../model/sensor.js');
 var supertest = require('supertest');
 var status = require('http-status');
 var util = require('util');
-var logger = require('../util/logger');
-var db = require('../util/db');
+var logger = require('../../util/logger');
+var db = require('../../util/db');
 var env = process.env.ENVIRONMENT || 'dev';
 var colname = env + '.sensor';
 var insertedIds = [];
@@ -17,7 +16,7 @@ var port = process.env.PORT || 4321;
 var user_key = process.env.THREESCALE_USER_KEY;
 
 // system under test
-var server = require('../bin/www');
+var server = require('../../bin/www');
 
 describe('sensor API tests', function() {
 	beforeEach(function(done) {
@@ -60,7 +59,7 @@ describe('sensor API tests', function() {
 		});
 	};
 	
-	after(function(done){
+	afterAll(function(done){
 		droprows(done);
 	});	
 	
@@ -84,11 +83,11 @@ describe('sensor API tests', function() {
 		.get(url)
 		.expect(status.OK)
 		.end(function(err,res) {
-			expect(err).to.not.be.ok();
-			expect(res).to.be.ok();
+			expect(err).not.toBeTruthy();
+			expect(res).toBeTruthy();
 			logger.info('res = %s', util.inspect(res.body));
-			expect(res.body[0].soil).to.eql(36);
-			expect(res.body.length).to.eql(20);
+			expect(res.body[0].soil).toEqual(36);
+			expect(res.body.length).toEqual(20);
 			done();
 		});
 	});
@@ -99,11 +98,11 @@ describe('sensor API tests', function() {
 		.get(url)
 		.expect(status.OK)
 		.end(function(err,res) {
-			expect(err).to.not.be.ok();
-			expect(res).to.be.ok();
+			expect(err).not.toBeTruthy();
+			expect(res).toBeTruthy();
 			logger.info('res = %s', util.inspect(res.body));
-			expect(res.body[0].soil).to.eql(36);
-			expect(res.body.length).to.eql(5);
+			expect(res.body[0].soil).toEqual(36);
+			expect(res.body.length).toEqual(5);
 			done();
 		});
 	});
