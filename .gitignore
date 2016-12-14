@@ -42,3 +42,6 @@ npm-debug.log
 
 npm-debug.log
 
+# webpack build artifacts
+/public/dist
+
