@@ -7,12 +7,15 @@
     "start:watch": "watch 'npm start'",
     "jshint": "jshint **.js",
     "jscs": "jscs --preset=google **.js",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
     "test": "node ./jasmine.js",
     "test:watch": "watch 'npm run test'",
     "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec"
   },
   "dependencies": {
     "3scale": "^0.7.2",
+    "@types/jasmine": "2.5.38",
     "body-parser": "^1.14.1",
     "bootstrap": "^3.3.5",
     "cookie-parser": "^1.4.0",
@@ -49,6 +52,7 @@
     "rewire": "^2.3.4",
     "superagent": "^1.6.1",
     "supertest": "^1.1.0",
+    "typescript": "2.1.4",
     "watch": "0.17.1"
   }
 }
