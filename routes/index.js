@@ -161,10 +161,7 @@ router.get('/collections/:collectionName', authenticated.cookie, collectionsRout
 router.get('/sensor', authenticated.cookie, sensorRoute);
 
 router.get('/spa', authenticated.cookie, function(req, res, next) {
-	res.render('spa', {
-		title: 'Limitless Garden and Spa',
-		user: req.user
-	});
+	res.sendfile( __dirname + '/../public/app/index.html');
 })
 
 /* temprarily park some routes which will be filled later */ 
