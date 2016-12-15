@@ -68,7 +68,7 @@ webpackJsonp([0],{
 	AppComponent = __decorate([
 	    core_1.Component({
 	        selector: 'spa-app',
-	        template: "<h1>Hello {{name}}</h1>",
+	        template: "\n    <div class=\"container\">\n      <h1>Hello {{name}} !</h1>\n    </div>\n    ",
 	    }),
 	    __metadata("design:paramtypes", [])
 	], AppComponent);
@@ -78,4 +78,4 @@ webpackJsonp([0],{
 /***/ }
 
 });
-//# sourceMappingURL=app.e53874c38bd290c09d0d.js.map
+//# sourceMappingURL=app.d465bf74d69424e59988.js.map
