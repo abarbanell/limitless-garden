@@ -12,7 +12,7 @@
     "test": "node ./jasmine.js && karma start",
     "test:watch": "watch 'npm run test'",
     "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec",
-    "build": "rimraf public/dist && webpack --config config/webpack.prod.js --progress --profile --bail"
+    "build": "rimraf public/app && webpack --config config/webpack.prod.js --progress --profile --bail"
   },
   "dependencies": {
     "3scale": "^0.7.2",
