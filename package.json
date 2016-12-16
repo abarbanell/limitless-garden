@@ -9,7 +9,7 @@
     "jscs": "jscs --preset=google **.js",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
-    "test": "node ./jasmine.js",
+    "test": "node ./jasmine.js && karma start",
     "test:watch": "watch 'npm run test'",
     "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec",
     "build": "rimraf public/dist && webpack --config config/webpack.prod.js --progress --profile --bail"
