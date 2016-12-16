@@ -42,6 +42,8 @@ npm-debug.log
 
 npm-debug.log
 
-# webpack build artifacts
-/public/app
+# webpack build artifacts - currently we need to put webpack files into git 
+# because we deploy from git without running webpack after deploy (i.e. webpack is only
+# on dev system)
+# /public/app
 
