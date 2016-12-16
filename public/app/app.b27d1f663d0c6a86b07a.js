@@ -50,7 +50,7 @@ webpackJsonp([0],[
 	var navbar_component_1 = __webpack_require__(25);
 	var not_found_component_1 = __webpack_require__(27);
 	var contact_component_1 = __webpack_require__(28);
-	var app_routing_1 = __webpack_require__(29);
+	var app_routing_1 = __webpack_require__(30);
 	var AppModule = (function () {
 	    function AppModule() {
 	    }
@@ -178,16 +178,28 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(3);
+	var contact_service_1 = __webpack_require__(29);
 	var ContactComponent = (function () {
-	    function ContactComponent() {
+	    function ContactComponent(_contactService) {
+	        this._contactService = _contactService;
+	        this.isLoading = true;
 	    }
+	    ContactComponent.prototype.ngOnInit = function () {
+	        var _this = this;
+	        this._contactService.getContact()
+	            .subscribe(function (c) {
+	            _this.contact = c;
+	            _this.isLoading = false;
+	        });
+	    };
 	    return ContactComponent;
 	}());
 	ContactComponent = __decorate([
 	    core_1.Component({
-	        template: "\n        <div class=\"alert alert-info\">\n            Contact Component - text not found\n        </div>\n    "
+	        template: "\n        <div class=\"alert alert-info\" *ngIf=\"!isLoading\">\n            Contact loaded.\n        </div>\n        <div *ngIf=\"isLoading\">\n            <i class=\"fa fa-spinner fa-spin fa-3x\"></i>\n        </div>\n        <div  *ngIf=\"!isLoading\">\n            <h2> {{ contact.title }} </h2>\n            <p> {{ contact.text }} </p>\n            <p> \n                <a href=\"{{ contact.repoUrl }}\"> \n                    {{ contact.repoUrl }} \n                </a>\n            </p>\n\n    ",
+	        providers: [contact_service_1.ContactService]
 	    }),
-	    __metadata("design:paramtypes", [])
+	    __metadata("design:paramtypes", [contact_service_1.ContactService])
 	], ContactComponent);
 	exports.ContactComponent = ContactComponent;
 
@@ -197,7 +209,42 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var router_1 = __webpack_require__(30);
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(3);
+	var Observable_1 = __webpack_require__(5);
+	var ContactService = (function () {
+	    function ContactService() {
+	    }
+	    ContactService.prototype.getContact = function () {
+	        return Observable_1.Observable.from([{
+	                title: "Limitless Spa",
+	                text: "This is a Single Page Application connecting to the Limitless Garden API backend",
+	                repoUrl: "https://github.com/abarbanell/limitless-garden"
+	            }]);
+	    };
+	    return ContactService;
+	}());
+	ContactService = __decorate([
+	    core_1.Injectable(),
+	    __metadata("design:paramtypes", [])
+	], ContactService);
+	exports.ContactService = ContactService;
+
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var router_1 = __webpack_require__(31);
 	// import my components....
 	var not_found_component_1 = __webpack_require__(27);
 	var contact_component_1 = __webpack_require__(28);
@@ -210,4 +257,4 @@ webpackJsonp([0],[
 
 /***/ }
 ]);
-//# sourceMappingURL=app.c4a2049fff69d2df5227.js.map
+//# sourceMappingURL=app.b27d1f663d0c6a86b07a.js.map
