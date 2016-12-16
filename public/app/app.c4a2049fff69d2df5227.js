@@ -203,11 +203,11 @@ webpackJsonp([0],[
 	var contact_component_1 = __webpack_require__(28);
 	exports.routing = router_1.RouterModule.forRoot([
 	    { path: '', component: not_found_component_1.NotFoundComponent },
-	    { path: 'contact', component: contact_component_1.ContactComponent },
+	    { path: 'app/contact', component: contact_component_1.ContactComponent },
 	    { path: '**', component: not_found_component_1.NotFoundComponent }
 	]);
 
 
 /***/ }
 ]);
-//# sourceMappingURL=app.fce31effedcfcb8ade2d.js.map
+//# sourceMappingURL=app.c4a2049fff69d2df5227.js.map

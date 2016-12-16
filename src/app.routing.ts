@@ -6,6 +6,6 @@ import { ContactComponent } from './contact.component';
 
 export const routing = RouterModule.forRoot([
     { path: '', component: NotFoundComponent }, 
-    { path: 'contact', component: ContactComponent }, 
+    { path: 'app/contact', component: ContactComponent }, 
     { path: '**', component: NotFoundComponent } 
 ]);
