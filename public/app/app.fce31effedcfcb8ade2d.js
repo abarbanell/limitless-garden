@@ -200,13 +200,14 @@ webpackJsonp([0],[
 	var router_1 = __webpack_require__(30);
 	// import my components....
 	var not_found_component_1 = __webpack_require__(27);
+	var contact_component_1 = __webpack_require__(28);
 	exports.routing = router_1.RouterModule.forRoot([
 	    { path: '', component: not_found_component_1.NotFoundComponent },
-	    { path: 'contact', component: not_found_component_1.NotFoundComponent },
+	    { path: 'contact', component: contact_component_1.ContactComponent },
 	    { path: '**', component: not_found_component_1.NotFoundComponent }
 	]);
 
 
 /***/ }
 ]);
-//# sourceMappingURL=app.a1cd0cb6a501f7d796d6.js.map
+//# sourceMappingURL=app.fce31effedcfcb8ade2d.js.map
