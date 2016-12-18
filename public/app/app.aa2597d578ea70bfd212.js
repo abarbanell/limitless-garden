@@ -48,10 +48,10 @@ webpackJsonp([0],[
 	var platform_browser_1 = __webpack_require__(21);
 	var app_component_1 = __webpack_require__(24);
 	var navbar_component_1 = __webpack_require__(25);
-	var not_found_component_1 = __webpack_require__(27);
-	var contact_component_1 = __webpack_require__(28);
-	var home_component_1 = __webpack_require__(30);
-	var app_routing_1 = __webpack_require__(31);
+	var not_found_component_1 = __webpack_require__(28);
+	var contact_component_1 = __webpack_require__(29);
+	var home_component_1 = __webpack_require__(31);
+	var app_routing_1 = __webpack_require__(32);
 	var AppModule = (function () {
 	    function AppModule() {
 	    }
@@ -118,29 +118,68 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(3);
+	var auth_service_1 = __webpack_require__(26);
 	var NavbarComponent = (function () {
-	    function NavbarComponent() {
+	    function NavbarComponent(_authService) {
+	        this._authService = _authService;
 	    }
+	    NavbarComponent.prototype.ngOnInit = function () {
+	        if (this._authService.isLoggedin) {
+	            this.userName = this._authService.userName;
+	        }
+	        else {
+	            this.userName = "<None>";
+	        }
+	    };
 	    return NavbarComponent;
 	}());
 	NavbarComponent = __decorate([
 	    core_1.Component({
 	        selector: 'navbar',
-	        template: __webpack_require__(26)
+	        template: __webpack_require__(27),
+	        providers: [auth_service_1.AuthService]
 	    }),
-	    __metadata("design:paramtypes", [])
+	    __metadata("design:paramtypes", [auth_service_1.AuthService])
 	], NavbarComponent);
 	exports.NavbarComponent = NavbarComponent;
 
 
 /***/ },
 /* 26 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "<nav class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">\n    <div class=\"container\">\n        <!-- Brand and toggle get grouped for better mobile display -->\n        <div class=\"navbar-header\">\n            <button type=\"button\" \n                class=\"navbar-toggle collapsed\" \n                data-toggle=\"collapse\" \n                data-target=\"#lgnavbar\"\n                aria-expanded=\"false\">\n                <span class=\"sr-only\">Toggle Navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n            <a class=\"navbar-brand\" href=\"#\">\n                <img src=\"/img/logo.png\" alt=\"Limitless Garden\" height=\"50\" width=\"50\">\n            </a>\n        </div>\n\n        <!-- Collect the nav links, forms, and other content for toggling -->\n        <div class=\"collapse navbar-collapse navbar-left\" id=\"lgnavbar\">\n            <ul class=\"nav navbar-nav\">\n                <li><a routerLink=\"app/\"> Spa Home </a></li>\n                <li><a routerLink=\"app/contact\">Contact</a></li>\n            </ul>\n        </div>\n        <!-- /.navbar-collapse -->\n    </div>\n    <!-- /.container-fluid -->\n</nav>";
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(3);
+	var AuthService = (function () {
+	    function AuthService() {
+	        this.isLoggedin = false;
+	    }
+	    return AuthService;
+	}());
+	AuthService = __decorate([
+	    core_1.Injectable(),
+	    __metadata("design:paramtypes", [])
+	], AuthService);
+	exports.AuthService = AuthService;
+
 
 /***/ },
 /* 27 */
+/***/ function(module, exports) {
+
+	module.exports = "<nav class=\"navbar navbar-inverse navbar-fixed-top\" role=\"navigation\">\n    <div class=\"container\">\n        <!-- Brand and toggle get grouped for better mobile display -->\n        <div class=\"navbar-header\">\n            <button type=\"button\" \n                class=\"navbar-toggle collapsed\" \n                data-toggle=\"collapse\" \n                data-target=\"#lgnavbar\"\n                aria-expanded=\"false\">\n                <span class=\"sr-only\">Toggle Navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n            <a class=\"navbar-brand\" href=\"#\">\n                <img src=\"/img/logo.png\" alt=\"Limitless Garden\" height=\"50\" width=\"50\">\n            </a>\n        </div>\n\n        <!-- Collect the nav links, forms, and other content for toggling -->\n        <div class=\"collapse navbar-collapse navbar-left\" id=\"lgnavbar\">\n            <ul class=\"nav navbar-nav\">\n                <li><a routerLink=\"app/\"> Spa Home </a></li>\n                <li><a routerLink=\"app/contact\">Contact</a></li>\n                <li><a routerLink=\"\"> User: {{ userName }} </a></li>\n            </ul>\n        </div>\n        <!-- /.navbar-collapse -->\n    </div>\n    <!-- /.container-fluid -->\n</nav>";
+
+/***/ },
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -169,7 +208,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -183,7 +222,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(3);
-	var contact_service_1 = __webpack_require__(29);
+	var contact_service_1 = __webpack_require__(30);
 	var ContactComponent = (function () {
 	    function ContactComponent(_contactService) {
 	        this._contactService = _contactService;
@@ -210,7 +249,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -245,7 +284,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -259,7 +298,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(3);
-	var contact_service_1 = __webpack_require__(29);
+	var contact_service_1 = __webpack_require__(30);
 	var HomeComponent = (function () {
 	    function HomeComponent(_contactService) {
 	        this._contactService = _contactService;
@@ -286,15 +325,15 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var router_1 = __webpack_require__(32);
+	var router_1 = __webpack_require__(33);
 	// import my components....
-	var not_found_component_1 = __webpack_require__(27);
-	var contact_component_1 = __webpack_require__(28);
-	var home_component_1 = __webpack_require__(30);
+	var not_found_component_1 = __webpack_require__(28);
+	var contact_component_1 = __webpack_require__(29);
+	var home_component_1 = __webpack_require__(31);
 	exports.routing = router_1.RouterModule.forRoot([
 	    { path: 'app', component: home_component_1.HomeComponent },
 	    { path: 'app/contact', component: contact_component_1.ContactComponent },
@@ -304,4 +343,4 @@ webpackJsonp([0],[
 
 /***/ }
 ]);
-//# sourceMappingURL=app.ed0d2df2a16cd7fa5ee6.js.map
+//# sourceMappingURL=app.aa2597d578ea70bfd212.js.map
