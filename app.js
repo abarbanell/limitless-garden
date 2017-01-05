@@ -8,9 +8,10 @@ var user = require('./model/user');
 var session = require('express-session');
 var logger = require('./util/logger');
 var statsd = require('./util/statsd');
+var cors = require ('cors');
 
 
-//set auth startegy
+//set auth strategy
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
@@ -72,6 +73,7 @@ app.use(session({
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(statsd.statsdHits);
+app.use(cors());
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).

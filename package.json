@@ -9,7 +9,7 @@
     "jscs": "jscs --preset=google **.js",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
-    "test": "node ./jasmine.js && karma start",
+    "test": "node ./jasmine.js && karma start --single-run",
     "test:watch": "watch 'npm run test'",
     "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec",
     "build": "rimraf public/app && webpack --config config/webpack.prod.js --progress --profile --bail"
@@ -28,6 +28,7 @@
     "bootstrap": "^3.3.5",
     "cookie-parser": "^1.4.0",
     "core-js": "2.4.1",
+    "cors": "2.8.1",
     "debug": "~2.2.0",
     "ejs": "~2.3.3",
     "express": "~4.13.1",
