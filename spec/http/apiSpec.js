@@ -7,7 +7,7 @@ var util = require('util');
 var logger = require('../../util/logger');
 
 // environment
-var port = process.env.PORT || 4321;
+var port = process.env.TEST_PORT || 4321;
 var user_key = process.env.THREESCALE_USER_KEY;
 
 // system under test

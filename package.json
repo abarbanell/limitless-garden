@@ -9,10 +9,9 @@
     "jscs": "jscs --preset=google **.js",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
-    "test": "node ./jasmine.js && karma start --single-run",
+    "test": "node ./jasmine.js",
     "test:watch": "watch 'npm run test'",
-    "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec",
-    "build": "rimraf public/app && webpack --config config/webpack.prod.js --progress --profile --bail"
+    "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec"
   },
   "dependencies": {
     "3scale": "^0.7.2",
