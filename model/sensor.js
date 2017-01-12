@@ -115,11 +115,15 @@ var sensor = function() {
 	}
 
 	return {
+		// v0 - these do NOT have a schema_version field
 		get: findOne,
 		getMulti: find,
 		getUniqueHosts: distinctHosts,
 		getValuesByHost: findValuesByHost,
 		validateObj: validateObj
+		// v1 - these have schema_version: 1
+		// TODO
+
 	}
 }();
 
