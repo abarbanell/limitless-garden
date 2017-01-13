@@ -50,10 +50,6 @@
     "winston": "^2.1.1",
     "zone.js": "^0.6.21"
   },
-  "pre-commit": [
-    "jshint",
-    "test"
-  ],
   "devDependencies": {
     "@types/core-js": "0.9.35",
     "@types/jasmine": "2.5.38",
@@ -68,7 +64,6 @@
     "jscs": "^2.8.0",
     "jshint": "^2.8.0",
     "node-mocks-http": "1.5.3",
-    "pre-commit": "^1.1.2",
     "rewire": "^2.3.4",
     "rimraf": "2.5.4",
     "superagent": "^1.6.1",
