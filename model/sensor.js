@@ -12,6 +12,11 @@ var sensor = function() {
 		if (! obj) return null;
 		var rObj = {}; 
 		rObj._id = obj._id;
+		// check version schema_version should be 0 or non-existing
+		if (obj.schema_version) {
+			logger.error('model/sensor.js: did not expect record with schema_version = ' + 
+				obj.schema_version);
+		}
 		//rename some fields
 		logger.info('typeof(timestamp) = ' + typeof(obj.timestamp));
 		logger.info('typeof(timespamp) = ' + typeof(obj.timespamp));
@@ -55,7 +60,10 @@ var sensor = function() {
 			}
 			logger.info('sensor.js - db opened');
 			var collection = dbObj.collection(colname);
-			collection.findOne({"_id": id}, {}, function(err,doc) {
+			collection.findOne({
+				"_id": id, 
+				"schema_version" : { "$exists" : false }
+			}, {}, function(err,doc) {
 				dbObj.close();
 				logger.info('sensor.js - db closed');
 				if (err) {
@@ -70,6 +78,7 @@ var sensor = function() {
 
 	var find = function(query, options, callback) {
 		logger.info('sensor.js - converting results toArray()');
+		query.schema_version = { "$exists" : false };
 		db.connect(function(err,dbObj){
 			var collection = dbObj.collection(colname);
 			collection.find(query, options).toArray(function(err,docs){
@@ -100,6 +109,7 @@ var sensor = function() {
 			var query = { };
 			query['host'] = host;
 			query[value] = { $gt: 0 };
+			query.schema_version = { "$exists" : false }
 			var options = {};
 			options['host'] = 1;
 			options[value] = 1;

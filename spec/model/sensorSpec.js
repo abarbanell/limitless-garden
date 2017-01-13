@@ -1,12 +1,15 @@
 var util = require('util');
 var sensor = require('../../model/sensor.js');
 var logger = require('../../util/logger');
-var db = require('../../util/db');
-var env = process.env.ENVIRONMENT || 'dev';
-var colname = env + '.sensor';
 var sensorHelper = require('../helpers/sensor.js');
 
-describe('Sensor Model ', function() {
+describe('Sensor Model V1', function() {
+	it('TODO: there is work todo', function() {
+		expect("TODO").toBe("TODO");
+	})
+});
+
+describe('Sensor Model V0', function() {
 	beforeEach(function(done) {
 		sensorHelper.droprows(function(){
 			sensorHelper.insertrows(done);
