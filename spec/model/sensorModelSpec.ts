@@ -1,4 +1,5 @@
 import { SensorModel } from '../../model/sensor.model';
+import { Observable } from 'rxjs/Rx';
 
 var util = require('util');
 //var sensor = require('../../model/sensor.js');
@@ -12,10 +13,6 @@ describe('Sensor Model V1', function() {
 		sensor = new SensorModel();
 });
 
-	it('TODO: there is work todo', function() {
-		expect("TODO").toBe("TODO");
-	});
-
 	it('check SensorModel', () => {
 		expect(sensor instanceof SensorModel).toBe(true);
 	});
@@ -27,21 +24,57 @@ describe('Sensor Model V1', function() {
 		expect(sut[0]._id).toBe("id17");
 	});
 
-	it('getById returns single ISensor', () => {
-		var sut = sensor.getByID("id15");
-		expect(sut._id).toBe("id17");
+	it('getById invalid id', (done) => {
+		var sut = sensor.getById("invalid-ID");
+		sut.subscribe(s => {
+			expect(s).toBe("you-should-not-get-here");
+			done();
+		}, e => {
+			expect(e.toString()).toContain("Argument passed");
+			done();
+		})
 	});
 
-	it('post(obj) returns string ID', () => {
+	it('collectionName is sane', () => {
+		var sut = sensor.getCollectionName();
+		expect(sut).toContain("sensor");
+	});
+
+	it('post(obj) returns string ID', (done) => {
 		var sut = sensor.post({
-			 _id: "id17",
 			 name: "sensor 3",
     	 host: "rpi99",
     	 type: {
       	name: "soil"
     	 }
 			});
-		expect(sut).toBe("error");
-	})
+		expect(sut instanceof Observable).toBe(true);
+		sut.subscribe(s => {
+			console.log('post returns: ', s);
+			expect(s).toEqual(jasmine.any(String));
+			done();
+		})
+	});
+
+	it('post(obj) can get again', (done) => {
+		var sut = sensor.post({
+			 name: "sensor 3",
+    	 host: "rpi99",
+    	 type: {
+      	name: "soil"
+    	 }
+			});
+		expect(sut instanceof Observable).toBe(true);
+		sut.subscribe(s => {
+			console.log('post returns: ', s);
+			expect(s).toEqual(jasmine.any(String));
+			sensor.getById(s).subscribe(d => {
+				console.log('getById returns: ', d);
+				expect(d._id.toString()).toEqual(s);
+				done();
+			})
+		})
+	});
+
 });
 
