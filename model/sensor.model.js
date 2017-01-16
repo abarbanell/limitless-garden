@@ -24,12 +24,26 @@ var SensorModel = (function () {
             }];
     }
     SensorModel.prototype.get = function () {
-        return this._dummyval;
+        var cn = this._collectionName;
+        var obs = new Rx_1.Subject();
+        db.connect(function (err, dbObj) {
+            var coll = dbObj.collection(cn);
+            try {
+                coll.find({ schema_version: 1 }).toArray().then(function (docs) {
+                    obs.next(docs);
+                });
+            }
+            catch (ex) {
+                logger.error("SensorModel.get.catch: ", ex);
+                obs.error(ex);
+            }
+        });
+        return obs;
     };
     SensorModel.prototype.getById = function (id) {
         var cn = this._collectionName;
         var obs = new Rx_1.Subject();
-        logger.error("SensorModel.getById before mongo call");
+        logger.info("SensorModel.getById before mongo call");
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
             try {
@@ -56,7 +70,7 @@ var SensorModel = (function () {
         var ms = new MongoSensorClass(data);
         var obs = new Rx_1.Subject();
         var cn = this._collectionName;
-        logger.error("SensorModel.post before mongo call");
+        logger.info("SensorModel.post before mongo call");
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
             coll.insert(ms, {}, function (e, results) {

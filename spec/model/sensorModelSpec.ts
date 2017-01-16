@@ -11,17 +11,21 @@ var sensorHelper = require('../helpers/sensor.js');
 describe('Sensor Model V1', function() {
 	beforeEach (() => {
 		sensor = new SensorModel();
-});
+	});
 
 	it('check SensorModel', () => {
 		expect(sensor instanceof SensorModel).toBe(true);
 	});
 
-	it('get returns ISensor array', () => {
+	it('get returns ISensor array', (done) => {
 		var sut = sensor.get();
-		expect(sut instanceof Array).toBe(true);
-		expect(sut.length).toBe(2);
-		expect(sut[0]._id).toBe("id17");
+		sut.subscribe(s => {
+			expect(s instanceof Array).toBe(true);
+			done();
+		}, e => {
+			expect(e).toBe("you-should-not-get-here");
+			done();
+		});
 	});
 
 	it('getById invalid id', (done) => {
@@ -50,13 +54,12 @@ describe('Sensor Model V1', function() {
 			});
 		expect(sut instanceof Observable).toBe(true);
 		sut.subscribe(s => {
-			console.log('post returns: ', s);
 			expect(s).toEqual(jasmine.any(String));
 			done();
 		})
 	});
 
-	it('post(obj) can get again', (done) => {
+	it('post(obj) can getByID again', (done) => {
 		var sut = sensor.post({
 			 name: "sensor 3",
     	 host: "rpi99",
@@ -66,11 +69,28 @@ describe('Sensor Model V1', function() {
 			});
 		expect(sut instanceof Observable).toBe(true);
 		sut.subscribe(s => {
-			console.log('post returns: ', s);
 			expect(s).toEqual(jasmine.any(String));
 			sensor.getById(s).subscribe(d => {
-				console.log('getById returns: ', d);
 				expect(d._id.toString()).toEqual(s);
+				done();
+			})
+		})
+	});
+
+	it('post(obj) can get again', (done) => {
+		var sut = sensor.post({
+			 name: "sensor 4",
+    	 host: "rpi99",
+    	 type: {
+      	name: "soil"
+    	 }
+			});
+		expect(sut instanceof Observable).toBe(true);
+		sut.subscribe(s => {
+			expect(s).toEqual(jasmine.any(String));
+			sensor.get().subscribe(d => {
+				expect(d.length).toBeGreaterThan(0);
+				expect(d[0]._id.toString().length).toEqual(24);
 				done();
 			})
 		})

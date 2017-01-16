@@ -15,7 +15,7 @@ export class SensorModel {
       name: "soil"
     }
   },{
-        _id: "id18",
+    _id: "id18",
     name: "sensor 2",
     host: "rpi97",
     type: {
@@ -23,14 +23,27 @@ export class SensorModel {
     }
   }];
 
-  get(): ISensor[] {
-    return this._dummyval;
+  get(): Observable<ISensor[]> {
+    var cn = this._collectionName;
+    var obs = new Subject<ISensor[]>();
+    db.connect(function(err, dbObj) {
+      var coll = dbObj.collection(cn);
+      try {
+        coll.find({ schema_version: 1 }).toArray().then(function(docs) {
+          obs.next(docs);
+        })
+      } catch (ex) {
+        logger.error("SensorModel.get.catch: ", ex)
+        obs.error(ex);
+      }
+    }); 
+    return obs;
   }
 
   getById(id: string): Observable<ISensor> {
     var cn = this._collectionName;
     var obs = new Subject<ISensor>();
-    logger.error("SensorModel.getById before mongo call");
+    logger.info("SensorModel.getById before mongo call");
 
     db.connect(function (err, dbObj) {
       var coll = dbObj.collection(cn);
@@ -59,7 +72,7 @@ export class SensorModel {
     var obs = new Subject<string>();
     var cn = this._collectionName;
 
-    logger.error("SensorModel.post before mongo call");
+    logger.info("SensorModel.post before mongo call");
 
     db.connect(function(err,dbObj){
       var coll = dbObj.collection(cn);
