@@ -1,15 +1,11 @@
-// API integration tests
+// Sesnor API integration tests
 
 // prerequisites
-var sensor = require('../../model/sensor.js');
+
 var supertest = require('supertest');
 var status = require('http-status');
 var util = require('util');
 var logger = require('../../util/logger');
-// var db = require('../../util/db');
-// var env = process.env.ENVIRONMENT || 'dev';
-// var colname = env + '.sensor';
-// var insertedIds = [];
 
 // environment
 var port = process.env.TEST_PORT || 4321;
@@ -19,66 +15,46 @@ var user_key = process.env.THREESCALE_USER_KEY;
 var server = require('../../bin/www');
 
 describe('sensor API tests', function() {
-	beforeEach(function(done) {
-		// droprows(function(){
-		// 	insertrows(done);
-		// });
+  it('server should be valid', function(done){
+      expect(server).toBeTruthy();
+			expect(server.listen).toBeA(Function);
+			done();
+  });
+	
+	it('port should be set', function(done) {
+		expect(port).toBeTruthy();
+		logger.info('port=%s', port);
+		done();
 	});
 
-	function insertrows(done){
-		logger.info('insertrows: insert some data via ensor model');
-		// var today = new Date();
-		// var objs = [];
-		// for (var i=0; i<20; i++) {
-		// 	var m1 = {
-		// 	"soil": 35 +i ,
-		// 	"host": "rpi03",
-		// 	"sensor": "soil",
-		// 	"timestamp": Math.floor(Date.now() /1000)
-		// 	};
-		// 	var m2 =  {
-		// 		"soil": 36 - i,
-		// 		"host": "rpi02",
-		// 		"sensor": "soil",
-		// 		"timestamp": today.toISOString()
-		// 	};
-		// 	objs.push(m1);
-		// 	objs.push(m2);
-		// }
-		// db.connect(function(err,dbObj){
-		// 	dbObj.collection(colname).insert(objs, function(err, result) {
-		// 		if (err) {
-		// 			logger.error('insertrows Error: ' + err);
-		// 			done();
-		// 		} 
-		// 		logger.info('insertrows result: ' + JSON.stringify(result));
-		// 		insertedIds = result.insertedIds;
-		// 		dbObj.close();
-		// 		done();
-		// 	});
-		// });
-	};
-	
-	afterAll(function(done){
-		droprows(done);
-	});	
-	
-	function droprows(done) {
-		// drop rows via sensor model
-		// db.connect(function(err,dbObj){
-		// 	dbObj.collection(colname).remove({}, function(err, result) {
-		// 		if (err) {
-		// 			logger.error('droprows() error: '+ err);
-		// 		}
-		// 		logger.info('droprows() - removed data: ' + JSON.stringify(result));
-		// 		dbObj.close();
-		// 		done();
-		// 	});
-		// });
-	};
+	it('user_key should be set', function(done) {
+		expect(user_key).toBeTruthy();
+		logger.info('user_key=%s', user_key);
+		done();
+	});
+
+	it('GET sensors,  missing user_key should return BAD_REQUEST', function(done) {
+		supertest(server)
+		.get('/api/sensors')
+		.expect(status.BAD_REQUEST, done);
+	});
+
+	// GET /api/sensors -> list of sensors
+	it('GET sensors, returns empty Array', function(done) {
+		supertest(server)
+		.get('/api/sensors?user_key=true')
+		.expect(status.OK)
+		.end(function(err, res) {
+			logger.error('res.body: ', res.body);
+			expect(res.body).toBeA(Array);
+			expect(res.body.length).toBe(0);
+			done();
+		});
+	});
+
 	
 	// Update sensor API to 
-	// GET /api/sensors -> list of sensors
+
 	// GET /api/sensors/:sensorid -> details about one sensor (host, name, type,...)
 	// GET /api/sensors/:sensorid/data -> list of data points 
 	// GET /api/sensors/:sensorid/data/:dataid -> one data point 
