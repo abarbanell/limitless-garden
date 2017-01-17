@@ -67,6 +67,36 @@ describe('sensor API tests', function () {
             done();
         });
     });
+    it('POST and GET again, returns Object', function (done) {
+        var input = {
+            name: "new sensor 17",
+            host: "rpi02",
+            type: {
+                name: "soil"
+            }
+        };
+        supertest(server)
+            .post('/api/sensors?user_key=true')
+            .send(input)
+            .expect(httpStatus.OK)
+            .end(function (err, res) {
+            logger.error('res.body: ', res.body);
+            expect(res.body._id).toBeDefined();
+            expect(res.body.rc).toBeDefined();
+            var id = res.body._id;
+            var getUrl = '/api/sensors/' + id + '?user_key=true';
+            supertest(server)
+                .get(getUrl)
+                .end(function (err, res) {
+                logger.error('get after post: status: ', res.status);
+                expect(res.status).toBe(httpStatus.OK);
+                expect(res.body).toBeDefined();
+                expect(res.body._id).toBeDefined();
+                expect(res.body._id).toBe(id);
+                done();
+            });
+        });
+    });
     // Update sensor API to 
     // GET /api/sensors/:sensorid -> details about one sensor (host, name, type,...)
     // GET /api/sensors/:sensorid/data -> list of data points 

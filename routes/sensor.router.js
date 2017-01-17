@@ -15,12 +15,21 @@ router.get('/', function (req, res, next) {
         logger.error('sensor router get("/") error: ', e);
     });
 });
+// GET /api/sensors/:sensorid -> details about one sensor (host, name, type,...)
+router.get('/:id', function (req, res, next) {
+    logger.error('get id : ', req.params);
+    sensorModel.getById(req.params.id).subscribe(function (s) {
+        res.json(s);
+    }, function (e) {
+        logger.error('sensor router get("/:id") error: ', e);
+    });
+});
 // POST /api/sensors -> create new sensor 
 router.post('/', function (req, res, next) {
     try {
         sensorModel.post(req.body).subscribe(function (s) {
-            logger.error('post succceeded: ', s);
-            var payload = { _id: s, rc: "OK" };
+            var str = s;
+            var payload = { _id: str, rc: "OK" };
             res.json(payload);
         }, function (e) {
             logger.error('post failed: ', e);

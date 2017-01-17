@@ -20,12 +20,22 @@ router.get('/', function(req, res, next) {
 	});
 });
 
+// GET /api/sensors/:sensorid -> details about one sensor (host, name, type,...)
+router.get('/:id', function(req, res, next) {
+	logger.error('get id : ', req.params);
+	sensorModel.getById(req.params.id).subscribe(s => {		
+		  res.json(s);
+	}, e => {
+		logger.error('sensor router get("/:id") error: ', e);
+	});
+});
+
 // POST /api/sensors -> create new sensor 
 router.post('/', function(req, res, next) {
 	try {
 		sensorModel.post(req.body).subscribe(s => {
-			logger.error('post succceeded: ', s);
-			var payload = { _id: s, rc: "OK" }
+			var str: string = s;
+			var payload = { _id: str, rc: "OK" }
 			res.json(payload);
 		}, e=> {
 			logger.error('post failed: ', e);
