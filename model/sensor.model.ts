@@ -89,7 +89,6 @@ export class SensorModel {
   getCollectionName(): string {
     return this._collectionName;
   }
-
 }
 
 // our payload data model: 
@@ -133,5 +132,4 @@ class MongoSensorClass implements MongoSensor {
     this.host = is.host;
     this.type = is.type;
   }
-
 }
