@@ -86,6 +86,33 @@ export class SensorModel {
     return obs;
   }
 
+    delete(id: string): Observable<Number> {
+    var cn = this._collectionName;
+    var obs = new Subject<Number>();
+    logger.info("SensorModel.delete before mongo call");
+
+    db.connect(function (err, dbObj) {
+      var coll = dbObj.collection(cn);
+      try {
+        var oid = mongodb.ObjectID.createFromHexString(id)
+        coll.deleteOne({ _id: oid }, function (e, results) {
+          if (e) {
+            logger.error("SensorModel.delete.delete error: ", e);
+            obs.error(e);
+          }
+          if (results) {
+            logger.error('SensorModel.delete.delete results: ', results.deletedCount)
+            obs.next(results.deletedCount);
+          }
+        });
+      } catch (ex) {
+        logger.error("SensorModel.delete.catch: ", ex)
+        obs.error(ex);
+      }
+    });
+    return obs;
+  }
+
   getCollectionName(): string {
     return this._collectionName;
   }

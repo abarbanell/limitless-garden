@@ -86,4 +86,21 @@ describe('Sensor Model V1', function () {
             });
         });
     });
+    it('post(obj) can delete again', function (done) {
+        var sut = sensor.post({
+            name: "sensor 3",
+            host: "rpi99",
+            type: {
+                name: "soil"
+            }
+        });
+        expect(sut instanceof Rx_1.Observable).toBe(true);
+        sut.subscribe(function (s) {
+            expect(s).toEqual(jasmine.any(String));
+            sensor.delete(s).subscribe(function (d) {
+                expect(d).toEqual(1);
+                done();
+            });
+        });
+    });
 });
