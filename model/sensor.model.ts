@@ -86,7 +86,7 @@ export class SensorModel {
     return obs;
   }
 
-    delete(id: string): Observable<Number> {
+  delete(id: string): Observable<Number> {
     var cn = this._collectionName;
     var obs = new Subject<Number>();
     logger.info("SensorModel.delete before mongo call");
@@ -107,6 +107,32 @@ export class SensorModel {
         });
       } catch (ex) {
         logger.error("SensorModel.delete.catch: ", ex)
+        obs.error(ex);
+      }
+    });
+    return obs;
+  }
+
+    deleteAll(): Observable<Number> {
+    var cn = this._collectionName;
+    var obs = new Subject<Number>();
+    logger.info("SensorModel.deleteAll before mongo call");
+
+    db.connect(function (err, dbObj) {
+      var coll = dbObj.collection(cn);
+      try {
+        coll.deleteOne({}, function (e, results) {
+          if (e) {
+            logger.error("SensorModel.deleteAll.delete error: ", e);
+            obs.error(e);
+          }
+          if (results) {
+            logger.error('SensorModel.deleteAll.delete results: ', results.deletedCount)
+            obs.next(results.deletedCount);
+          }
+        });
+      } catch (ex) {
+        logger.error("SensorModel.deleteAll.catch: ", ex)
         obs.error(ex);
       }
     });

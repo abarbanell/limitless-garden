@@ -109,6 +109,31 @@ var SensorModel = (function () {
         });
         return obs;
     };
+    SensorModel.prototype.deleteAll = function () {
+        var cn = this._collectionName;
+        var obs = new Rx_1.Subject();
+        logger.info("SensorModel.deleteAll before mongo call");
+        db.connect(function (err, dbObj) {
+            var coll = dbObj.collection(cn);
+            try {
+                coll.deleteOne({}, function (e, results) {
+                    if (e) {
+                        logger.error("SensorModel.deleteAll.delete error: ", e);
+                        obs.error(e);
+                    }
+                    if (results) {
+                        logger.error('SensorModel.deleteAll.delete results: ', results.deletedCount);
+                        obs.next(results.deletedCount);
+                    }
+                });
+            }
+            catch (ex) {
+                logger.error("SensorModel.deleteAll.catch: ", ex);
+                obs.error(ex);
+            }
+        });
+        return obs;
+    };
     SensorModel.prototype.getCollectionName = function () {
         return this._collectionName;
     };

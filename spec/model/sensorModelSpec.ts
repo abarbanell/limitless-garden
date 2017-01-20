@@ -96,7 +96,7 @@ describe('Sensor Model V1', function() {
 		})
 	});
 
-		it('post(obj) can delete again', (done) => {
+	it('post(obj) can delete again', (done) => {
 		var sut = sensor.post({
 			 name: "sensor 3",
     	 host: "rpi99",
@@ -108,6 +108,24 @@ describe('Sensor Model V1', function() {
 		sut.subscribe(s => {
 			expect(s).toEqual(jasmine.any(String));
 			sensor.delete(s).subscribe(d => {
+				expect(d).toEqual(1);
+				done();
+			})
+		})
+	});
+
+		it('post(obj) and deleteAll', (done) => {
+		var sut = sensor.post({
+			 name: "sensor 3",
+    	 host: "rpi99",
+    	 type: {
+      	name: "soil"
+    	 }
+			});
+		expect(sut instanceof Observable).toBe(true);
+		sut.subscribe(s => {
+			expect(s).toEqual(jasmine.any(String));
+			sensor.deleteAll().subscribe(d => {
 				expect(d).toEqual(1);
 				done();
 			})

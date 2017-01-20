@@ -6,6 +6,8 @@ var supertest = require('supertest');
 var httpStatus = require('http-status');
 var util = require('util');
 var logger = require('../../util/logger');
+import { SensorModel } from '../../model/sensor.model';
+import { Observable } from 'rxjs/Rx';
 
 // environment
 var port = process.env.TEST_PORT || 4321;
@@ -17,8 +19,11 @@ var server = require('../../bin/www');
 
 describe('sensor API tests', function() {
 	beforeEach(done => {
-		logger.error('should drop db rows before each test');
-		done();
+		var s = new SensorModel();
+		s.deleteAll().subscribe(s => { 
+			logger.error('beforeAll: deleted row count is ', s);
+			done(); 
+		});
 	})
   it('server should be valid', function(done){
       expect(server).toBeTruthy();
@@ -109,14 +114,44 @@ it('POST and GET again, returns Object', function(done) {
 		});
 	});
 
-	
+// DELETE /api/sensor/:sensorid/data 
+	it('POST and DELETE, returns Object', function(done) {
+		var input = { 
+			name: "new sensor 17",
+			host: "rpi02",
+			type: {
+				name: "soil"
+			}
+		};
+		supertest(server)
+		.post('/api/sensors?user_key=true')
+		.send(input)
+		.expect(httpStatus.OK)
+		.end(function(err, res) {
+			logger.error('res.body: ', res.body);
+			expect(res.body._id).toBeDefined();
+			expect(res.body.rc).toBeDefined();
+			var id = res.body._id;
+			var getUrl = '/api/sensors/' + id + '?user_key=true';
+			supertest(server)
+				.del(getUrl)
+				.end((err, res) => {
+					logger.error('del after post: status: ', res.status);
+					expect(res.status).toBe(httpStatus.OK);
+					expect(res.body.rc).toEqual('OK');
+					expect(res.body.deletedCount).toEqual(1);
+					done();
+				});
+		});
+	});
+
 	// Update sensor API to 
 
 	// GET /api/sensors/:sensorid -> details about one sensor (host, name, type,...)
 	// GET /api/sensors/:sensorid/data -> list of data points 
 	// GET /api/sensors/:sensorid/data/:dataid -> one data point 
 	
-	// POST /api/sensor/:sensorid/data -> create new data element under sensor
+	
 	// DELETE /api/sensor/:sensorid -> delet a sensor, il all data rows are deleted
 	// DELETE /api/sensor:sensorid/data/:dataid -> delete one data row
 

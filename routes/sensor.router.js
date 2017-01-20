@@ -39,4 +39,18 @@ router.post('/', function (req, res, next) {
         logger.error('sensor router post("/") exception ', ex);
     }
 });
+// DELETE /api/sensor/:sensorid/data 
+router.delete('/:id', function (req, res, next) {
+    try {
+        sensorModel.delete(req.params.id).subscribe(function (s) {
+            var payload = { deletedCount: s, rc: "OK" };
+            res.json(payload);
+        }, function (e) {
+            logger.error('delete failed: ', e);
+        });
+    }
+    catch (ex) {
+        logger.error('sensor router delete("/:id") exception ', ex);
+    }
+});
 module.exports = router;
