@@ -12,6 +12,8 @@ var reporter = new JasmineConsoleReporter({
     activity: false
 });
 
+process.env.PORT = process.env.TEST_PORT;
+
 jasmine.addReporter(reporter);
 
 jasmine.execute();

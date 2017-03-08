@@ -6,7 +6,6 @@ var util = require('util');
 var httpStatus = require('http-status');
 var db = require('../util/db');
 var ObjectID = require('mongodb').ObjectID;
-// var sensorRouter = require('./sensor.router.js');
 var sensorRouter = require("./sensor.router");
 var threescale = require('../util/threescale');
 router.use(threescale);
@@ -39,7 +38,8 @@ router.get('/collections/:collectionName', function (req, res, next) {
         var limit = req.query.limit || 10;
         var offset = req.query.offset || 0;
         var fillDate = req.query.filldate || 0;
-        req.collection.find({}, { limit: limit, offset: offset, sort: { '_id': 1 } }).toArray(function (e, results) {
+        var queryObj = QueryMapper.qmap(req.query);
+        req.collection.find(queryObj, { limit: limit, offset: offset, sort: { '_id': 1 } }).toArray(function (e, results) {
             if (e)
                 return next(e);
             fillResults(req, res, fillDate, count, results);
@@ -108,4 +108,28 @@ router.delete('/collections/:collectionName/:id', function (req, res, next) {
         });
     });
 });
+var QueryMapper = (function () {
+    function QueryMapper() {
+    }
+    QueryMapper.qmap = function (q) {
+        var rc = {};
+        logger.error('QueryMapper in, querystring: ' + JSON.stringify(q));
+        // map fields and filter out special fields like limit, offset,...
+        for (var member in q) {
+            switch (member) {
+                case 'limit':
+                case 'offset':
+                case 'fillDate':
+                case 'user_key':
+                    break;
+                default:
+                    rc[member] = q[member];
+            }
+        }
+        // return results
+        logger.error('QueryMapper out, query object: ' + JSON.stringify(rc));
+        return rc;
+    };
+    return QueryMapper;
+}());
 module.exports = router;
