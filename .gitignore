@@ -41,6 +41,7 @@ npm-debug.log
 .vscode
 
 npm-debug.log
+nohup.out
 .DS_Store
 
 # webpack build artifacts - currently we need to put webpack files into git 
