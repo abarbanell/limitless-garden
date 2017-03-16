@@ -41,6 +41,7 @@ describe('Sensor Model V1', function() {
 
 	it('collectionName is sane', () => {
 		var sut = sensor.getCollectionName();
+		expect(sut).toContain("model");
 		expect(sut).toContain("sensor");
 	});
 

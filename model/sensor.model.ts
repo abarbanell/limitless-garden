@@ -5,7 +5,7 @@ import { Observable, Subject } from 'rxjs/Rx';
 
 export class SensorModel {
   private _schema_version = 1;
-  private _collectionName = db.collectionName('sensor');
+  private _collectionName = db.collectionName('model.sensor');
   private _dummyval: ISensor[] = 
   [{
     _id: "id17",
