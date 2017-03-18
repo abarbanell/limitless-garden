@@ -54,9 +54,12 @@ export class SensorModel {
             logger.error("SensorModel.getById.findOne: ", e);
             obs.error(e);
           }
-          if (results) {
-            obs.next(results);
+          if (results && results._id) {
+            if (results._id instanceof mongodb.ObjectID) {
+              results._id = results._id.toString();
+            }     
           }
+          obs.next(results);
         });
       } catch (ex) {
         logger.error("SensorModel.getById.catch: ", ex)
@@ -113,7 +116,7 @@ export class SensorModel {
     return obs;
   }
 
-    deleteAll(): Observable<Number> {
+  deleteAll(): Observable<Number> {
     var cn = this._collectionName;
     var obs = new Subject<Number>();
     logger.info("SensorModel.deleteAll before mongo call");
@@ -141,6 +144,31 @@ export class SensorModel {
 
   getCollectionName(): string {
     return this._collectionName;
+  }
+
+  getByHost(host: string): Observable<ISensor> {
+    var cn = this._collectionName;
+    var obs = new Subject<ISensor>();
+    logger.info("SensorModel.getByHost before mongo call");
+
+    db.connect(function (err, dbObj) {
+      var coll = dbObj.collection(cn);
+      try {
+        coll.find({ host: host }, {}, function (e, results) {
+          if (e) {
+            logger.error("SensorModel.getByhost.find: ", e);
+            obs.error(e);
+          }
+          if (results) {
+            obs.next(results);
+          }
+        });
+      } catch (ex) {
+        logger.error("SensorModel.getByHost.catch: ", ex)
+        obs.error(ex);
+      }
+    });
+    return obs;
   }
 }
 

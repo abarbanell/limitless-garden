@@ -6,7 +6,7 @@ var Rx_1 = require("rxjs/Rx");
 var SensorModel = (function () {
     function SensorModel() {
         this._schema_version = 1;
-        this._collectionName = db.collectionName('sensor');
+        this._collectionName = db.collectionName('model.sensor');
         this._dummyval = [{
                 _id: "id17",
                 name: "sensor 1",
@@ -53,9 +53,12 @@ var SensorModel = (function () {
                         logger.error("SensorModel.getById.findOne: ", e);
                         obs.error(e);
                     }
-                    if (results) {
-                        obs.next(results);
+                    if (results && results._id) {
+                        if (results._id instanceof mongodb.ObjectID) {
+                            results._id = results._id.toString();
+                        }
                     }
+                    obs.next(results);
                 });
             }
             catch (ex) {
@@ -136,6 +139,30 @@ var SensorModel = (function () {
     };
     SensorModel.prototype.getCollectionName = function () {
         return this._collectionName;
+    };
+    SensorModel.prototype.getByHost = function (host) {
+        var cn = this._collectionName;
+        var obs = new Rx_1.Subject();
+        logger.info("SensorModel.getByHost before mongo call");
+        db.connect(function (err, dbObj) {
+            var coll = dbObj.collection(cn);
+            try {
+                coll.find({ host: host }, {}, function (e, results) {
+                    if (e) {
+                        logger.error("SensorModel.getByhost.find: ", e);
+                        obs.error(e);
+                    }
+                    if (results) {
+                        obs.next(results);
+                    }
+                });
+            }
+            catch (ex) {
+                logger.error("SensorModel.getByHost.catch: ", ex);
+                obs.error(ex);
+            }
+        });
+        return obs;
     };
     return SensorModel;
 }());

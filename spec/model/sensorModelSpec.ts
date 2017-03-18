@@ -28,6 +28,63 @@ describe('Sensor Model V1', function() {
 		});
 	});
 
+	it('getById valid id', (done) => {
+		var id = sensor.post({
+			 name: "sensor 3",
+    	 host: "rpi99",
+    	 type: {
+      	name: "soil"
+    	 }
+		});
+		id.subscribe(strId => {
+			expect(strId).toEqual(jasmine.any(String));
+			logger.info("id = ", strId);
+			var sut = sensor.getById(strId);
+			sut.subscribe(s => {
+				expect(s._id).toBe(strId);
+				done();
+			}, e => {
+				expect(e.toString()).toContain("you should not get here");
+				done();
+		})
+			done();
+		}, e => {
+			expect(e).toBe("you-should-not-get-here-either");
+		 	done();
+		});
+	});
+
+	it('getById missing id', (done) => {
+		var id = sensor.post({
+			 name: "sensor 3",
+    	 host: "rpi99",
+    	 type: {
+      	name: "soil"
+    	 }
+		});
+		id.subscribe(strId => {
+			let nonExistingId = "58cd177e9900ff4a2a741bbc";
+			expect(strId).toEqual(jasmine.any(String));
+			logger.info("inserted id = ", strId);
+			logger.info("non-existing id = ", nonExistingId);
+			expect(strId).not.toBe(nonExistingId);
+			var sut = sensor.getById(nonExistingId);
+			sut.subscribe(s => {
+				logger.info("got s = ", s);
+				expect(s).toBeNull();
+				done();
+			}, e => {
+				logger.error('got e = ', e);
+				expect(e.toString()).toContain("you should not get here");
+				done();
+			})
+		}, e => {
+			logger.error('could not insert before get, e = ', e);
+			expect(e).toBe("you-should-not-get-here-either");
+		 	done();
+		});
+	});
+
 	it('getById invalid id', (done) => {
 		var sut = sensor.getById("invalid-ID");
 		sut.subscribe(s => {
