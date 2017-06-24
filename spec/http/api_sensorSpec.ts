@@ -21,7 +21,7 @@ describe('sensor API tests', function() {
 	beforeEach(done => {
 		var s = new SensorModel();
 		s.deleteAll().subscribe(s => { 
-			logger.error('beforeAll: deleted row count is ', s);
+			logger.info('beforeAll: deleted row count is ', s);
 			done(); 
 		});
 	})
@@ -55,7 +55,7 @@ describe('sensor API tests', function() {
 		.get('/api/sensors?user_key=true')
 		.expect(httpStatus.OK)
 		.end(function(err, res) {
-			logger.error('res.body: ', res.body);
+			logger.info('res.body (expected empty): ', res.body);
 			expect(res.body.length).toBeDefined();
 			expect(res.body.length).toBe(0);
 			done();

@@ -115,7 +115,7 @@ router.delete('/collections/:collectionName/:id', function(req, res, next) {
 class QueryMapper {
 	static qmap(q: Object) {
 		var rc = {};
-		logger.error('QueryMapper in, querystring: ' + JSON.stringify(q));
+		logger.info('QueryMapper in, querystring: ' + JSON.stringify(q));
 		// map fields and filter out special fields like limit, offset,...
 		for (var member in q) {
 			switch (member) { 
@@ -129,7 +129,7 @@ class QueryMapper {
 			}
 		}
 		// return results
-		logger.error('QueryMapper out, query object: ' + JSON.stringify(rc));
+		logger.info('QueryMapper out, query object: ' + JSON.stringify(rc));
 		return rc;
 	}
 }

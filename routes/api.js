@@ -113,7 +113,7 @@ var QueryMapper = (function () {
     }
     QueryMapper.qmap = function (q) {
         var rc = {};
-        logger.error('QueryMapper in, querystring: ' + JSON.stringify(q));
+        logger.info('QueryMapper in, querystring: ' + JSON.stringify(q));
         // map fields and filter out special fields like limit, offset,...
         for (var member in q) {
             switch (member) {
@@ -127,7 +127,7 @@ var QueryMapper = (function () {
             }
         }
         // return results
-        logger.error('QueryMapper out, query object: ' + JSON.stringify(rc));
+        logger.info('QueryMapper out, query object: ' + JSON.stringify(rc));
         return rc;
     };
     return QueryMapper;

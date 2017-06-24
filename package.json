@@ -10,7 +10,7 @@
     "jscs": "jscs --preset=google **.js",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
-    "test": "node ./jasmine.js",
+    "test": ". .lg.rc; node ./jasmine.js",
     "test:watch": "watch 'npm run test'",
     "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec"
   },

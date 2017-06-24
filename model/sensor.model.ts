@@ -130,7 +130,7 @@ export class SensorModel {
             obs.error(e);
           }
           if (results) {
-            logger.error('SensorModel.deleteAll.delete results: ', results.deletedCount)
+            logger.info('SensorModel.deleteAll.delete results: ', results.deletedCount)
             obs.next(results.deletedCount);
           }
         });
