@@ -19,7 +19,7 @@ var threescale = function(req, res, next) {
     res.status(status.BAD_REQUEST).send('Bad Request - user_key missing');
   } else {
     logger.info("threescale: user key exists - " + req.query.user_key);
-    if ((req.app.get("env") === "local")) {
+    if ((process.env.ENVIRONMENT === "local")) {
       // total bypass
       logger.info("threescale: local mode, no check");
       return next();

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": ". .lg.rc; node ./bin/www",
     "start:watch": "watch 'npm start'",
     "start:full": "rimraf node_modules && npm install && npm start",
     "jshint": "jshint **.js",
