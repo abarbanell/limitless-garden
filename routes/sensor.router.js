@@ -9,6 +9,7 @@ router.use(threescale);
 var sensorModel = new sensor_model_1.SensorModel();
 // GET /api/sensors -> list of sensors
 router.get('/', function (req, res, next) {
+    logger.info("sensor.route: GET /api/sensors");
     sensorModel.get().subscribe(function (s) {
         res.json(s);
     }, function (e) {

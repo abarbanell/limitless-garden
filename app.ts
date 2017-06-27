@@ -1,16 +1,19 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var cors = require ('cors');
+// external import
+import * as express from 'express';
+import * as path from 'path';
+import * as favicon from 'serve-favicon';
+import * as morgan from 'morgan';
+import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+import * as session from 'express-session';
 
-var session = require('express-session');
+// internal imports
 var logger = require('./util/logger');
-var statsd = require('./util/statsd');
+import { statsdHits } from './util/statsd';
+
 // TODO: import into typescript app.ts
-import { AuthSetup } from './util/authSetup');
+import { AuthSetup } from './util/authSetup';
 
 var routes = require('./routes/index');
 var api = require('./routes/api');
@@ -35,7 +38,7 @@ app.use(session({
 }));
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(statsd.statsdHits);
+app.use(statsdHits);
 app.use(cors());
 
 AuthSetup.setAuth(app);
@@ -46,7 +49,7 @@ app.use('/auth', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  var err: any = new Error('Not Found');
   err.status = 404;
   next(err);
 });

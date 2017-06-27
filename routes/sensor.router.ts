@@ -13,6 +13,7 @@ var sensorModel = new SensorModel();
 
 // GET /api/sensors -> list of sensors
 router.get('/', function(req, res, next) {
+	logger.info("sensor.route: GET /api/sensors");
 	sensorModel.get().subscribe(s => {		
 		  res.json(s);
 	}, e => {

@@ -1,17 +1,18 @@
 "use strict";
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var morgan = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var cors = require('cors');
-var session = require('express-session');
+// external import
+var express = require("express");
+var path = require("path");
+var favicon = require("serve-favicon");
+var morgan = require("morgan");
+var cookieParser = require("cookie-parser");
+var bodyParser = require("body-parser");
+var cors = require("cors");
+var session = require("express-session");
+// internal imports
 var logger = require('./util/logger');
-var statsd = require('./util/statsd');
+var statsd_1 = require("./util/statsd");
 // TODO: import into typescript app.ts
 var authSetup_1 = require("./util/authSetup");
-;
 var routes = require('./routes/index');
 var api = require('./routes/api');
 var auth = require('./routes/auth');
@@ -32,7 +33,7 @@ app.use(session({
 }));
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(statsd.statsdHits);
+app.use(statsd_1.statsdHits);
 app.use(cors());
 authSetup_1.AuthSetup.setAuth(app);
 app.use('/', routes);
