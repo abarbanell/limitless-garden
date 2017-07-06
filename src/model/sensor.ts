@@ -136,4 +136,4 @@ var sensor = function() {
 	}
 }();
 
-module.exports = sensor; 
+export = sensor; 

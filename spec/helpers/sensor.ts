@@ -1,5 +1,5 @@
-var logger = require('../../util/logger');
-var db = require('../../util/db');
+var logger = require('../../src/util/logger');
+var db = require('../../src/util/db');
 var env = process.env.ENVIRONMENT || 'dev';
 var colname = env + '.sensor';
 var insertedIds = [];

@@ -1,7 +1,7 @@
 var util = require('util');
-var user = require('../../model/user.js');
-var logger = require('../../util/logger');
-var db = require('../../util/db');
+var user = require('../../src/model/user.js');
+var logger = require('../../src/util/logger');
+var db = require('../../src/util/db');
 var env = process.env.ENVIRONMENT || 'dev';
 var colname = 'sys.' + env + '.user';
 
@@ -55,9 +55,9 @@ describe('User Model ', function() {
 	};
 	
   it('should contain get and findOrCreate methods ', function(){
-      expect(user).toBeA(Object);
-      expect(user.get).toBeA(Function);
-      expect(user.findOrCreate).toBeA(Function);	
+      expect(typeof(user)).toBe('object');
+      expect(typeof(user.get)).toBe('function');
+      expect(typeof(user.findOrCreate)).toBe('function');	
   });
 
 	it('get a single value - notfound', function(done) {
@@ -84,7 +84,7 @@ it('get a single value - found', function (done) {
 			logger.info('model_user.js - result = %s', typeof(result));
 			logger.info('model_user.js - result = %s', JSON.stringify(result));
 			expect(result).toBeTruthy();
-			expect(result).toBeA(Object);
+			expect(typeof(result)).toBe('object');
 			expect(result._id).toEqual(insertedIds[0]);
 			done();
 		
@@ -92,7 +92,7 @@ it('get a single value - found', function (done) {
 	});
 
 	it('should findOrCreate an entry - new user', function(done) {
-		newObj = { 
+		var newObj = { 
 			profile: { id: "dummyId456", displayName: "Jack Douglas" },
 			"timestamp": "2015-09-29T19:25:12.435121"
 		};
@@ -112,15 +112,15 @@ it('get a single value - found', function (done) {
 
 	it('should findOrCreate an entry - existing user', function(done) {
 		spyOn(logger, 'error');
-		newObj = objs[1];
+		var newObj = objs[1];
 		user.findOrCreate(newObj, function (err, result) {
 			expect(logger.error).toHaveBeenCalled();
 			if (err) {
 				logger.error('err = ' + JSON.stringify(err));
 				done();
 			} else {
-				expect(err).not.tobeTruthy();
-				expect(result).tobeTruthy();
+				expect(err).not.toBeTruthy();
+				expect(result).toBeTruthy();
 				logger.info('findOrCreate result: ' + JSON.stringify(result));
 				expect(result._id).toEqual(insertedIds[1]);
 				done();

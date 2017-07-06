@@ -2,9 +2,9 @@
 
 // prerequisites
 var supertest = require('supertest');
-var status = require('http-status');
+var httpStatus = require('http-status');
 var util = require('util');
-var logger = require('../../util/logger');
+var logger = require('../../src/util/logger');
 var httpMocks = require('node-mocks-http');
 var rewire = require('rewire');
 var sensorHelper = require('../helpers/sensor.js');
@@ -14,27 +14,27 @@ var port = process.env.TEST_PORT || 4321;
 var user_key = process.env.THREESCALE_USER_KEY;
 
 // system under test
-var server = require('../../bin/www');
-var indexrouter = rewire('../../routes/index.js');
+var server = require('../../src/server');
+var indexrouter = rewire('../../src/routes/index.js');
 
 describe('collections index.js route supertests', function() {
 
 	it('GET about page - no auth needed', function(done) {
 		supertest(server)
 		.get('/about')
-		.expect(status.OK, done);
+		.expect(httpStatus.OK, done);
 	});
 
 	it('GET login page - even if no auth ', function(done) {
 		supertest(server)
 		.get('/login')
-		.expect(status.OK, done);
+		.expect(httpStatus.OK, done);
 	});
 
 	it('GET logout page - successful redirect even if no auth ', function(done) {
 		supertest(server)
 		.get('/logout')
-		.expect(status.FOUND, done);
+		.expect(httpStatus.FOUND, done);
 	});
 
 });
@@ -120,8 +120,8 @@ describe('Middleware test for for index routes', function() {
 			response.render = function(view, obj) { 
 				expect(view).toEqual('hosts');
 				expect(obj).toBeTruthy();
-				expect(obj.title).toBeA(String);
-				expect(obj.data).toBeA(Array);
+				expect(typeof(obj.title)).toBe('string');
+				expect(typeof(obj.data.length)).toBe('number');
 				done();
 			};
 			var sr = indexrouter.__get__('hostsRoute');
@@ -144,9 +144,9 @@ describe('Middleware test for for index routes', function() {
 			response.render = function(view, obj) { 
 				expect(view).toEqual('hostdata');
 				expect(obj).toBeTruthy();
-				expect(obj.title).toBeA(String);
-				expect(obj.data).toBeA(Array);
-				expect(obj.data[0].sensor).toBeA(Array);
+				expect(typeof(obj.title)).toBe('string');
+				expect(typeof(obj.data.length)).toBe('number');
+				expect(typeof(obj.data[0].sensor.length)).toBe('number');
 				expect(obj.data[0].sensor.length).toEqual(1);
 				done();
 			};
@@ -170,10 +170,10 @@ describe('Middleware test for for index routes', function() {
 			response.render = function(view, obj) { 
 				expect(view).toEqual('hostdata');
 				expect(obj).toBeTruthy();
-				expect(obj.title).toBeA(String);
-				expect(obj.data).toBeA(Array);
-				expect(obj.data[0].sensor).toBeA(Array);
-				expect(obj.data[0].sensor[0]).toBeA(String);
+				expect(typeof(obj.title)).toBe('string');
+				expect(typeof(obj.data.length)).toBe('number');
+				expect(typeof(obj.data[0].sensor.length)).toBe('number');
+				expect(typeof(obj.data[0].sensor[0])).toBe('string');
 				logger.info('sensor.length: ' + obj.data[0].sensor.length);
 				expect(obj.data[0].sensor.length).toBeGreaterThan(1);
 				done();
@@ -191,6 +191,3 @@ describe('Middleware test for for index routes', function() {
 		
 });		
 	
-
-
-

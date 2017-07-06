@@ -1,5 +1,5 @@
 // test util/statsd.js
-import { statsdHits } from '../../util/statsd';
+import { statsdHits } from '../../src/util/statsd';
 
 describe('statsd tests', function () {
     

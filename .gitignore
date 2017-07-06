@@ -49,3 +49,5 @@ nohup.out
 # on dev system)
 # /public/app
 
+target
+dist

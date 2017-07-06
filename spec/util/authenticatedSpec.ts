@@ -1,9 +1,9 @@
 // test for util/authenticated middleware
 
-var auth = require('../../util/authenticated.js');
+var auth = require('../../src/util/authenticated.js');
 
 var httpMocks = require('node-mocks-http');
-var logger = require('../../util/logger.js');
+var logger = require('../../src/util/logger.js');
 var util = require('util');
 
 describe('Middleware test for authentication', function() {

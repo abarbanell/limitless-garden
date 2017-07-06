@@ -5,8 +5,8 @@
 var supertest = require('supertest');
 var httpStatus = require('http-status');
 var util = require('util');
-var logger = require('../../util/logger');
-import { SensorModel } from '../../model/sensor.model';
+import logger = require('../../src/util/logger');
+import { SensorModel } from '../../src/model/sensor.model';
 import { Observable } from 'rxjs/Rx';
 
 // environment
@@ -15,7 +15,7 @@ process.env.PORT = port;
 var user_key = process.env.THREESCALE_USER_KEY;
 
 // system under test
-var server = require('../../bin/www');
+var server = require('../../src/server');
 
 describe('sensor API tests', function() {
 	beforeEach(done => {

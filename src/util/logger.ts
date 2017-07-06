@@ -8,4 +8,4 @@ var logger = function() {
   return winston;
 }();
 
-module.exports = logger;
+export = logger;

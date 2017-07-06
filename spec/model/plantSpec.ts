@@ -1,7 +1,7 @@
 var rewire = require('rewire');
-var plant = rewire('../../model/plant.js');
-var logger = require('../../util/logger');
-var db = require('../../util/db');
+var plant = rewire('../../src/model/plant.js');
+var logger = require('../../src/util/logger');
+var db = require('../../src/util/db');
 var env = process.env.ENVIRONMENT || 'dev';
 var colname = env + '.plant';
 var insertedIds = [];
@@ -71,11 +71,11 @@ describe('plant Model ', function() {
 	};
 	
   it('should contain get and some other methods ', function(){
-      expect(plant).toBeA(Object);
-      expect(plant.get).toBeA(Function);
-      expect(plant.getMulti).toBeA(Function);	
-      expect(plant.create).toBeA(Function);	
-      expect(plant.getSpecies).toBeA(Function);	
+      expect(typeof(plant)).toBe('object');
+      expect(typeof(plant.get)).toBe('function');
+      expect(typeof(plant.getMulti)).toBe('function');	
+      expect(typeof(plant.create)).toBe('function');	
+      expect(typeof(plant.getSpecies)).toBe('function');	
   });
 
 	it('get a single value - notfound', function(done) {
@@ -125,11 +125,10 @@ describe('plant Model ', function() {
 		plant.getSpecies(function(err,result){
 			if (err) {
 				logger.error('plant.js - error in getSpecies()');
-				return callback(err, null);
 			};
 			expect(err).not.toBeTruthy();
 			expect(result).toBeTruthy();
-			expect(result).toBeA(Array);
+			expect(typeof(result.length)).toBe('number');
 			expect(result.length).toEqual(2);
 			done();
 		});
@@ -137,7 +136,7 @@ describe('plant Model ', function() {
 
 	it('check private check() function', function(done) {
 		var private_check = plant.__get__('check');
-		expect(private_check).toBeA(Function);
+		expect(typeof(private_check)).toBe('function');
 		var lobj = private_check({});
 		expect(lobj.name).toEqual("unknown");
 		lobj = private_check({name: "n1", species: "s1", location: "l1"});

@@ -1,7 +1,7 @@
 // test util/logger.js
 // require logger ad check we have function error(), info()
 
-var logger = require('../../util/logger');
+var logger = require('../../src/util/logger');
 
 describe('logger tests', function() {
 

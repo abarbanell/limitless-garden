@@ -5,7 +5,7 @@
 var rewire = require('rewire');
 var mongo_url = process.env.TEST_MONGO_URL; 
 var mongoClient = require('mongodb').MongoClient;
-var logger = require('../../util/logger');
+var logger = require('../../src/util/logger');
 var util = require('util');
 
 describe('util/db tests', function() {
@@ -26,16 +26,16 @@ describe('util/db tests', function() {
 		var ObjectID = require('mongodb').ObjectID;
 		var oid = new ObjectID('aabbaabbaabbaabbaabbaabb');
 		logger.info('o0 - typeof ObjectID = %s', typeof(ObjectID));
-		expect(ObjectID).toBeA(Function);
+		expect(typeof(ObjectID)).toBe('function');
 		logger.info('o1: - typeof oid = %s', typeof(oid));
-		expect(oid).toBeA(Object);
+		expect(typeof(oid)).toBe('object');
 		logger.info('o2');
 		done();
 	});
 
  it('mongo has ObjectID.isValid()?', function(done){		
 		var ObjectID = require('mongodb').ObjectID;
-		expect(ObjectID.isValid).toBeA(Function);		
+		expect(typeof(ObjectID.isValid)).toBe('function');		
 		expect(ObjectID.isValid('aabbaabbaabbaabbaabbaabb')).toBeTruthy();
 		expect(ObjectID.isValid(17)).toBeTruthy();
 		expect(ObjectID.isValid('aabbaabbaabbaabbaabb')).not.toBeTruthy();
@@ -45,15 +45,15 @@ describe('util/db tests', function() {
 
 	var check_db = function(db, done) {
 		expect(db).toBeTruthy();
-		expect(db).toBeA(Object);
-		expect(db.close).toBeA(Function);
+		expect(typeof(db)).toBe('object');
+		expect(typeof(db.close)).toBe('function');
 		db.close();
 		done();
 	};
 
 	it('open DB via MONGOLAB_URI in util/db.js?', function(done) {
 		process.env.MONGOLAB_URI = mongo_url;
-		var db = rewire('../../util/db');
+		var db = rewire('../../src/util/db');
 		expect(typeof(db.connect)).toEqual('function');
 		logger.info('m1');
 		db.connect(function(err,db1){
@@ -69,8 +69,8 @@ describe('util/db tests', function() {
 			delete process.env.MONGOLAB_URI;
 		}
 		process.env.MONGO_URL = mongo_url;
-		var db = rewire('../../util/db');
-		expect(db.connect).toBeA(Function);
+		var db = rewire('../../src/util/db');
+		expect(typeof(db.connect)).toBe('function');
 		db.connect(function(err,db1){
 			expect(err).not.toBeTruthy();
 			check_db(db1, done);
@@ -82,15 +82,15 @@ describe('util/db tests', function() {
 			delete process.env.MONGOLAB_URI;
 		}
 		process.env.MONGO_URL = mongo_url;
-		var db = rewire('../../util/db');
-		expect(db.connect).toBeA(Function);
+		var db = rewire('../../src/util/db');
+		expect(typeof(db.connect)).toBe('function');
 		db.connect(function(err,db1){
 			expect(err).not.toBeTruthy();
 			var col = db1.collection('test');
 			col.insert({"data": "unit test" }, function(err,r) {
 				expect(err).not.toBeTruthy();
-				expect(r).toBeA(Object);
-				expect(r.result).toBeA(Object);
+				expect(typeof(r)).toBe('object');
+				expect(typeof(r.result)).toBe('object');
 				logger.info('r.result: %s', util.inspect(r.result));
 				expect(r.result.ok).toEqual(1);
 				expect(r.result.n).toEqual(1);
@@ -100,42 +100,42 @@ describe('util/db tests', function() {
 	});  
 
 	it('count is a function returning a number', function(done) {
-		var db = rewire('../../util/db');
-		expect(db.count).toBeA(Function);
+		var db = rewire('../../src/util/db');
+		expect(typeof(db.count)).toBe('function');
 		db.count('test', function(err, result) {
 			expect(err).not.toBeTruthy();
-			expect(result).toBeA(Number);
+			expect(typeof(result)).toBe('number');
 			done();
 		});
 	});
 
 	it('collectionName is a function returning a string', function(done) {
-		var db = rewire('../../util/db');
-		expect(db.collectionName).toBeA(Function);
-		expect(db.collectionName('test')).toBeA(String);
+		var db = rewire('../../src/util/db');
+		expect(typeof(db.collectionName)).toBe('function');
+		expect(typeof(db.collectionName('test'))).toBe('string');
 		done();
 	});
 
 	it('collectionName starts with environemnt', function(done) {
 		var env = process.env.ENVIRONMENT;
 		process.env.ENVIRONMENT='jsm';
-		var db = rewire('../../util/db');
-		expect(db.collectionName).toBeA(Function);
+		var db = rewire('../../src/util/db');
+		expect(typeof(db.collectionName)).toBe('function');
 		var s = db.collectionName('test');
-		expect(s).toBeA(String);
+		expect(typeof(s)).toBe('string');
 		expect(s.startsWith(process.env.ENVIRONMENT)).toEqual(true);
 		process.env.ENVIRONMENT = env;
 		done();
 	});
 	
     it('collections function return array', function (done) {
-        var db = rewire('../../util/db');
-        expect(db.collections).toBeA(Function);
+        var db = rewire('../../src/util/db');
+        expect(typeof(db.collections)).toBe('function');
         db.collections(function (err, arr) {
             expect(err).not.toBeTruthy();
 		logger.info('arr is of type: ' + typeof(arr));
 		logger.info('arr = '+ util.inspect(arr));
-            expect(arr).toBeA(Array);
+            expect(typeof(arr.length)).toBe('number');
             done();
         })
     })

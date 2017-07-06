@@ -1,11 +1,11 @@
-import { SensorModel } from '../../model/sensor.model';
+import { SensorModel } from '../../src/model/sensor.model';
 import { Observable } from 'rxjs/Rx';
 
 var util = require('util');
 //var sensor = require('../../model/sensor.js');
 var sensor: SensorModel; 
 
-var logger = require('../../util/logger');
+var logger = require('../../src/util/logger');
 var sensorHelper = require('../helpers/sensor.js');
 
 describe('Sensor Model V1', function() {

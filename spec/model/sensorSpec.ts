@@ -1,7 +1,7 @@
 var util = require('util');
-var sensor = require('../../model/sensor.js');
-var logger = require('../../util/logger');
-var sensorHelper = require('../helpers/sensor.js');
+var sensor = require('../../src/model/sensor');
+var logger = require('../../src/util/logger');
+var sensorHelper = require('../helpers/sensor');
 
 
 describe('Sensor Model V0', function() {
@@ -16,14 +16,14 @@ describe('Sensor Model V0', function() {
 	});	
 	
   it('should contain get and getMulti methods ', function(){
-      expect(sensor).toBeA(Object);
-      expect(sensor.get).toBeA(Function);
-      expect(sensor.getMulti).toBeA(Function);	
+      expect(typeof(sensor)).toBe('object');
+      expect(typeof(sensor.get)).toBe('function');
+      expect(typeof(sensor.getMulti)).toBe('function');	
   });
 
   it('should insert 3 rows in beforeEach ', function(){
-      expect(sensorHelper.insertedIds).toBeA(Function);
-      expect(sensorHelper.insertedIds()).toBeA(Array);
+      expect(typeof(sensorHelper.insertedIds)).toBe('function');
+      expect(typeof(sensorHelper.insertedIds().length)).toBe('number');
       expect(sensorHelper.insertedIds().length).toEqual(3);
   });
 
@@ -66,7 +66,7 @@ describe('Sensor Model V0', function() {
 				expect(result).toBeTruthy();
 				expect(result._id).toEqual(sensorHelper.insertedIds()[2]);
 				logger.info('model_sensor test with broken sensor field: '+ util.inspect(util.sensor));
-				expect(result.sensor).toBeA(Array); // broken sensor value should be converted to empty array
+				expect(typeof(result.sensor.length)).toBe('number'); // broken sensor value should be converted to empty array
 				expect(result.sensor.length).toEqual(0); 
 				done();
 			}
@@ -95,11 +95,10 @@ describe('Sensor Model V0', function() {
 		sensor.getUniqueHosts(function(err,result){
 			if (err) {
 				logger.err('sensor.js - error in distinctHosts()');
-				return callback(err, null);
 			};
 			expect(err).not.toBeTruthy();
 			expect(result).toBeTruthy();
-			expect(result).toBeA(Array);
+			expect(typeof(result.length)).toBe('number');
 			expect(result.length).toEqual(3);
 			done();
 		});
