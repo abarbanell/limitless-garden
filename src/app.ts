@@ -7,6 +7,7 @@ import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as session from 'express-session';
+import * as httpStatus from 'http-status';
 
 // internal imports
 var logger = require('./util/logger');
@@ -48,6 +49,7 @@ app.use('/', routes);
 app.use('/api', api);
 app.use('/auth', auth);
 
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err: any = new Error('Not Found');
@@ -61,6 +63,8 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
+    logger.error("ERROR " + (err.status || 500) + 
+      " from URL: " + req.originalUrl + " [IP: " + req.ip + "] - " + err.message);
     res.status(err.status || 500);
     res.render('error', {
       title: 'Limitless Garden',
@@ -74,6 +78,8 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
+  logger.error("ERROR " + (err.status || 500) + 
+    " from URL: " + req.originalUrl + " [IP: " + req.ip + "] - " + err.message);
   res.status(err.status || 500);
   res.render('error', {
     title: 'Limitless Garden',
@@ -82,5 +88,6 @@ app.use(function(err, req, res, next) {
     user: req.user
   });
 });
+
 
 module.exports = app;

@@ -67,14 +67,23 @@ var fillResults = function(req, res, fill, count, results) {
 router.post('/collections/:collectionName', function(req, res, next) {
 	logger.info('POST: ' + util.inspect(req.body));
   req.collection.insert(req.body, {}, function(e, results){
-    if (e) return next(e)
+    if (e) {
+			logger.error("api.post(): error from [IP: " + req.ip + "] - " + e);
+			return next(e)
+		}
+		if (results && results.result) {
 		logger.info('POST result is %s', util.inspect(results));
-    res.send(results)
+    res.send(results) 
+		} else {
+			logger.error("api.post(): nothing posted [IP: " + req.ip + "]" );
+			res.status(httpStatus.BAD_REQUEST).send("nothing posted");
+		}
   })
 })
 
 router.get('/collections/:collectionName/:id', function(req, res, next) {
 	if (!ObjectID.isValid(req.params.id)) {
+		logger.error("400 - BAD_REQUEST - api.get(): invalid ObjectID [IP: " + req.ip + "]");
 		return res.sendStatus(httpStatus.BAD_REQUEST);
 	}
 	var oid = ObjectID.createFromHexString(req.params.id);
@@ -97,6 +106,7 @@ router.put('/collections/:collectionName/:id', function(req, res, next) {
 
 router.delete('/collections/:collectionName/:id', function(req, res, next) {
 	if (!ObjectID.isValid(req.params.id)) {
+		logger.error("400 - BAD_REQUEST - api.delete(): invalid ObjectID [IP: " + req.ip + "]");
 		return res.sendStatus(httpStatus.BAD_REQUEST);
 	}
 	var oid = ObjectID.createFromHexString(req.params.id);

@@ -15,7 +15,7 @@ var threescale = function(req, res, next) {
 	}
 	logger.info('threescale: 3scale middleware start');
   if (!req.query.user_key) {
-    logger.info("threescale: user key missing");
+    logger.error("400 - BAD_REQUEST - threescale: user key missing [IP: " + req.ip + "]");
     res.status(status.BAD_REQUEST).send('Bad Request - user_key missing');
   } else {
     logger.info("threescale: user key exists - " + req.query.user_key);
