@@ -132,7 +132,7 @@ describe('collections API integration tests', function() {
 		.expect(httpStatus.NOT_FOUND, done);
 	});
 
-	it('GET testcollection/malformed-id with user_key should return OK', function(done) {
+	it('GET testcollection/malformed-id with user_key should return 400 BAD_REQUEST', function(done) {
 		var url = '/api/collections/test/this-is-not-hex?user_key=true';
 		supertest(server)
 		.get(url)

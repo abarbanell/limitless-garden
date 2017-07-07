@@ -83,8 +83,11 @@ router.post('/collections/:collectionName', function(req, res, next) {
 
 router.get('/collections/:collectionName/:id', function(req, res, next) {
 	if (!ObjectID.isValid(req.params.id)) {
-		logger.error("400 - BAD_REQUEST - api.get(): invalid ObjectID [IP: " + req.ip + "]");
-		return res.sendStatus(httpStatus.BAD_REQUEST);
+		// logger.error("400 - BAD_REQUEST - api.get(): invalid ObjectID [IP: " + req.ip + "]");
+		// return res.sendStatus(httpStatus.BAD_REQUEST);
+		var err: any = new Error('ObjectID not valid');
+		err.status = httpStatus.BAD_REQUEST;
+		return next(err);
 	}
 	var oid = ObjectID.createFromHexString(req.params.id);
   req.collection.findOne( { _id: oid } ,{}, function(e, results){
@@ -106,8 +109,9 @@ router.put('/collections/:collectionName/:id', function(req, res, next) {
 
 router.delete('/collections/:collectionName/:id', function(req, res, next) {
 	if (!ObjectID.isValid(req.params.id)) {
-		logger.error("400 - BAD_REQUEST - api.delete(): invalid ObjectID [IP: " + req.ip + "]");
-		return res.sendStatus(httpStatus.BAD_REQUEST);
+		var err: any = new Error('ObjectID not valid');
+		err.status = httpStatus.BAD_REQUEST;
+		return next(err);
 	}
 	var oid = ObjectID.createFromHexString(req.params.id);
 	db.connect(function(err, dbObj) {
