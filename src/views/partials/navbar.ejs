@@ -27,11 +27,11 @@
             <li><a href="/about#contact">Contact</a></li>
 						<li>
             <% if (user && user.profile && user.profile.id ) { %>
-               <a href=".">logged in as <%= user.profile.displayName %> 
+               <a href="/logout">[<%= user.profile.displayName %> 
                 <% if (user.admin) { %>
                    <i class="fa fa-wrench" aria-hidden="true"></i>
-                <% } %>
-               </a>
+                <% } %>]
+               </a> 
             <% } else { %>
                <a href="/auth/google">Login</a>
             <% } %>
