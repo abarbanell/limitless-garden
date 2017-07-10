@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": ". .lg.rc; node ./target/src/server.js",
+    "start": "node ./target/src/server.js",
     "start:watch": "watch 'npm start'",
     "start:full": "rimraf node_modules && npm install && npm start",
     "jshint": "jshint ./target/src/**.js",
@@ -11,7 +11,7 @@
     "copyfiles": "copyfiles 'public/**' 'spec/**/*.json' 'src/**/*.ejs'  target/",
     "tsc": "tsc",
     "tsc:watch": "tsc -w",
-    "test": ". .lg.rc; cd target; node ./jasmine.js",
+    "test": "cd target; node ./jasmine.js",
     "test:watch": "watch 'npm run test'",
     "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec"
   },
