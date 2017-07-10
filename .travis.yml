@@ -1,8 +1,9 @@
-sudo: required
+sudo: false
 dist: precise
 language: node_js
 node_js:
   - "6"
+  - "8"
 services:
   - mongodb
 env:
