@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include partials/head %>
+  </head>
+  <body>
+
+<header>
+<% include partials/navbar %>
+</header>
+
+    <div class="container-fluid">
+      <div class="starter-template">
+				<h1><%= title %></h1>
+
+
+      </div>
+      	<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<table class="table table-striped ">
+						<thead class="lgstyle-inverse">
+							<td>Host</td>
+							<td>Actions</td>
+						</thead>
+
+					<% for(var i=0; i<data.length; i++) { %>
+						<tr>
+							<td> <a href="/hosts/<%= data[i] %>"><%= data[i] %></a> </td>
+							<td> </td>
+						</tr>
+					<% } %>
+
+					</table>
+				</div>
+			</div>	
+
+      
+      <div class="row">
+        <% include partials/ad %>
+  		</div>
+  
+
+    </div><!-- /.container -->
+
+		<% include partials/footer %>
+  </body>
+</html>

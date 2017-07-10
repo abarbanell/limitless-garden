@@ -1,0 +1,29 @@
+<html lang="en">
+  <head>
+    <% include partials/head %>
+  </head>
+  <body>
+  
+    <header>
+      <% include partials/navbar %>
+    </header>
+
+    <div class="container-fluid">
+      <div class="starter-template">
+				<h1><%= title %></h1>
+				<p>Welcome to <%= title %></p>
+				<p>Please log in first. </p>
+      </div>
+      <div class="row">
+         <div class="col-md-2 col-md-offset-5">
+          <a href="/auth/google" class="btn btn-block btn-social btn-google">
+            <span class="fa fa-google"></span> Sign in with Google
+          </a>
+        </div>
+      </div>
+    </div>
+  
+		<% include partials/footer %>
+  </body>
+</html>
+

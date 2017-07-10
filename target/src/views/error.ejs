@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include partials/head %>
+  </head>
+  <body>
+  
+		<header>
+			<% include partials/navbar %>
+		</header>
+
+		<div class="container-fluid">
+				<div class="lgerror">
+					<h1>Error in <%= title %></h1>		
+					<h2><%= error.status %>: <%= message %></h2>
+					<pre class="lgerror-trace"><%= error.stack %></pre>
+				</div>
+		</div> 
+
+		<% include partials/footer %>
+    
+  </body>
+</html>

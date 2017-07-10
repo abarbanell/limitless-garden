@@ -44,10 +44,10 @@ npm-debug.log
 nohup.out
 .DS_Store
 
-# webpack build artifacts - currently we need to put webpack files into git 
+# webpack build artifacts - currently we need to put webpack and dist / target files into git 
 # because we deploy from git without running webpack after deploy (i.e. webpack is only
 # on dev system)
 # /public/app
 
-target
-dist
+# target
+# dist

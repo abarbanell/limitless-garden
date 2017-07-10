@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include partials/head %>
+  </head>
+  <body>
+
+<header>
+<% include partials/navbar %>
+</header>
+
+    <div class="container-fluid">
+      <div class="starter-template">
+				<h1><%= title %></h1>
+				<p>Welcome to <%= title %></p>
+				<p>We have the following <%= count %> of objects  available for you. </p>
+      </div>
+      
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<table class="table table-striped ">
+						<thead class="lgstyle-inverse">
+							<td>Object</td>
+						</thead>
+
+					<% for(var i=0; i<data.length; i++) { %>
+						<tr>
+							<td>
+								<%= data[i] %> 
+							</td>
+						</tr>
+					<% } %>
+
+					</table>
+      
+        	<% include partials/ad %>
+				</div>
+			</div>
+
+    </div><!-- /.container -->
+
+		<% include partials/footer %>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include partials/head %>
+  </head>
+  <body>
+
+<header>
+<% include partials/navbar %>
+</header>
+
+    <div class="container-fluid">
+      <div class="starter-template">
+				<h1><%= title %></h1>
+				<p> This page shows data for one host. More work needed here.
+				</p>
+
+      </div>
+      
+
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2">
+					<table class="table table-striped ">
+						<thead class="lgstyle-inverse">
+							<td>Date</td>
+							<td><a href="/hosts">Host</a></td>
+							<td>Sensor</td>
+							<td>Soil</td>
+							<td>capacitance</td>
+							<td>temperature</td>
+							<td>humidity</td>
+							<td>light</td>
+						</thead>
+
+					<% for(var i=0; i<data.length; i++) { %>
+						<tr>
+							<td><%= data[i].date %></td>
+							<td><%= data[i].host %></td>
+							<td><% data[i].sensor.forEach(function(element, index, array) {  %>
+								<a href="<%= dashurl %>/<%= element %>"> [<%= element %>] </a> 
+								<% }); %>
+							</td>
+			
+							<td><%= data[i].soil %></td>
+							<td><%= data[i].capacitance %></td>
+							<td><%= data[i].temperature %></td>
+							<td><%= data[i].humidity %></td>
+							<td><%= data[i].light %></td>
+						</tr>
+					<% } %>
+
+					</table>
+				</div>
+			</div>	
+
+      
+  
+      
+      <div class="row">
+        <% include partials/ad %>
+  		</div>
+  
+
+    </div><!-- /.container -->
+
+		<% include partials/footer %>
+  </body>
+</html>
