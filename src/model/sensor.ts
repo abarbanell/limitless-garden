@@ -64,8 +64,6 @@ var sensor = function() {
 				"_id": id, 
 				"schema_version" : { "$exists" : false }
 			}, {}, function(err,doc) {
-				dbObj.close();
-				logger.info('sensor.js - db closed');
 				if (err) {
 					return callback(err,null);
 				} else {
@@ -82,7 +80,6 @@ var sensor = function() {
 		db.connect(function(err,dbObj){
 			var collection = dbObj.collection(colname);
 			collection.find(query, options).toArray(function(err,docs){
-				dbObj.close();
 				var mapped = docs.map(validateObj);
 				callback(err,mapped);
 			});
@@ -92,7 +89,6 @@ var sensor = function() {
 	var distinctHosts = function(callback) {
 		db.connect(function(err,dbObj){
 			dbObj.collection(colname).distinct("host", function(err,result){
-				dbObj.close();
 				return callback(err,result);
 			});
 		});

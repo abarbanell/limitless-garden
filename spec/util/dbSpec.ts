@@ -63,6 +63,21 @@ describe('util/db tests', function() {
 			check_db(db1, done);
 		});
 	});  
+
+	it('connecting twice should return same Mongoclient object', function(done) {
+		process.env.MONGOLAB_URI = mongo_url;
+		var db = rewire('../../src/util/db');
+		expect(typeof(db.connect)).toEqual('function');
+		logger.info('m1');
+		db.connect(function(err,db1){
+			expect(err).not.toBeTruthy();
+			db.connect(function(err2,db2){
+				expect(err2).not.toBeTruthy();
+				expect(db1).toBe(db2);
+				done();		
+		});
+		});
+	})
 	
 	it('open DB via MONGO_URL in util/db.js?', function(done) {
 		if(process.env.MONGOLAB_URI) {

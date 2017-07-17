@@ -6,13 +6,14 @@ var util = require('util');
 var logger = require('../../src/util/logger');
 var httpMocks = require('node-mocks-http');
 var rewire = require('rewire');
-var sensorHelper = require('../helpers/sensor.js');
+var sensorHelper = require('../helpers/sensor');
 // environment
 var port = process.env.TEST_PORT || 4321;
 var user_key = process.env.THREESCALE_USER_KEY;
 // system under test
 var server = require('../../src/server');
 var indexrouter = rewire('../../src/routes/index.js');
+//var indexrouter = require('../../src/routes/index.js');
 describe('collections index.js route supertests', function () {
     it('GET about page - no auth needed', function (done) {
         supertest(server)
@@ -43,24 +44,25 @@ describe('Middleware test for for index routes', function () {
             sensorHelper.insertrows(done);
         });
     });
-    afterAll(function (done) {
+    afterEach(function (done) {
         sensorHelper.droprows(done);
     });
     it('check sensorRoute - happy path', function (done) {
         // we want to catch the res.render function
         response.render = function (view, obj) {
+            logger.info("mocked res.render() called as expected");
             expect(view).toBeTruthy();
             expect(obj).toBeTruthy();
-            done();
+            return done();
         };
         var sr = indexrouter.__get__('sensorRoute');
         sr(request, response, function next(error) {
             if (error) {
-                logger.error("error received");
+                logger.error("error received: " + error);
             }
             ;
             expect("you should not get here").toEqual("Never");
-            done();
+            return done();
         });
     });
     it('collectionsListRoute - happy path', function (done) {
@@ -73,7 +75,7 @@ describe('Middleware test for for index routes', function () {
         var sr = indexrouter.__get__('collectionsListRoute');
         sr(request, response, function next(error) {
             if (error) {
-                logger.error("error received");
+                logger.error("error received: " + error);
             }
             ;
             expect("you should not get here").toEqual("Never");

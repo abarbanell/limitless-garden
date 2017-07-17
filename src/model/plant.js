@@ -37,8 +37,6 @@ var plant = function() {
 			logger.info('plant.js - db opened');
 			var collection = dbObj.collection(colname);
 			collection.findOne({"_id": id}, {}, function(err,doc) {
-				dbObj.close();
-				logger.info('plant.js - db closed');
 				return callback(err,doc);
 			});
 		});
@@ -49,7 +47,6 @@ var plant = function() {
 		db.connect(function(err,dbObj){
 			var collection = dbObj.collection(colname);
 			collection.find(query, options).toArray(function(err,docs){
-				dbObj.close();
 				callback(err,docs);
 			});
 		});
@@ -58,7 +55,6 @@ var plant = function() {
 	var distinctSpecies = function(callback) {
 		db.connect(function(err,dbObj){
 			dbObj.collection(colname).distinct("species", function(err,result){
-				dbObj.close();
 				return callback(err,result);
 			});
 		});

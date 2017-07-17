@@ -1,5 +1,5 @@
-var rewire = require('rewire');
-var plant = rewire('../../src/model/plant.js');
+//var rewire = require('rewire');
+var plant = require('../../src/model/plant.js');
 var logger = require('../../src/util/logger');
 var db = require('../../src/util/db');
 var env = process.env.ENVIRONMENT || 'dev';
@@ -9,7 +9,7 @@ var insertedIds = [];
 describe('plant Model ', function() {
 	beforeEach(function(done) {
 		droprows(function(){
-			insertrows(done);
+			return insertrows(done);
 		});
 	});
 	
@@ -43,18 +43,17 @@ describe('plant Model ', function() {
 			dbObj.collection(colname).insert(objs, function(err, result) {
 				if (err) {
 					logger.error('insertrows Error: ' + err);
-					done();
+					return done();
 				} 
 				logger.info('insertrows result: ' + JSON.stringify(result));
 				insertedIds = result.insertedIds;
-				dbObj.close();
-				done();
+				return done();
 			});
 		});
 	};
 	
-	afterAll(function(done){
-		droprows(done);
+	afterEach(function(done){
+		return droprows(done);
 	});	
 	
 	function droprows(done) {
@@ -64,18 +63,18 @@ describe('plant Model ', function() {
 					logger.error('droprows() error: '+ err);
 				}
 				logger.info('droprows() - removed data: ' + JSON.stringify(result));
-				dbObj.close();
-				done();
+				return done();
 			});
 		});
 	};
 	
-  it('should contain get and some other methods ', function(){
+  it('should contain get and some other methods ', function(done){
       expect(typeof(plant)).toBe('object');
       expect(typeof(plant.get)).toBe('function');
       expect(typeof(plant.getMulti)).toBe('function');	
       expect(typeof(plant.create)).toBe('function');	
-      expect(typeof(plant.getSpecies)).toBe('function');	
+	  expect(typeof(plant.getSpecies)).toBe('function');
+	  return done();	
   });
 
 	it('get a single value - notfound', function(done) {
@@ -87,7 +86,7 @@ describe('plant Model ', function() {
 			}
 			expect(err).not.toBeTruthy(); 
 			expect(result).not.toBeTruthy();
-		  done();
+		  	return done();
 		});
 	});
 	
@@ -95,12 +94,12 @@ describe('plant Model ', function() {
 		plant.get(insertedIds[0], function (err, result) {
 			if (err) {
 				logger.error('err = ' + JSON.stringify(err));
-				done();
+				return done();
 			} else {
 				expect(err).not.toBeTruthy();
 				expect(result).toBeTruthy();
 				expect(result._id).toEqual(insertedIds[0]);
-				done();
+				return done();
 			}
 		});
 	});
@@ -110,13 +109,13 @@ describe('plant Model ', function() {
 			logger.info('model_plant test: getmulti callback reached');
 			if (err) {
 				logger.error('err = ' + JSON.stringify(err));
-				done();
+				return done();
 			} else {
 				expect(err).not.toBeTruthy();
 				expect(result).toBeTruthy();
 				logger.info('getMulti result: ' + JSON.stringify(result));
 				expect(result.length).toEqual(insertedIds.length);
-				done();
+				return done();
 			}
 		});
 	});
@@ -130,21 +129,22 @@ describe('plant Model ', function() {
 			expect(result).toBeTruthy();
 			expect(typeof(result.length)).toBe('number');
 			expect(result.length).toEqual(2);
-			done();
+			return done();
 		});
 	});
 
-	it('check private check() function', function(done) {
-		var private_check = plant.__get__('check');
-		expect(typeof(private_check)).toBe('function');
-		var lobj = private_check({});
-		expect(lobj.name).toEqual("unknown");
-		lobj = private_check({name: "n1", species: "s1", location: "l1"});
-		expect(lobj.name).toEqual("n1");
-		expect(lobj.species).toEqual("s1");
-		expect(lobj.location).toEqual("l1");
-		done();
-	}); 
+	// not possible without rewire - private method
+	// it('check private check() function', function(done) {
+	// 	var private_check = plant.__get__('check');
+	// 	expect(typeof(private_check)).toBe('function');
+	// 	var lobj = private_check({});
+	// 	expect(lobj.name).toEqual("unknown");
+	// 	lobj = private_check({name: "n1", species: "s1", location: "l1"});
+	// 	expect(lobj.name).toEqual("n1");
+	// 	expect(lobj.species).toEqual("s1");
+	// 	expect(lobj.location).toEqual("l1");
+	// 	done();
+	// }); 
 
 	it('should create a new entry', function(done) {
 		var obj = {
@@ -162,7 +162,7 @@ describe('plant Model ', function() {
 			} 
 			expect(err).not.toBeTruthy();
 			expect(result).toBeTruthy();
-			done();
+			return done();
 		});
 	});
 

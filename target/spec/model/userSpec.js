@@ -28,7 +28,6 @@ describe('User Model ', function () {
                 }
                 logger.info('insertrows result: ' + JSON.stringify(result));
                 insertedIds = result.insertedIds;
-                dbObj.close();
                 done();
             });
         });
@@ -44,7 +43,6 @@ describe('User Model ', function () {
                     logger.error('droprows() error: ' + err);
                 }
                 logger.info('droprows() - removed data: ' + util.inspect(result));
-                dbObj.close();
                 done();
             });
         });

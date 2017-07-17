@@ -26,11 +26,11 @@ var insertedIds = [];
 			dbObj.collection(colname).insert(objs, function(err, result) {
 				if (err) {
 					logger.error('insertrows Error: ' + err);
-					done();
+					return done();
 				} 
 				logger.info('insertrows result: ' + JSON.stringify(result));
 				insertedIds = result.insertedIds;
-				done();
+				return done();
 			});
 		});
 	};
@@ -42,7 +42,7 @@ var insertedIds = [];
 					logger.error('droprows() error: '+ err);
 				}
 				logger.info('droprows() - removed data: ' + JSON.stringify(result));
-				done();
+				return done();
 			});
 		});
 	};
@@ -54,7 +54,7 @@ var insertedIds = [];
 	function getCollection(callback) {
 		db.connect(function(err,dbObj){
 			var c = dbObj.collection(colname);
-			callback(c);
+			return callback(c);
 		});
 	};
 
