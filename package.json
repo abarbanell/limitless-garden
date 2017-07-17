@@ -2,6 +2,9 @@
   "name": "limitless-garden",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "8.1.x"
+  },
   "scripts": {
     "start": "node ./target/src/server.js",
     "start:watch": "watch 'npm start'",
