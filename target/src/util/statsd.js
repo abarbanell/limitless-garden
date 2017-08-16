@@ -23,3 +23,19 @@ function statsdHits(req, res, next) {
     return next();
 }
 exports.statsdHits = statsdHits;
+function statsdData(req, res, next) {
+    var fields = ["temperature", "capacitance", "light", "soil", "humidity"];
+    var body = req.body;
+    if (req.params && (req.params["collectionName"] == "sensor") && body.host) {
+        fields.forEach(function (field) {
+            if (body[field] && typeof (body[field]) == "number") {
+                var metric = prefix + "." + body.host + "." + field;
+                var value = body[field];
+                client.gauge(metric, value);
+                logger.info("StatsdData: " + metric + " = " + value);
+            }
+        });
+    }
+    return next();
+}
+exports.statsdData = statsdData;

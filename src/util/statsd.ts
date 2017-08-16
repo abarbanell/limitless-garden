@@ -26,4 +26,20 @@ export function statsdHits(req, res, next) {
   return next();
 }
 
+export function statsdData(req, res, next) {
+  var fields = [ "temperature", "capacitance", "light", "soil", "humidity" ];
+  var body = req.body;
+  if (req.params && (req.params["collectionName"] == "sensor") && body.host) {
+    fields.forEach( field => {
+      if (body[field] && typeof(body[field]) == "number"){
+        var metric = prefix + "." + body.host + "." + field;
+        var value = body[field];
+        client.gauge(metric, value);
+        logger.info("StatsdData: " + metric + " = " + value);
+      }
+    });
+  }
+  return next();
+}
+
 

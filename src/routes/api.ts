@@ -8,6 +8,7 @@ var ObjectID = require('mongodb').ObjectID;
 
 
 import * as sensorRouter from './sensor.router' 
+import { statsdData } from '../util/statsd';
 
 var threescale = require('../util/threescale');
 router.use(threescale);
@@ -64,7 +65,7 @@ var fillResults = function(req, res, fill, count, results) {
 	res.set('X-Total-Count', count).send(results);
 }
 
-router.post('/collections/:collectionName', function(req, res, next) {
+router.post('/collections/:collectionName', statsdData, function(req, res, next) {
 	logger.info('POST: ' + util.inspect(req.body));
   req.collection.insert(req.body, {}, function(e, results){
     if (e) {

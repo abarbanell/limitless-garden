@@ -23,4 +23,28 @@ describe('statsd tests', function () {
         };
         statsd_1.statsdHits(req, res, next);
     });
+    it('check statsdData is a function', function (done) {
+        expect(typeof (statsd_1.statsdData)).toBe("function");
+        done();
+    });
+    it('middleware test - statsd and next() exit', function (done) {
+        var req = {
+            method: "POST",
+            originalURL: "http://localhost/api/test",
+            body: {
+                host: "testhost",
+                temperature: 17,
+                soil: 4
+            },
+            params: {
+                collectionName: "sensor"
+            }
+        };
+        var res = {};
+        var next = function () {
+            console.info("next called");
+            done();
+        };
+        statsd_1.statsdData(req, res, next);
+    });
 });

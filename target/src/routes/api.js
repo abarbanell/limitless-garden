@@ -7,6 +7,7 @@ var httpStatus = require('http-status');
 var db = require('../util/db');
 var ObjectID = require('mongodb').ObjectID;
 var sensorRouter = require("./sensor.router");
+var statsd_1 = require("../util/statsd");
 var threescale = require('../util/threescale');
 router.use(threescale);
 router.use('/sensors', sensorRouter);
@@ -57,7 +58,7 @@ var fillResults = function (req, res, fill, count, results) {
     ;
     res.set('X-Total-Count', count).send(results);
 };
-router.post('/collections/:collectionName', function (req, res, next) {
+router.post('/collections/:collectionName', statsd_1.statsdData, function (req, res, next) {
     logger.info('POST: ' + util.inspect(req.body));
     req.collection.insert(req.body, {}, function (e, results) {
         if (e) {

@@ -214,6 +214,33 @@ describe('collections API integration tests', function() {
 		});
 	});
 
+	it('POST sensor with DELETE', function(done) {
+		var url = '/api/collections/sensor?user_key=true';
+		supertest(server)
+		.post(url)
+		.send({
+			host: 'ESP_CBBAAB', 
+			sensor: [ 'capacitance', 'temperature', 'light' ], 
+			capacitance: 999, 
+			temperature: 26.4, 
+			light: 3838
+		})
+		.expect(httpStatus.OK)
+		.end(function(err, res) {
+			expect(err).not.toBeTruthy();
+			expect(res).toBeTruthy();
+			expect(typeof(res.body)).toBe('object');
+			logger.info('insert result=%s', util.inspect(res.body));
+			expect(typeof(res.body.insertedIds.length)).toBe('number');
+			expect(res.body.insertedIds.length).toEqual(1);
+			var id = res.body.insertedIds[0];
+			var deleteUrl = '/api/collections/sensor/' + id + '?user_key=true';
+			supertest(server)
+			.delete(deleteUrl)
+			.expect(httpStatus.OK, done);
+		});
+	});
+
 	it('POST testcollection with POST again to same id', function(done) {
 		var url = '/api/collections/test?user_key=true';
 		supertest(server)
