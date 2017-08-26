@@ -8,6 +8,7 @@ var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var cors = require("cors");
 var session = require("express-session");
+var httpStatus = require('http-status');
 // internal imports
 var logger = require('./util/logger');
 // import * as logger from './util/logger';

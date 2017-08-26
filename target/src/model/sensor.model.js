@@ -38,7 +38,7 @@ var SensorModel = (function () {
                 obs.error(ex);
             }
         });
-        return obs;
+        return obs.asObservable();
     };
     SensorModel.prototype.getById = function (id) {
         var cn = this._collectionName;
@@ -66,7 +66,7 @@ var SensorModel = (function () {
                 obs.error(ex);
             }
         });
-        return obs;
+        return obs.asObservable();
     };
     SensorModel.prototype.post = function (data) {
         var id = "error";
@@ -84,7 +84,7 @@ var SensorModel = (function () {
                 }
             });
         });
-        return obs;
+        return obs.asObservable();
     };
     SensorModel.prototype.delete = function (id) {
         var cn = this._collectionName;
@@ -110,7 +110,7 @@ var SensorModel = (function () {
                 obs.error(ex);
             }
         });
-        return obs;
+        return obs.asObservable();
     };
     SensorModel.prototype.deleteAll = function () {
         var cn = this._collectionName;
@@ -135,7 +135,7 @@ var SensorModel = (function () {
                 obs.error(ex);
             }
         });
-        return obs;
+        return obs.asObservable();
     };
     SensorModel.prototype.getCollectionName = function () {
         return this._collectionName;
@@ -162,7 +162,7 @@ var SensorModel = (function () {
                 obs.error(ex);
             }
         });
-        return obs;
+        return obs.asObservable();
     };
     return SensorModel;
 }());

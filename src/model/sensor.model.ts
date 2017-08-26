@@ -37,7 +37,7 @@ export class SensorModel {
         obs.error(ex);
       }
     }); 
-    return obs;
+    return obs.asObservable();
   }
 
   getById(id: string): Observable<ISensor> {
@@ -66,7 +66,7 @@ export class SensorModel {
         obs.error(ex);
       }
     });
-    return obs;
+    return obs.asObservable();
   }
 
   post(data: ISensor): Observable<string> {
@@ -86,7 +86,7 @@ export class SensorModel {
         }
       })
     })
-    return obs;
+    return obs.asObservable();
   }
 
   delete(id: string): Observable<Number> {
@@ -113,7 +113,7 @@ export class SensorModel {
         obs.error(ex);
       }
     });
-    return obs;
+    return obs.asObservable();
   }
 
   deleteAll(): Observable<Number> {
@@ -139,7 +139,7 @@ export class SensorModel {
         obs.error(ex);
       }
     });
-    return obs;
+    return obs.asObservable();
   }
 
   getCollectionName(): string {
@@ -168,7 +168,7 @@ export class SensorModel {
         obs.error(ex);
       }
     });
-    return obs;
+    return obs.asObservable();
   }
 }
 
