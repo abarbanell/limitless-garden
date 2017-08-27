@@ -42,4 +42,9 @@ export function statsdData(req, res, next) {
   return next();
 }
 
+export function statsdHeartbeat(host: string, uptime: number) {
+  var metric = prefix + "." + host + ".uptime";
+  client.gauge(metric, uptime);
+}
+
 

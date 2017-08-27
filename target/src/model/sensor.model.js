@@ -7,21 +7,6 @@ var SensorModel = (function () {
     function SensorModel() {
         this._schema_version = 1;
         this._collectionName = db.collectionName('model.sensor');
-        this._dummyval = [{
-                _id: "id17",
-                name: "sensor 1",
-                host: "rpi99",
-                type: {
-                    name: "soil"
-                }
-            }, {
-                _id: "id18",
-                name: "sensor 2",
-                host: "rpi97",
-                type: {
-                    name: "temp"
-                }
-            }];
     }
     SensorModel.prototype.get = function () {
         var cn = this._collectionName;

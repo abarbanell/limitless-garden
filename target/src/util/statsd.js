@@ -39,3 +39,8 @@ function statsdData(req, res, next) {
     return next();
 }
 exports.statsdData = statsdData;
+function statsdHeartbeat(host, uptime) {
+    var metric = prefix + "." + host + ".uptime";
+    client.gauge(metric, uptime);
+}
+exports.statsdHeartbeat = statsdHeartbeat;

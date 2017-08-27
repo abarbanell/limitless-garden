@@ -6,22 +6,6 @@ import { Observable, Subject } from 'rxjs/Rx';
 export class SensorModel {
   private _schema_version = 1;
   private _collectionName = db.collectionName('model.sensor');
-  private _dummyval: ISensor[] = 
-  [{
-    _id: "id17",
-    name: "sensor 1",
-    host: "rpi99",
-    type: {
-      name: "soil"
-    }
-  },{
-    _id: "id18",
-    name: "sensor 2",
-    host: "rpi97",
-    type: {
-      name: "temp"
-    }
-  }];
 
   get(): Observable<ISensor[]> {
     var cn = this._collectionName;

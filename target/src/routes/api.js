@@ -7,10 +7,12 @@ var httpStatus = require('http-status');
 var db = require('../util/db');
 var ObjectID = require('mongodb').ObjectID;
 var sensorRouter = require("./sensor.router");
+var heartbeatRouter = require("./heartbeat.router");
 var statsd_1 = require("../util/statsd");
 var threescale = require('../util/threescale');
 router.use(threescale);
 router.use('/sensors', sensorRouter);
+router.use('/heartbeat', heartbeatRouter);
 /* GET api  */
 router.get('/hello', function (req, res, next) {
     res.json({ msg: 'hello world!' });

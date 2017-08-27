@@ -8,11 +8,13 @@ var ObjectID = require('mongodb').ObjectID;
 
 
 import * as sensorRouter from './sensor.router' 
+import * as heartbeatRouter from './heartbeat.router';
 import { statsdData } from '../util/statsd';
 
 var threescale = require('../util/threescale');
 router.use(threescale);
 router.use('/sensors', sensorRouter);
+router.use('/heartbeat', heartbeatRouter);
 
 /* GET api  */
 router.get('/hello', function(req, res, next) {
