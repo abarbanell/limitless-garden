@@ -5,8 +5,10 @@ var httpStatus = require('http-status');
 var util = require('util');
 var logger = require("../../src/util/logger");
 // system under test
-var server = require("../../src/server");
 var user_key = process.env.THREESCALE_USER_KEY;
+var port = process.env.TEST_PORT || "4321";
+process.env.PORT = port;
+var server = require("../../src/server");
 describe('heartbeat route test', function () {
     it('server should be valid', function (done) {
         expect(server).toBeTruthy();
