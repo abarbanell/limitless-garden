@@ -20,9 +20,7 @@ describe('heartbeat route test', function() {
 		.end(function(err, res) {
 			expect(err).toBeNull();
 			expect(res).toBeDefined();
-			if (!res.body) {
-				logger.error("res: " +  util.inspect(res));
-			}
+			logger.error("res: " +  util.inspect(res));
 			expect(res.body).toBeDefined()
 			logger.error('res.body: ' +  util.inspect(res.body));
 			expect(res.body._id).toBeDefined();
