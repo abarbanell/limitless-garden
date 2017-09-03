@@ -52,7 +52,7 @@
     "systemjs": "0.19.41",
     "util": "0.10.3",
     "winston": "2.3.1",
-    "zone.js": "0.6.26"
+    "zone.js": "0.8.17"
   },
   "devDependencies": {
     "@types/core-js": "0.9.35",
@@ -71,9 +71,9 @@
     "node-mocks-http": "1.5.3",
     "rewire": "^2.3.4",
     "rimraf": "2.5.4",
-    "superagent": "^1.6.1",
-    "supertest": "^1.1.0",
+    "superagent": "3.6.0",
+    "supertest": "3.0.0",
     "typescript": "2.1.4",
-    "watch": "0.17.1"
+    "watch": "1.0.2"
   }
 }
