@@ -4,14 +4,28 @@ var util = require('util');
 import logger = require('../../src/util/logger');
 
 // system under test
-import * as server from '../../src/server';
 var user_key = process.env.THREESCALE_USER_KEY;
+var port = process.env.TEST_PORT || "4321";
+process.env.PORT = port;
+import * as server from '../../src/server';
 
 
 describe('heartbeat route test', function() {
 	it('server should be valid', function(done){
 		expect(server).toBeTruthy();
 		expect(server.listen).toBeDefined();
+		done();
+	});
+
+	it('port should be set', function(done) {
+		expect(port).toBeTruthy();
+		logger.info('port=%s', port);
+		done();
+	});
+
+	it('user_key should be set', function(done) {
+		expect(user_key).toBeTruthy();
+		logger.error('user_key=%s', user_key);
 		done();
 	});
 
@@ -25,6 +39,7 @@ describe('heartbeat route test', function() {
 		.send(payload)
 		.expect(httpStatus.OK)
 		.end(function(err, res) {
+			logger.error("err: " + util.inspect(err));
 			expect(err).toBeNull();
 			expect(res).toBeTruthy();
 			logger.error("res: " +  util.inspect(res));
