@@ -93,7 +93,7 @@ describe('sensor API tests', function () {
             supertest(server)
                 .get(getUrl)
                 .end(function (err, res) {
-                logger.error('get after post: status: ', res.status);
+                logger.info('get after post: status: ', res.status);
                 expect(res.status).toBe(httpStatus.OK);
                 expect(res.body).toBeDefined();
                 expect(res.body._id).toBeDefined();
@@ -124,7 +124,7 @@ describe('sensor API tests', function () {
             supertest(server)
                 .del(getUrl)
                 .end(function (err, res) {
-                logger.error('del after post: status: ', res.status);
+                logger.info('del after post: status: ', res.status);
                 expect(res.status).toBe(httpStatus.OK);
                 expect(res.body.rc).toEqual('OK');
                 expect(res.body.deletedCount).toEqual(1);
