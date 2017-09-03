@@ -1,5 +1,6 @@
-// Sesnor API integration tests
 "use strict";
+// Sesnor API integration tests
+Object.defineProperty(exports, "__esModule", { value: true });
 // prerequisites
 var supertest = require('supertest');
 var httpStatus = require('http-status');
@@ -7,7 +8,7 @@ var util = require('util');
 var logger = require("../../src/util/logger");
 var sensor_model_1 = require("../../src/model/sensor.model");
 // environment
-var port = process.env.TEST_PORT || 4321;
+var port = process.env.TEST_PORT || "4321";
 process.env.PORT = port;
 var user_key = process.env.THREESCALE_USER_KEY;
 // system under test

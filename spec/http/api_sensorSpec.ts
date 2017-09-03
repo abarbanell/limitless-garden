@@ -10,7 +10,7 @@ import { SensorModel } from '../../src/model/sensor.model';
 import { Observable } from 'rxjs/Rx';
 
 // environment
-var port = process.env.TEST_PORT || 4321;
+var port = process.env.TEST_PORT || "4321";
 process.env.PORT = port;
 var user_key = process.env.THREESCALE_USER_KEY;
 

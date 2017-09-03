@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Rx_1 = require("rxjs/Rx");
 var mongodb = require("mongodb");
 var logger = require('../util/logger');

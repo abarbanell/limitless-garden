@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var logger = require('../util/logger');
 var db = require('../util/db');
 var mongodb = require("mongodb");

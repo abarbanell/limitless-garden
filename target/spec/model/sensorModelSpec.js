@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var sensor_model_1 = require("../../src/model/sensor.model");
 var Rx_1 = require("rxjs/Rx");
 var util = require('util');
@@ -81,7 +82,8 @@ describe('Sensor Model V1', function () {
     it('getById invalid id', function (done) {
         var sut = sensor.getById("invalid-ID");
         sut.subscribe(function (s) {
-            expect(s).toBe("you-should-not-get-here");
+            // you should not get here
+            expect(s).toBeNull();
             done();
         }, function (e) {
             expect(e.toString()).toContain("Argument passed");

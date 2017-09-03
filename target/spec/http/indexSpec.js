@@ -8,7 +8,7 @@ var httpMocks = require('node-mocks-http');
 var rewire = require('rewire');
 var sensorHelper = require('../helpers/sensor');
 // environment
-var port = process.env.TEST_PORT || 4321;
+var port = process.env.TEST_PORT || "4321";
 var user_key = process.env.THREESCALE_USER_KEY;
 // system under test
 var server = require('../../src/server');

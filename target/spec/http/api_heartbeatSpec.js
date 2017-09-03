@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var supertest = require("supertest");
 var httpStatus = require('http-status');
 var util = require('util');

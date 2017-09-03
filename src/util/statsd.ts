@@ -12,7 +12,8 @@ var client = new Statsd({
   host: process.env.STATSD_HOST,
   port: process.env.STATSD_PORT
 });
-var prefix = process.env.ENVIRONMENT
+var prefix = process.env.ENVIRONMENT;
+
 logger.info("StatsdUtil - initialization code");
 
 export function statsdHits(req, res, next) {

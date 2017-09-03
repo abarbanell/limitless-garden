@@ -125,6 +125,8 @@ var sensor = function () {
         getUniqueHosts: distinctHosts,
         getValuesByHost: findValuesByHost,
         validateObj: validateObj
+        // v1 - these have schema_version: 1
+        // TODO
     };
 }();
 module.exports = sensor;

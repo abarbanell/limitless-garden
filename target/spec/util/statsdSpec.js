@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // test util/statsd.js
 var statsd_1 = require("../../src/util/statsd");
 describe('statsd tests', function () {

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var user = require('../model/user');
 var logger = require('../util/logger');
 var AuthSetup = (function () {

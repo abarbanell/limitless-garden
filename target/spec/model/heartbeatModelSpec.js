@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var hb_model_1 = require("../../src/model/hb.model");
 var Rx_1 = require("rxjs/Rx");
 var util = require('util');

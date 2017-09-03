@@ -88,7 +88,8 @@ describe('Sensor Model V1', function() {
 	it('getById invalid id', (done) => {
 		var sut = sensor.getById("invalid-ID");
 		sut.subscribe(s => {
-			expect(s).toBe("you-should-not-get-here");
+			// you should not get here
+			expect(s).toBeNull();
 			done();
 		}, e => {
 			expect(e.toString()).toContain("Argument passed");
