@@ -44,6 +44,7 @@ export function statsdData(req, res, next) {
 
 export function statsdHeartbeat(host: string, uptime: number) {
   var metric = prefix + "." + host + ".uptime";
+  logger.error('statsd metric: %s', metric);
   client.gauge(metric, uptime);
 }
 

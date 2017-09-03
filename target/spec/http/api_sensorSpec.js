@@ -66,7 +66,7 @@ describe('sensor API tests', function () {
             .send(input)
             .expect(httpStatus.OK)
             .end(function (err, res) {
-            logger.error('res.body: ', res.body);
+            logger.info('res.body: ', res.body);
             expect(res.body._id).toBeDefined();
             expect(res.body.rc).toBeDefined();
             done();
