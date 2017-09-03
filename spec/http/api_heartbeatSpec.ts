@@ -16,9 +16,12 @@ describe('heartbeat route test', function() {
 		.send(payload)
 		.expect(httpStatus.OK)
 		.end(function(err, res) {
+			expect(err).toBeNull();
+			expect(res).toBeDefined();
+			expect(res.body).toBeDefined()
 			logger.info('res.body: ', res.body);
 			expect(res.body._id).toBeDefined();
-			expect(res.body.rc).toBeDefined();
+			expect(res.body.rc).toBe("OK");
 			done();
 		});
   })
