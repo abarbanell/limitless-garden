@@ -1,9 +1,11 @@
 import * as supertest from 'supertest';
 var httpStatus  = require('http-status');
+var util = require('util');
+import logger = require('../../src/util/logger');
 
 // system under test
 import * as server from '../../src/server';
-import logger = require('../../src/util/logger');
+
 
 describe('heartbeat route test', function() {
   it('POST heartbeat', (done) => {
@@ -18,8 +20,11 @@ describe('heartbeat route test', function() {
 		.end(function(err, res) {
 			expect(err).toBeNull();
 			expect(res).toBeDefined();
+			if (!res.body) {
+				logger.error("res: " +  util.inspect(res));
+			}
 			expect(res.body).toBeDefined()
-			logger.info('res.body: ', res.body);
+			logger.error('res.body: ' +  util.inspect(res.body));
 			expect(res.body._id).toBeDefined();
 			expect(res.body.rc).toBe("OK");
 			done();

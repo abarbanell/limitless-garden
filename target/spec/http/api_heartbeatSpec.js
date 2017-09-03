@@ -1,9 +1,10 @@
 "use strict";
 var supertest = require("supertest");
 var httpStatus = require('http-status');
+var util = require('util');
+var logger = require("../../src/util/logger");
 // system under test
 var server = require("../../src/server");
-var logger = require("../../src/util/logger");
 describe('heartbeat route test', function () {
     it('POST heartbeat', function (done) {
         var payload = {
@@ -17,8 +18,11 @@ describe('heartbeat route test', function () {
             .end(function (err, res) {
             expect(err).toBeNull();
             expect(res).toBeDefined();
+            if (!res.body) {
+                logger.error("res: " + util.inspect(res));
+            }
             expect(res.body).toBeDefined();
-            logger.info('res.body: ', res.body);
+            logger.error('res.body: ' + util.inspect(res.body));
             expect(res.body._id).toBeDefined();
             expect(res.body.rc).toBe("OK");
             done();
