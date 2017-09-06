@@ -35,21 +35,14 @@ var Heartbeat = (function () {
         if (this._id) {
             rc._id = new mongodb.ObjectId.createFromHexString(this._id);
         }
-        if (this.host) {
-            rc.host = this.host;
-        }
+        rc.host = this.host || "UNKNOWN";
         if (this.uptime) {
-            rc.host = this.uptime;
+            rc.uptime = this.uptime;
         }
         if (this.i2cDevices) {
-            rc.host = this.i2cDevices;
+            rc.i2cDevices = this.i2cDevices;
         }
-        if (this.date) {
-            rc.host = this.date;
-        }
-        else {
-            rc.host = new Date().toISOString();
-        }
+        rc.date = this.date || new Date().toISOString();
         logger.info("Mongo object: %s", util.inspect(rc));
         return rc;
     };
