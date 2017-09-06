@@ -45,7 +45,6 @@ describe('plant Model ', function() {
 					logger.error('insertrows Error: ' + err);
 					return done();
 				} 
-				logger.info('insertrows result: ' + JSON.stringify(result));
 				insertedIds = result.insertedIds;
 				return done();
 			});
@@ -58,11 +57,11 @@ describe('plant Model ', function() {
 	
 	function droprows(done) {
 		db.connect(function(err,dbObj){
-			dbObj.collection(colname).remove({}, function(err, result) {
+			dbObj.collection(colname).remove({}, function(err, res) {
 				if (err) {
 					logger.error('droprows() error: '+ err);
 				}
-				logger.info('droprows() - removed data: ' + JSON.stringify(result));
+				logger.info('droprows() - removed data: ' + JSON.stringify(res.result));
 				return done();
 			});
 		});

@@ -143,7 +143,7 @@ describe('collections API integration tests', function () {
             expect(err).not.toBeTruthy();
             expect(res).toBeTruthy();
             expect(typeof (res.body)).toBe('object');
-            logger.info('insert result=%s', util.inspect(res.body));
+            logger.info('insert result=%s', util.inspect(res.body.result));
             expect(typeof (res.body.insertedIds.length)).toBe('number');
             expect(res.body.insertedIds.length).toEqual(1);
             var id = res.body.insertedIds[0];
@@ -181,7 +181,7 @@ describe('collections API integration tests', function () {
             expect(err).not.toBeTruthy();
             expect(res).toBeTruthy();
             expect(typeof (res.body)).toBe('object');
-            logger.info('insert result=%s', util.inspect(res.body));
+            logger.info('insert result=%s', util.inspect(res.body.result));
             expect(typeof (res.body.insertedIds.length)).toBe('number');
             expect(res.body.insertedIds.length).toEqual(1);
             var id = res.body.insertedIds[0];
@@ -207,7 +207,7 @@ describe('collections API integration tests', function () {
             expect(err).not.toBeTruthy();
             expect(res).toBeTruthy();
             expect(typeof (res.body)).toBe('object');
-            logger.info('insert result=%s', util.inspect(res.body));
+            logger.info('insert result=%s', util.inspect(res.body.result));
             expect(typeof (res.body.insertedIds.length)).toBe('number');
             expect(res.body.insertedIds.length).toEqual(1);
             var id = res.body.insertedIds[0];
@@ -227,7 +227,7 @@ describe('collections API integration tests', function () {
             expect(err).not.toBeTruthy();
             expect(res).toBeTruthy();
             expect(typeof (res.body)).toBe('object');
-            logger.info('insert result=%s', util.inspect(res.body));
+            logger.info('insert result=%s', util.inspect(res.body.result));
             expect(typeof (res.body.insertedIds.length)).toBe('number');
             expect(res.body.insertedIds.length).toEqual(1);
             var id = res.body.insertedIds[0];
@@ -248,7 +248,7 @@ describe('collections API integration tests', function () {
             expect(err).not.toBeTruthy();
             expect(res).toBeTruthy();
             expect(typeof (res.body)).toBe('object');
-            logger.info('insert result=%s', util.inspect(res.body));
+            logger.info('insert result=%s', util.inspect(res.body.result));
             done();
         });
     });
@@ -263,7 +263,7 @@ describe('collections API integration tests', function () {
             expect(err).not.toBeTruthy();
             expect(res).toBeTruthy();
             expect(typeof (res.body)).toBe('object');
-            logger.info('insert result=%s', util.inspect(res.body));
+            logger.info('insert result=%s', util.inspect(res.body.result));
             done();
         });
     });

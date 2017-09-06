@@ -15,7 +15,7 @@ var connect = function (callback) {
                 logger.error('db.ts - connection to %s failed', mongourl);
                 return callback(err, null);
             }
-            logger.info('db.ts - connection to %s ok, implemented return as anonymous function', mongourl);
+            logger.info('db.ts - connection to %s ok', mongourl);
             _db = db;
             return callback(null, _db);
         });
@@ -41,7 +41,6 @@ var collections = function (callback) {
                         var n = item.s.name.substring(env.length + 1);
                         return n;
                     });
-                    logger.info('collections: %s ', util.inspect(coll));
                     logger.info('names: %s ', util.inspect(names));
                     return callback(null, names);
                 }

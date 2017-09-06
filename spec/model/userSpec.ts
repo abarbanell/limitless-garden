@@ -42,11 +42,11 @@ describe('User Model ', function() {
 	
 	function droprows(done) {
 		db.connect(function(err,dbObj){
-			dbObj.collection(colname).remove({}, function(err, result) {
+			dbObj.collection(colname).remove({}, function(err, res) {
 				if (err) {
 					logger.error('droprows() error: '+ err);
 				}
-				logger.info('droprows() - removed data: ' + util.inspect(result));
+				logger.info('droprows() - removed data: ' + util.inspect(res.result));
 				done();
 			});
 		});

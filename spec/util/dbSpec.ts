@@ -131,7 +131,7 @@ describe('util/db tests', function() {
 		done();
 	});
 
-	it('collectionName starts with environemnt', function(done) {
+	it('collectionName starts with environment', function(done) {
 		var env = process.env.ENVIRONMENT;
 		process.env.ENVIRONMENT='jsm';
 		var db = rewire('../../src/util/db');
