@@ -6,6 +6,8 @@ var util = require('util');
 //var sensor = require('../../model/sensor.js');
 var hb;
 var logger = require('../../src/util/logger');
+var db = require('../../src/util/db');
+var colname = db.collectionName('model.heartbeat');
 describe('Heartbeat Model', function () {
     beforeEach(function () {
         hb = new hb_model_1.Heartbeat();
@@ -19,10 +21,20 @@ describe('Heartbeat Model', function () {
         hb.uptime = (new Date()).getMinutes();
         var obs = hb.post();
         expect(obs instanceof Rx_1.Observable).toBe(true);
+        logger.info("have observable, now subscribing...");
         obs.subscribe(function (s) {
             expect(s).toEqual(jasmine.any(String));
             logger.info("Heartbeat.post returned: %s", s);
-            done();
+            db.connect(function (err, dbObj) {
+                dbObj.collection(colname).findOne({ _id: s }, function (err, result) {
+                    if (err) {
+                        logger.error('findOne Error: ' + err);
+                        return done();
+                    }
+                    logger.error('TODO: check findOne result: ' + JSON.stringify(result));
+                    return done();
+                });
+            });
         });
     });
     // it('post(obj) can getByID again', (done) => {

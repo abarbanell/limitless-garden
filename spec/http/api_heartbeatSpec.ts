@@ -42,7 +42,6 @@ describe('heartbeat route test', function() {
 			logger.info("err: " + util.inspect(err));
 			expect(err).toBeNull();
 			expect(res).toBeTruthy();
-			logger.info("res: " +  util.inspect(res));
 			expect(res.body).toBeDefined()
 			logger.info('res.body: ' +  util.inspect(res.body));
 			expect(res.body._id).toBeDefined();

@@ -22,7 +22,7 @@ describe('heartbeat route test', function () {
     });
     it('user_key should be set', function (done) {
         expect(user_key).toBeTruthy();
-        logger.error('user_key=%s', user_key);
+        logger.info('user_key=%s', user_key);
         done();
     });
     it('POST heartbeat', function (done) {
@@ -35,12 +35,11 @@ describe('heartbeat route test', function () {
             .send(payload)
             .expect(httpStatus.OK)
             .end(function (err, res) {
-            logger.error("err: " + util.inspect(err));
+            logger.info("err: " + util.inspect(err));
             expect(err).toBeNull();
             expect(res).toBeTruthy();
-            logger.error("res: " + util.inspect(res));
             expect(res.body).toBeDefined();
-            logger.error('res.body: ' + util.inspect(res.body));
+            logger.info('res.body: ' + util.inspect(res.body));
             expect(res.body._id).toBeDefined();
             expect(res.body.rc).toBe("OK");
             done();

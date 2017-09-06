@@ -16,11 +16,9 @@ logger.info("StatsdUtil - initialization code");
 function statsdHits(req, res, next) {
     var c1 = prefix + ".http";
     var c2 = prefix + "." + req.method;
-    var c3 = prefix + ".route" + (req.originalUrl || "/");
     client.increment(c1, 1);
     client.increment(c2, 1);
-    client.increment(c3, 1);
-    logger.info("StatsdUtil - statsd increment: " + c1 + ", " + c2 + ", " + c3);
+    logger.info("StatsdUtil - statsd increment: " + c1 + ", " + c2);
     return next();
 }
 exports.statsdHits = statsdHits;
@@ -42,7 +40,7 @@ function statsdData(req, res, next) {
 exports.statsdData = statsdData;
 function statsdHeartbeat(host, uptime) {
     var metric = prefix + "." + host + ".uptime";
-    logger.error('statsd metric: %s', metric);
+    logger.info('statsd metric: %s', metric);
     client.gauge(metric, uptime);
 }
 exports.statsdHeartbeat = statsdHeartbeat;

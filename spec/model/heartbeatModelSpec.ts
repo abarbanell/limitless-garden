@@ -6,6 +6,8 @@ var util = require('util');
 var hb: Heartbeat; 
 
 var logger = require('../../src/util/logger');
+var db = require('../../src/util/db');
+var colname = db.collectionName('model.heartbeat')
 
 
 describe('Heartbeat Model', function() {
@@ -24,10 +26,20 @@ describe('Heartbeat Model', function() {
 		
 		var obs = hb.post();
 		expect(obs instanceof Observable).toBe(true);
+		logger.info("have observable, now subscribing...");
 		obs.subscribe(s => {
 			expect(s).toEqual(jasmine.any(String));
 			logger.info("Heartbeat.post returned: %s", s);
-			done();
+			db.connect(function(err,dbObj){
+				dbObj.collection(colname).findOne({ _id: s}, function(err, result) {
+					if (err) {
+						logger.error('findOne Error: ' + err);
+						return done();
+					} 
+					logger.error('TODO: check findOne result: ' + JSON.stringify(result));
+					return done();
+				});
+			});
 		})
 	});
 

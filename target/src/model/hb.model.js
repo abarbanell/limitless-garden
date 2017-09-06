@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var Rx_1 = require("rxjs/Rx");
 var mongodb = require("mongodb");
+var util = require("util");
 var logger = require('../util/logger');
 var db = require('../util/db');
 var statsd_1 = require("../util/statsd");
@@ -49,7 +50,7 @@ var Heartbeat = (function () {
         else {
             rc.host = new Date().toISOString();
         }
-        logger.info("Mongo object: %s", rc);
+        logger.info("Mongo object: %s", util.inspect(rc));
         return rc;
     };
     Heartbeat.prototype.populate = function (obj) {

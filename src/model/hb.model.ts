@@ -1,6 +1,7 @@
 
 import { Observable, Subject } from 'rxjs/Rx';
 import mongodb = require('mongodb');
+import * as util from 'util';
 
 var logger = require('../util/logger');
 var db = require('../util/db');
@@ -58,7 +59,7 @@ export class Heartbeat {
     } else { 
       rc.host = new Date().toISOString()
     }
-    logger.info("Mongo object: %s", rc)
+    logger.info("Mongo object: %s", util.inspect(rc))
     return rc;
   }
 
