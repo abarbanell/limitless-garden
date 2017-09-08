@@ -54,4 +54,6 @@ nohup.out
 
 # Credentials
 .travis/*.pem
+.travis/*.key
+.travis/*.key.pub
 
