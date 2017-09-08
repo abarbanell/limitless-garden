@@ -51,3 +51,7 @@ nohup.out
 
 # target
 # dist
+
+# Credentials
+.travis/*.pem
+
