@@ -18,8 +18,8 @@ before_install:
   -in .travis/deploy.key.enc -out .travis/deploy.key -d
 after_success:
   - eval "$(ssh-agent -s)" #start the ssh agent
-  - chmod 600 .travis/deploy_key.key # this key should have push access
-  - ssh-add .travis/deploy_key
+  - chmod 600 .travis/deploy.key # this key should have push access
+  - ssh-add .travis/deploy.key
   - ssh-keyscan dokku.abarbanell.de >> ~/.ssh/known_hosts
   - git remote add deploy dokku@dokku.abarbanell.de:lg
   - git config --global push.default simple
