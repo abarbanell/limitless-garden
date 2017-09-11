@@ -167,7 +167,7 @@ router.get('/', authenticated.cookie, collectionsListRoute);
 router.get('/collections/:collectionName', authenticated.cookie, collectionsRoute);
 /* GET sensor page. */
 router.get('/sensor', authenticated.cookie, sensorRoute);
-/* temprarily park some routes which will be filled later */
+/* temporarily park some routes which will be filled later */
 router.get('/hosts/:host', authenticated.cookie, hostDataRoute);
 router.get('/hosts', authenticated.cookie, hostsRoute);
 /* GET login page. */

@@ -6,7 +6,8 @@ var status = require('http-status');
 //   the request will proceed.  Otherwise, the user will be redirected to the
 //   login page.
 
-
+var str = process.env.API_KEYS;
+var api_keys = JSON.parse(str);
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
@@ -14,13 +15,18 @@ function ensureAuthenticated(req, res, next) {
 }
 
 function ensureApiKey(req, res, next) {
-  if (req.query.user_key) { return next(); }
+  if (req.query.user_key &&  
+      api_keys.includes(req.query.user_key)) {
+      return next(); 
+  }
   res.status(status.FORBIDDEN).send(status[status.FORBIDDEN]);
 }
 
 function ensureCookieOrApikey(req, res, next) {
-  if (req.isAuthenticated() || req.query.user_key) { return next(); }
-  res.redirect('/login');
+  if (req.isAuthenticated()) { 
+    return next(); 
+  }
+  return ensureApiKey(req, res, next);
 }
 
 function isAdmin(req, res, next) {

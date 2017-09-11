@@ -11,15 +11,10 @@ import * as sensorRouter from './sensor.router'
 import * as heartbeatRouter from './heartbeat.router';
 import { statsdData } from '../util/statsd';
 
-var threescale = require('../util/threescale');
-router.use(threescale);
+var authenticated = require('../util/authenticated');
+router.use(authenticated.cookieOrApikey);
 router.use('/sensors', sensorRouter);
 router.use('/heartbeat', heartbeatRouter);
-
-/* GET api  */
-router.get('/hello', function(req, res, next) {
-  res.json({msg: 'hello world!'});
-});
 
 router.param('collectionName', function(req, res, next, collectionName){
 	db.connect(function(err, dbObj) {

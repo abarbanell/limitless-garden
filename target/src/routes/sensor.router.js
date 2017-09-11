@@ -5,8 +5,8 @@ var router = express.Router();
 var logger = require('../util/logger');
 var util = require('util');
 var sensor_model_1 = require("../model/sensor.model");
-var threescale = require('../util/threescale');
-router.use(threescale);
+var authenticated = require('../util/authenticated');
+router.use(authenticated.cookieOrApikey);
 var sensorModel = new sensor_model_1.SensorModel();
 // GET /api/sensors -> list of sensors
 router.get('/', function (req, res, next) {

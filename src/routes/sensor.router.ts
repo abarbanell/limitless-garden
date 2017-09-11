@@ -6,8 +6,8 @@ var util = require('util');
 import { SensorModel }  from '../model/sensor.model';
 import { Observable } from 'rxjs/Rx'
 
-var threescale = require('../util/threescale');
-router.use(threescale);
+var authenticated = require('../util/authenticated');
+router.use(authenticated.cookieOrApikey);
 
 var sensorModel = new SensorModel();
 

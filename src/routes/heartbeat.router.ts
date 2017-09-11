@@ -6,8 +6,8 @@ var util = require('util');
 import { Heartbeat }  from '../model/hb.model';
 import { Observable } from 'rxjs/Rx'
 
-var threescale = require('../util/threescale');
-router.use(threescale);
+var authenticated = require('../util/authenticated');
+router.use(authenticated.cookieOrApikey);
 
 // POST /api/heartbeat -> log one entry
 router.post('/', function(req, res, next) {

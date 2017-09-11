@@ -5,8 +5,8 @@ var router = express.Router();
 var logger = require('../util/logger');
 var util = require('util');
 var hb_model_1 = require("../model/hb.model");
-var threescale = require('../util/threescale');
-router.use(threescale);
+var authenticated = require('../util/authenticated');
+router.use(authenticated.cookieOrApikey);
 // POST /api/heartbeat -> log one entry
 router.post('/', function (req, res, next) {
     try {
