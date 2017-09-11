@@ -5,7 +5,9 @@ var httpStatus = require('http-status');
 var util = require('util');
 var logger = require("../../src/util/logger");
 // system under test
-var user_key = process.env.THREESCALE_USER_KEY;
+var str = process.env.API_KEYS;
+var obj = JSON.parse(str);
+var user_key = obj[0];
 var port = process.env.TEST_PORT || "4321";
 process.env.PORT = port;
 var server = require("../../src/server");
