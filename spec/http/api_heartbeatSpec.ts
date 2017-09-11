@@ -33,7 +33,7 @@ describe('heartbeat route test', function() {
     var payload = { 
       host: "ESP_TEST",
       uptime: (new Date()).getMinutes()
-    }
+		}
     supertest(server)
 		.post('/api/heartbeat?user_key=' + user_key)
 		.send(payload)

@@ -5,8 +5,10 @@ var status = require('http-status');
 
 // 3scale API gateway middleware - just count hits
 
-var ThreeScale = require('3scale');
-client = new ThreeScale.Client(process.env.THREESCALE_PROVIDER_KEY);
+// var ThreeScale = require('3scale');
+// client = new ThreeScale.Client(process.env.THREESCALE_PROVIDER_KEY);
+var apikeys = JSON.parse(process.env.API_KEYS);
+logger.info("apikeys: " + apikeys);
 
 var threescale = function(req, res, next) {
   if (req.isAuthenticated()) { 
@@ -28,36 +30,14 @@ var threescale = function(req, res, next) {
       logger.info("threescale: development environment and dummy key, ok.");
     	return next();
 		}
-    client.authorize_with_user_key({
-        "user_key": req.query.user_key
-    }, function(response){
-			logger.info('threescale: real 3scale auth done');
-      if (response.is_success()) {
-
-				logger.info('threescale: 3scale auth success');
-        var trans = [{ "user_key": req.query.user_key,
-          "usage": { "hits": 1 }
-        }];
-        client.report(trans, function(response){
-					logger.info('threescale: 3scale rep done');
-          if (response.is_success()) {
-
-						logger.info('threescale: 3scale rep success');
-            next();
-          } else {
-
-						logger.warn('threescale: 3scale auth fail: ' + response.error_message);
-            res.status(status.UNAUTHORIZED).send('no quota: ' + response.error_message);
-          };
-        });
-      } else {
-
-				logger.warn('threescale: 3scale rep fail:' + response.error_message);
-        // error in authorization,
-				res.status(status.FORBIDDEN).send('not authorized: ' + response.error_message);
-      }
-    });
-  };
-};
+    if (apikeys.includes(req.query.user_key)) {
+			logger.info('threescale: api key validated against env var');
+      next();
+    } else {
+			logger.warn('threescale: user_key invalid');
+      res.status(status.UNAUTHORIZED).send('invalid user_key');
+    }
+  }
+}
 
 module.exports = threescale;

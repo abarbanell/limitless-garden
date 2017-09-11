@@ -41,4 +41,13 @@ describe('Middleware test for authentication', function () {
             done();
         });
     });
+    it("check environment for API_KEYS", function () {
+        var str = process.env.API_KEYS;
+        expect(str).toBeDefined();
+        expect(typeof (str)).toBe("string");
+        var obj = JSON.parse(str);
+        logger.error("API_KEYS: " + util.inspect(obj));
+        expect(typeof (obj.includes)).toBe("function");
+        expect(obj.length).toBeGreaterThan(0);
+    });
 });
