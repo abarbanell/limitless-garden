@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var hb_model_1 = require("../../src/model/hb.model");
+var model_heartbeat_1 = require("../../src/model/model.heartbeat");
 var Rx_1 = require("rxjs/Rx");
 var util = require('util');
 //var sensor = require('../../model/sensor.js');
@@ -11,13 +11,13 @@ var colname = db.collectionName('model.heartbeat');
 var mongodb = require("mongodb");
 describe('Heartbeat Model', function () {
     beforeEach(function () {
-        hb = new hb_model_1.Heartbeat();
+        hb = new model_heartbeat_1.Heartbeat();
     });
     it('check Heartbeat Model', function () {
-        expect(hb instanceof hb_model_1.Heartbeat).toBe(true);
+        expect(hb instanceof model_heartbeat_1.Heartbeat).toBe(true);
     });
     it('post(obj) returns string ID', function (done) {
-        var hb = new hb_model_1.Heartbeat();
+        var hb = new model_heartbeat_1.Heartbeat();
         hb.host = "ESP_TEST";
         hb.uptime = (new Date()).getMinutes();
         var obs = hb.post();

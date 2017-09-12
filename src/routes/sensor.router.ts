@@ -3,7 +3,7 @@ var router = express.Router();
 var logger = require('../util/logger');
 var util = require('util');
 
-import { SensorModel }  from '../model/sensor.model';
+import { SensorModel }  from '../model/model.sensor';
 import { Observable } from 'rxjs/Rx'
 
 var authenticated = require('../util/authenticated');

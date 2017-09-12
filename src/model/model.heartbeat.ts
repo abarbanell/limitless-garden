@@ -7,12 +7,18 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 import { statsdHeartbeat } from '../util/statsd';
 
+export class Value {
+  public type: string;
+  public val: number;
+}
+
 export class Heartbeat {
   public _id: string;
   public date?: Date;
   public host: string;
   public uptime?: number;
   public i2cDevices?: number;
+  public values?: Value[];
 
   private _collectionName = db.collectionName('model.heartbeat');
 

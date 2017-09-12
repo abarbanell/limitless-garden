@@ -1,4 +1,4 @@
-import { SensorModel } from '../../src/model/sensor.model';
+import { SensorModel } from '../../src/model/model.sensor';
 import { Observable } from 'rxjs/Rx';
 
 var util = require('util');

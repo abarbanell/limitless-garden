@@ -4,13 +4,13 @@ var express = require("express");
 var router = express.Router();
 var logger = require('../util/logger');
 var util = require('util');
-var hb_model_1 = require("../model/hb.model");
+var model_heartbeat_1 = require("../model/model.heartbeat");
 var authenticated = require('../util/authenticated');
 router.use(authenticated.cookieOrApikey);
 // POST /api/heartbeat -> log one entry
 router.post('/', function (req, res, next) {
     try {
-        var hb = new hb_model_1.Heartbeat();
+        var hb = new model_heartbeat_1.Heartbeat();
         hb.populate(req.body);
         hb.post().subscribe(function (s) {
             var str = s;

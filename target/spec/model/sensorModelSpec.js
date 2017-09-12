@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var sensor_model_1 = require("../../src/model/sensor.model");
+var model_sensor_1 = require("../../src/model/model.sensor");
 var Rx_1 = require("rxjs/Rx");
 var util = require('util');
 //var sensor = require('../../model/sensor.js');
@@ -9,10 +9,10 @@ var logger = require('../../src/util/logger');
 var sensorHelper = require('../helpers/sensor.js');
 describe('Sensor Model V1', function () {
     beforeEach(function () {
-        sensor = new sensor_model_1.SensorModel();
+        sensor = new model_sensor_1.SensorModel();
     });
     it('check SensorModel', function () {
-        expect(sensor instanceof sensor_model_1.SensorModel).toBe(true);
+        expect(sensor instanceof model_sensor_1.SensorModel).toBe(true);
     });
     it('get returns ISensor array', function (done) {
         var sut = sensor.get();

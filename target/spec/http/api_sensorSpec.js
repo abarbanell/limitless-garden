@@ -6,16 +6,18 @@ var supertest = require('supertest');
 var httpStatus = require('http-status');
 var util = require('util');
 var logger = require("../../src/util/logger");
-var sensor_model_1 = require("../../src/model/sensor.model");
+var model_sensor_1 = require("../../src/model/model.sensor");
 // environment
 var port = process.env.TEST_PORT || "4321";
 process.env.PORT = port;
-var user_key = process.env.THREESCALE_USER_KEY;
+var str = process.env.API_KEYS;
+var arr = JSON.parse(str);
+var user_key = arr[0];
 // system under test
 var server = require('../../src/server');
 describe('sensor API tests', function () {
     beforeEach(function (done) {
-        var s = new sensor_model_1.SensorModel();
+        var s = new model_sensor_1.SensorModel();
         s.deleteAll().subscribe(function (s) {
             logger.info('beforeAll: deleted row count is ', s);
             done();

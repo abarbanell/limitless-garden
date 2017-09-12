@@ -3,7 +3,7 @@ var router = express.Router();
 var logger = require('../util/logger');
 var util = require('util');
 
-import { Heartbeat }  from '../model/hb.model';
+import { Heartbeat }  from '../model/model.heartbeat';
 import { Observable } from 'rxjs/Rx'
 
 var authenticated = require('../util/authenticated');

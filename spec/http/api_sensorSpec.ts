@@ -6,13 +6,15 @@ var supertest = require('supertest');
 var httpStatus = require('http-status');
 var util = require('util');
 import logger = require('../../src/util/logger');
-import { SensorModel } from '../../src/model/sensor.model';
+import { SensorModel } from '../../src/model/model.sensor';
 import { Observable } from 'rxjs/Rx';
 
 // environment
 var port = process.env.TEST_PORT || "4321";
 process.env.PORT = port;
-var user_key = process.env.THREESCALE_USER_KEY;
+var str = process.env.API_KEYS;
+var arr = JSON.parse(str);
+var user_key = arr[0];
 
 // system under test
 var server = require('../../src/server');

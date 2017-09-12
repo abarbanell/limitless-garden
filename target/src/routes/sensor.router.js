@@ -4,10 +4,10 @@ var express = require("express");
 var router = express.Router();
 var logger = require('../util/logger');
 var util = require('util');
-var sensor_model_1 = require("../model/sensor.model");
+var model_sensor_1 = require("../model/model.sensor");
 var authenticated = require('../util/authenticated');
 router.use(authenticated.cookieOrApikey);
-var sensorModel = new sensor_model_1.SensorModel();
+var sensorModel = new model_sensor_1.SensorModel();
 // GET /api/sensors -> list of sensors
 router.get('/', function (req, res, next) {
     logger.info("sensor.route: GET /api/sensors");

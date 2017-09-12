@@ -1,4 +1,4 @@
-import { Heartbeat } from '../../src/model/hb.model';
+import { Heartbeat } from '../../src/model/model.heartbeat';
 import { Observable } from 'rxjs/Rx';
 
 var util = require('util');

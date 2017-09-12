@@ -9,7 +9,9 @@ var rewire = require('rewire');
 var sensorHelper = require('../helpers/sensor');
 // environment
 var port = process.env.TEST_PORT || "4321";
-var user_key = process.env.THREESCALE_USER_KEY;
+var str = process.env.API_KEYS;
+var arr = JSON.parse(str);
+var user_key = arr[0];
 // system under test
 var server = require('../../src/server');
 var indexrouter = rewire('../../src/routes/index.js');
