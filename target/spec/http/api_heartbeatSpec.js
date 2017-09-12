@@ -27,10 +27,35 @@ describe('heartbeat route test', function () {
         logger.info('user_key=%s', user_key);
         done();
     });
-    it('POST heartbeat', function (done) {
+    it('POST heartbeat - small payload', function (done) {
         var payload = {
             host: "ESP_TEST",
             uptime: (new Date()).getMinutes()
+        };
+        supertest(server)
+            .post('/api/heartbeat?user_key=' + user_key)
+            .send(payload)
+            .expect(httpStatus.OK)
+            .end(function (err, res) {
+            logger.info("err: " + util.inspect(err));
+            expect(err).toBeNull();
+            expect(res).toBeTruthy();
+            expect(res.body).toBeDefined();
+            logger.info('res.body: ' + util.inspect(res.body));
+            expect(res.body._id).toBeDefined();
+            expect(res.body.rc).toBe("OK");
+            done();
+        });
+    });
+    it('POST heartbeat - payload with values', function (done) {
+        var payload = {
+            host: "ESP_TEST",
+            uptime: (new Date()).getMinutes(),
+            i2cDevices: 0,
+            values: [
+                { type: "soil", val: 17 },
+                { type: "temperature", val: 27.3 }
+            ]
         };
         supertest(server)
             .post('/api/heartbeat?user_key=' + user_key)

@@ -16,10 +16,41 @@ describe('Heartbeat Model', function () {
     it('check Heartbeat Model', function () {
         expect(hb instanceof model_heartbeat_1.Heartbeat).toBe(true);
     });
-    it('post(obj) returns string ID', function (done) {
+    it('post(minimal obj) returns string ID', function (done) {
         var hb = new model_heartbeat_1.Heartbeat();
         hb.host = "ESP_TEST";
         hb.uptime = (new Date()).getMinutes();
+        var obs = hb.post();
+        expect(obs instanceof Rx_1.Observable).toBe(true);
+        obs.subscribe(function (s) {
+            expect(s).toEqual(jasmine.any(String));
+            logger.info("Heartbeat.post returned: %s", s);
+            db.connect(function (err, dbObj) {
+                var oid = new mongodb.ObjectId.createFromHexString(s);
+                dbObj.collection(colname).findOne({ _id: oid }, function (err, res) {
+                    if (err) {
+                        logger.error('findOne Error: ' + err);
+                        return done();
+                    }
+                    expect(res).toBeTruthy();
+                    logger.info('findOne result: ' + JSON.stringify(res));
+                    expect(res.host).toBe(hb.host);
+                    expect(res.uptime).toBe(hb.uptime);
+                    expect(res.date).toBeDefined();
+                    return done();
+                });
+            });
+        });
+    });
+    it('post(full obj) returns string ID', function (done) {
+        var hb = new model_heartbeat_1.Heartbeat();
+        hb.host = "ESP_TEST";
+        hb.uptime = (new Date()).getMinutes();
+        hb.i2cDevices = 0;
+        hb.values = [
+            { type: "soil", val: 17 },
+            { type: "temperature", val: 27.3 }
+        ];
         var obs = hb.post();
         expect(obs instanceof Rx_1.Observable).toBe(true);
         obs.subscribe(function (s) {
