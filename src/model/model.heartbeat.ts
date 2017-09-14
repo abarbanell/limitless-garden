@@ -43,12 +43,22 @@ export class MongoHeartbeat extends HeartbeatPayload {
 
 export class Heartbeat extends HeartbeatPayload {
   public _id: string;
+  private static  _pubsub = new Subject<MongoHeartbeat>();
+  private static sub =  Heartbeat._pubsub.subscribe(s => {
+    logger.error("TODO - handle pubsub event: %s", util.inspect(s));
+  })
+
+  // constructor() {
+  //   super();
+  //   Heartbeat._pubsub.subscribe(s => {
+  //     log.error("pubsub event: %s", util.inspect(s));
+  //   })
+  // }
 
   private _collectionName = db.collectionName('model.heartbeat');
   //private dataPosted = new Subject<mongoObject>();
 
   post(): Observable<string> {
-    // var id: string = "error";
     var mongoObject = new MongoHeartbeat().fromHeartBeat(this);
     var obs = new Subject<string>();
     var cn = this._collectionName;
@@ -63,8 +73,8 @@ export class Heartbeat extends HeartbeatPayload {
         if (e) obs.error(e)
         if (results) {
           obs.next(results.ops[0]._id.toString());
-          // now process results...
-
+          // now process results - fire and forget...
+          Heartbeat._pubsub.next(mongoObject);
         }
       })
     })
