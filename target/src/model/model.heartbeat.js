@@ -16,6 +16,7 @@ var util = require("util");
 var logger = require('../util/logger');
 var db = require('../util/db');
 var statsd_1 = require("../util/statsd");
+var model_sensor_1 = require("./model.sensor");
 var Value = (function () {
     function Value() {
     }
@@ -52,6 +53,16 @@ var MongoHeartbeat = (function (_super) {
     return MongoHeartbeat;
 }(HeartbeatPayload));
 exports.MongoHeartbeat = MongoHeartbeat;
+// class SensorClass  implements ISensor { 
+//   _id: string = null;
+//   name: string = null;
+//   host: string = null;
+//   type = { name: null };
+//   constructor(host: string, type: string) {
+//     this.host = host;
+//     this.type.name = type;
+//   }
+// }
 var Heartbeat = (function (_super) {
     __extends(Heartbeat, _super);
     function Heartbeat() {
@@ -120,6 +131,12 @@ var Heartbeat = (function (_super) {
     Heartbeat._pubsub = new Rx_1.Subject();
     Heartbeat.sub = Heartbeat._pubsub.subscribe(function (s) {
         logger.error("TODO - handle pubsub event: %s", util.inspect(s));
+        var host = s.host;
+        var sensor = new model_sensor_1.SensorModel();
+        for (var _i = 0, _a = s.values; _i < _a.length; _i++) {
+            var value = _a[_i];
+            logger.error("TODO: insert or update sensor %s for host %s", value.type, host);
+        }
     });
     return Heartbeat;
 }(HeartbeatPayload));

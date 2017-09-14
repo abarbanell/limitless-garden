@@ -6,6 +6,7 @@ import * as util from 'util';
 var logger = require('../util/logger');
 var db = require('../util/db');
 import { statsdHeartbeat } from '../util/statsd';
+import { SensorModel, ISensor } from './model.sensor';
 
 export class Value {
   public type: string;
@@ -41,11 +42,29 @@ export class MongoHeartbeat extends HeartbeatPayload {
   }
 }
 
+// class SensorClass  implements ISensor { 
+//   _id: string = null;
+//   name: string = null;
+//   host: string = null;
+//   type = { name: null };
+
+//   constructor(host: string, type: string) {
+//     this.host = host;
+//     this.type.name = type;
+//   }
+// }
+
 export class Heartbeat extends HeartbeatPayload {
   public _id: string;
   private static  _pubsub = new Subject<MongoHeartbeat>();
   private static sub =  Heartbeat._pubsub.subscribe(s => {
     logger.error("TODO - handle pubsub event: %s", util.inspect(s));
+    var host = s.host;
+    var sensor = new SensorModel();
+    for (var value of s.values) {
+      logger.error("TODO: insert or update sensor %s for host %s", value.type, host)
+    }
+    
   })
 
   // constructor() {

@@ -9,8 +9,11 @@ var logger = require('../../src/util/logger');
 var sensorHelper = require('../helpers/sensor.js');
 
 describe('Sensor Model V1', function() {
-	beforeEach (() => {
+	beforeEach ((done) => {
 		sensor = new SensorModel();
+		sensor.deleteAll().subscribe(s => {
+			done()
+		})
 	});
 
 	it('check SensorModel', () => {
@@ -187,6 +190,35 @@ describe('Sensor Model V1', function() {
 			sensor.deleteAll().subscribe(d => {
 				expect(d).toEqual(1);
 				done();
+			})
+		})
+	});
+
+	it('multiple post(obj) can get by host', (done) => {
+		var sut1 = sensor.post({
+			 name: "sensor 44",
+    	 host: "rpi99",
+    	 type: {
+      	name: "soil"
+    	 }
+			});
+		expect(sut1 instanceof Observable).toBe(true);
+		sut1.subscribe(s => {
+			var sut2 = sensor.post({
+				name: "sensor 42",
+				host: "rpi01",
+				type: {
+				 name: "soil"
+				}
+			});
+			expect(sut2 instanceof Observable).toBe(true);
+			sut2.subscribe(s => {
+				expect(s).toEqual(jasmine.any(String));
+				sensor.getByHost("rpi01").subscribe(d => {
+					expect(d.length).toBe(1);
+					expect(d[0].host).toBe("rpi01");
+					done();
+				})
 			})
 		})
 	});

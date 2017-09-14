@@ -2,6 +2,8 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 import mongodb = require('mongodb');
 import { Observable, Subject } from 'rxjs/Rx';
+import * as util from 'util';
+
 
 export class SensorModel {
   private _schema_version = 1;
@@ -58,8 +60,6 @@ export class SensorModel {
     var ms = new MongoSensorClass(data);
     var obs = new Subject<string>();
     var cn = this._collectionName;
-
-    logger.info("SensorModel.post before mongo call");
 
     db.connect(function(err,dbObj){
       var coll = dbObj.collection(cn);
@@ -130,22 +130,23 @@ export class SensorModel {
     return this._collectionName;
   }
 
-  getByHost(host: string): Observable<ISensor> {
+  getByHost(host: string): Observable<ISensor[]> {
     var cn = this._collectionName;
-    var obs = new Subject<ISensor>();
-    logger.info("SensorModel.getByHost before mongo call");
-
+    var obs = new Subject<ISensor[]>();
+    logger.error("SensorModel.getByhost.entry: %s", host);
+    
     db.connect(function (err, dbObj) {
       var coll = dbObj.collection(cn);
       try {
         coll.find({ host: host }, {}, function (e, results) {
           if (e) {
-            logger.error("SensorModel.getByhost.find: ", e);
+            logger.error("SensorModel.getByhost.find: error %s", util.inspect(e));
             obs.error(e);
           }
-          if (results) {
-            obs.next(results);
-          }
+          results.toArray(function(err, docs) {
+            logger.error("SensorModel.getByhost.find: results %s", util.inspect(docs));
+            obs.next(docs);
+          })
         });
       } catch (ex) {
         logger.error("SensorModel.getByHost.catch: ", ex)

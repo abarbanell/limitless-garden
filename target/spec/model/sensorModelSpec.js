@@ -8,8 +8,11 @@ var sensor;
 var logger = require('../../src/util/logger');
 var sensorHelper = require('../helpers/sensor.js');
 describe('Sensor Model V1', function () {
-    beforeEach(function () {
+    beforeEach(function (done) {
         sensor = new model_sensor_1.SensorModel();
+        sensor.deleteAll().subscribe(function (s) {
+            done();
+        });
     });
     it('check SensorModel', function () {
         expect(sensor instanceof model_sensor_1.SensorModel).toBe(true);
@@ -175,6 +178,34 @@ describe('Sensor Model V1', function () {
             sensor.deleteAll().subscribe(function (d) {
                 expect(d).toEqual(1);
                 done();
+            });
+        });
+    });
+    it('multiple post(obj) can get by host', function (done) {
+        var sut1 = sensor.post({
+            name: "sensor 44",
+            host: "rpi99",
+            type: {
+                name: "soil"
+            }
+        });
+        expect(sut1 instanceof Rx_1.Observable).toBe(true);
+        sut1.subscribe(function (s) {
+            var sut2 = sensor.post({
+                name: "sensor 42",
+                host: "rpi01",
+                type: {
+                    name: "soil"
+                }
+            });
+            expect(sut2 instanceof Rx_1.Observable).toBe(true);
+            sut2.subscribe(function (s) {
+                expect(s).toEqual(jasmine.any(String));
+                sensor.getByHost("rpi01").subscribe(function (d) {
+                    expect(d.length).toBe(1);
+                    expect(d[0].host).toBe("rpi01");
+                    done();
+                });
             });
         });
     });

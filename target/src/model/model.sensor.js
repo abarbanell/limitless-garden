@@ -4,6 +4,7 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 var mongodb = require("mongodb");
 var Rx_1 = require("rxjs/Rx");
+var util = require("util");
 var SensorModel = (function () {
     function SensorModel() {
         this._schema_version = 1;
@@ -59,7 +60,6 @@ var SensorModel = (function () {
         var ms = new MongoSensorClass(data);
         var obs = new Rx_1.Subject();
         var cn = this._collectionName;
-        logger.info("SensorModel.post before mongo call");
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
             coll.insert(ms, {}, function (e, results) {
@@ -129,18 +129,19 @@ var SensorModel = (function () {
     SensorModel.prototype.getByHost = function (host) {
         var cn = this._collectionName;
         var obs = new Rx_1.Subject();
-        logger.info("SensorModel.getByHost before mongo call");
+        logger.error("SensorModel.getByhost.entry: %s", host);
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
             try {
                 coll.find({ host: host }, {}, function (e, results) {
                     if (e) {
-                        logger.error("SensorModel.getByhost.find: ", e);
+                        logger.error("SensorModel.getByhost.find: error %s", util.inspect(e));
                         obs.error(e);
                     }
-                    if (results) {
-                        obs.next(results);
-                    }
+                    results.toArray(function (err, docs) {
+                        logger.error("SensorModel.getByhost.find: results %s", util.inspect(docs));
+                        obs.next(docs);
+                    });
                 });
             }
             catch (ex) {
