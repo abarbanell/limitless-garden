@@ -11,6 +11,7 @@ describe('Sensor Model V1', function () {
     beforeEach(function (done) {
         sensor = new model_sensor_1.SensorModel();
         sensor.deleteAll().subscribe(function (s) {
+            logger.error("deleteAll done");
             done();
         });
     });
@@ -126,6 +127,37 @@ describe('Sensor Model V1', function () {
             sensor.getById(s).subscribe(function (d) {
                 expect(d._id.toString()).toEqual(s);
                 done();
+            });
+        });
+    });
+    it('multiple post(obj) can find by pattern', function (done) {
+        var sut1 = sensor.post({
+            name: "sensor 44",
+            host: "rpi99",
+            type: {
+                name: "soil"
+            }
+        });
+        expect(sut1 instanceof Rx_1.Observable).toBe(true);
+        sut1.subscribe(function (s) {
+            var sut2 = sensor.post({
+                name: "sensor 42",
+                host: "rpi01",
+                type: {
+                    name: "soil"
+                }
+            });
+            expect(sut2 instanceof Rx_1.Observable).toBe(true);
+            sut2.subscribe(function (s) {
+                expect(s).toEqual(jasmine.any(String));
+                var sen = new model_sensor_1.Sensor();
+                sen.host = "rpi01";
+                sen.type = { name: "soil" };
+                sensor.find(sen).subscribe(function (d) {
+                    expect(d.length).toBe(1);
+                    expect(d[0].host).toBe("rpi01");
+                    done();
+                });
             });
         });
     });

@@ -155,6 +155,53 @@ export class SensorModel {
     });
     return obs.asObservable();
   }
+
+  find(pattern: ISensor): Observable<ISensor[]> {
+    var cn = this._collectionName;
+    var obs = new Subject<ISensor[]>();
+    logger.error("SensorModel.find.entry: %s", util.inspect(pattern));
+    var mpattern = this.mongofy(pattern);
+    db.connect(function (err, dbObj) {
+      var coll = dbObj.collection(cn);
+      try {
+        coll.find(mpattern, {}, function (e, results) {
+          if (e) {
+            logger.error("SensorModel.find: error %s", util.inspect(e));
+            obs.error(e);
+          }
+          results.toArray(function(err, docs) {
+            logger.error("SensorModel.find: results %s", util.inspect(docs));
+            obs.next(docs);
+          })
+        });
+      } catch (ex) {
+        logger.error("SensorModel.find.catch: ", ex)
+        obs.error(ex);
+      }
+    });
+    return obs.asObservable();
+  } 
+
+  private mongofy(s: ISensor):any {
+    var lrc: any = {};
+    if (s._id) {
+      lrc._id = new mongodb.ObjectId.createFromHexString(s._id)
+    }
+    if (s.host) {
+      lrc.host = s.host
+    }
+    if (s.name) {
+      lrc.name = s.name
+    }
+    if (s.type) {
+      lrc.type = {}
+      if (s.type.name) {
+        lrc.type.name = s.type.name
+      }
+    }
+    return lrc;
+  }
+
 }
 
 // our payload data model: 
@@ -181,6 +228,19 @@ interface MongoSensor extends SensorPayload {
 // exposed interface 
 export interface ISensor extends SensorPayload {
   _id?: string
+}
+
+export class Sensor implements ISensor {
+  _id?: string;
+  name: string;
+  host: string;
+  type: {
+    name: string,
+    uom?: string,
+    min?: number,
+    max?: number,
+    tolerance?: number
+  }
 }
 
 class MongoSensorClass implements MongoSensor { 

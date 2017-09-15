@@ -151,9 +151,60 @@ var SensorModel = (function () {
         });
         return obs.asObservable();
     };
+    SensorModel.prototype.find = function (pattern) {
+        var cn = this._collectionName;
+        var obs = new Rx_1.Subject();
+        logger.error("SensorModel.find.entry: %s", util.inspect(pattern));
+        var mpattern = this.mongofy(pattern);
+        db.connect(function (err, dbObj) {
+            var coll = dbObj.collection(cn);
+            try {
+                coll.find(mpattern, {}, function (e, results) {
+                    if (e) {
+                        logger.error("SensorModel.find: error %s", util.inspect(e));
+                        obs.error(e);
+                    }
+                    results.toArray(function (err, docs) {
+                        logger.error("SensorModel.find: results %s", util.inspect(docs));
+                        obs.next(docs);
+                    });
+                });
+            }
+            catch (ex) {
+                logger.error("SensorModel.find.catch: ", ex);
+                obs.error(ex);
+            }
+        });
+        return obs.asObservable();
+    };
+    SensorModel.prototype.mongofy = function (s) {
+        var lrc = {};
+        if (s._id) {
+            lrc._id = new mongodb.ObjectId.createFromHexString(s._id);
+        }
+        if (s.host) {
+            lrc.host = s.host;
+        }
+        if (s.name) {
+            lrc.name = s.name;
+        }
+        if (s.type) {
+            lrc.type = {};
+            if (s.type.name) {
+                lrc.type.name = s.type.name;
+            }
+        }
+        return lrc;
+    };
     return SensorModel;
 }());
 exports.SensorModel = SensorModel;
+var Sensor = (function () {
+    function Sensor() {
+    }
+    return Sensor;
+}());
+exports.Sensor = Sensor;
 var MongoSensorClass = (function () {
     function MongoSensorClass(is) {
         this._id = null;

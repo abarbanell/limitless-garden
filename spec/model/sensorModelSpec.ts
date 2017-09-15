@@ -1,4 +1,4 @@
-import { SensorModel } from '../../src/model/model.sensor';
+import { SensorModel, Sensor, ISensor } from '../../src/model/model.sensor';
 import { Observable } from 'rxjs/Rx';
 
 var util = require('util');
@@ -12,6 +12,7 @@ describe('Sensor Model V1', function() {
 	beforeEach ((done) => {
 		sensor = new SensorModel();
 		sensor.deleteAll().subscribe(s => {
+			logger.error("deleteAll done");
 			done()
 		})
 	});
@@ -139,6 +140,39 @@ describe('Sensor Model V1', function() {
 		})
 	});
 
+
+	it('multiple post(obj) can find by pattern', (done) => {
+		var sut1 = sensor.post({
+			 name: "sensor 44",
+    	 host: "rpi99",
+    	 type: {
+      	name: "soil"
+    	 }
+			});
+		expect(sut1 instanceof Observable).toBe(true);
+		sut1.subscribe(s => {
+			var sut2 = sensor.post({
+				name: "sensor 42",
+				host: "rpi01",
+				type: {
+				 name: "soil"
+				}
+			});
+			expect(sut2 instanceof Observable).toBe(true);
+			sut2.subscribe(s => {
+				expect(s).toEqual(jasmine.any(String));
+				var sen = new Sensor();
+				sen.host = "rpi01";
+				sen.type = { name: "soil"} ;
+				sensor.find(sen).subscribe(d => {
+					expect(d.length).toBe(1);
+					expect(d[0].host).toBe("rpi01");
+					done();
+				})
+			})
+		})
+	});
+	
 	it('post(obj) can get again', (done) => {
 		var sut = sensor.post({
 			 name: "sensor 4",
@@ -222,6 +256,8 @@ describe('Sensor Model V1', function() {
 			})
 		})
 	});
+
+
 
 });
 
