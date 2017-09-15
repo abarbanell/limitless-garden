@@ -241,4 +241,61 @@ describe('Sensor Model V1', function () {
             });
         });
     });
+    it('multiple post(obj) and get by host fails for nonexisting host', function (done) {
+        var sut1 = sensor.post({
+            name: "sensor 44",
+            host: "rpi99",
+            type: {
+                name: "soil"
+            }
+        });
+        expect(sut1 instanceof Rx_1.Observable).toBe(true);
+        sut1.subscribe(function (s) {
+            var sut2 = sensor.post({
+                name: "sensor 42",
+                host: "rpi98",
+                type: {
+                    name: "soil"
+                }
+            });
+            expect(sut2 instanceof Rx_1.Observable).toBe(true);
+            sut2.subscribe(function (s) {
+                expect(s).toEqual(jasmine.any(String));
+                sensor.getByHost("rpi00").subscribe(function (d) {
+                    expect(d.length).toBe(0);
+                    // expect(d[0].host).toBe("rpi01");
+                    done();
+                });
+            });
+        });
+    });
+    it('multiple post(obj) and get by host returns multple', function (done) {
+        var sut1 = sensor.post({
+            name: "sensor 44",
+            host: "rpi77",
+            type: {
+                name: "soil"
+            }
+        });
+        expect(sut1 instanceof Rx_1.Observable).toBe(true);
+        sut1.subscribe(function (s) {
+            var sut2 = sensor.post({
+                name: "sensor 42",
+                host: "rpi77",
+                type: {
+                    name: "soil"
+                }
+            });
+            expect(sut2 instanceof Rx_1.Observable).toBe(true);
+            sut2.subscribe(function (s) {
+                expect(s).toEqual(jasmine.any(String));
+                sensor.getByHost("rpi77").subscribe(function (d) {
+                    expect(d.length).toBe(2);
+                    expect(d[0].host).toBe("rpi77");
+                    expect(d[1].host).toBe("rpi77");
+                    done();
+                });
+            });
+        });
+    });
 });
