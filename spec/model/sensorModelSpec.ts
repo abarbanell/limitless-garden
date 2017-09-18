@@ -257,37 +257,10 @@ describe('Sensor Model V1', function() {
 		})
 	});
 
-	it('multiple post(obj) and get by host fails for nonexisting host', (done) => {
-		var sut1 = sensor.post({
-			 name: "sensor 44",
-    	 host: "rpi99",
-    	 type: {
-      	name: "soil"
-    	 }
-			});
-		expect(sut1 instanceof Observable).toBe(true);
-		sut1.subscribe(s => {
-			var sut2 = sensor.post({
-				name: "sensor 42",
-				host: "rpi98",
-				type: {
-				 name: "soil"
-				}
-			});
-			expect(sut2 instanceof Observable).toBe(true);
-			sut2.subscribe(s => {
-				expect(s).toEqual(jasmine.any(String));
-				sensor.getByHost("rpi00").subscribe(d => {
-					expect(d.length).toBe(0);
-					// expect(d[0].host).toBe("rpi01");
-					done();
-				})
-			})
-		})
-	});
 
 
-	it('multiple post(obj) and get by host returns multple', (done) => {
+
+	it('multiple post(obj) and get by host returns multiple', (done) => {
 		var sut1 = sensor.post({
 			 name: "sensor 44",
     	 host: "rpi77",
@@ -316,7 +289,74 @@ describe('Sensor Model V1', function() {
 			})
 		})
 	});
+});
 
+describe('Sensor Model V1 prepopulated', function() {
+	var data = [
+		{
+			name: "sensor 43",
+			host: "rpi77",
+			type: {
+				name: "soil"
+			}
+		},
+		{
+			name: "sensor 44",
+			host: "rpi77",
+			type: {
+				name: "soil"
+			}
+		},
+		{
+			name: "sensor 01",
+			host: "rpi01",
+			type: {
+				name: "soil"
+			}
+		}
+	];
+	beforeEach ((done) => {
+		sensor = new SensorModel();
+		sensor.deleteAll().subscribe(s => {
+			logger.error("deleteAll done");
+			var sut1 = sensor.post(data[0]).subscribe(s => {
+			 var sut2 = sensor.post(data[1]).subscribe(s => {
+				sensor.post(data[2]).subscribe(s => {
+					done();
+				})
+			 })
+		 })
+		})
+	});
+
+	it('deleteAll', (done) => {
+		sensor.get().subscribe(s => {
+			expect(s.length).toBe(3);
+			sensor.deleteAll().subscribe(s => {
+				expect(s).toBe(3);
+				sensor.get().subscribe(s => {
+					expect(s.length).toBe(0);
+					done();
+				})
+			})
+		})
+	})
+
+	it('multiple post(obj) and get by host returns multple', (done) => {
+		sensor.getByHost("rpi77").subscribe(d => {
+			expect(d.length).toBe(2);
+			expect(d[0].host).toBe("rpi77");
+			expect(d[1].host).toBe("rpi77");
+			done();
+		})
+	});
+
+	it('get by host fails for nonexisting host', (done) => {
+		sensor.getByHost("no-host").subscribe(d => {
+			expect(d.length).toBe(0);
+			done();
+		})
+	});
 
 });
 

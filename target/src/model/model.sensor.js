@@ -105,7 +105,7 @@ var SensorModel = (function () {
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
             try {
-                coll.deleteOne({}, function (e, results) {
+                coll.deleteMany({}, function (e, results) {
                     if (e) {
                         logger.error("SensorModel.deleteAll.delete error: ", e);
                         obs.error(e);
