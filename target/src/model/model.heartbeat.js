@@ -66,26 +66,16 @@ exports.MongoHeartbeat = MongoHeartbeat;
 var Heartbeat = (function (_super) {
     __extends(Heartbeat, _super);
     function Heartbeat() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        // constructor() {
-        //   super();
-        //   Heartbeat._pubsub.subscribe(s => {
-        //     log.error("pubsub event: %s", util.inspect(s));
-        //   })
-        // }
-        _this._collectionName = db.collectionName('model.heartbeat');
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    //private dataPosted = new Subject<mongoObject>();
     Heartbeat.prototype.post = function () {
         var mongoObject = new MongoHeartbeat().fromHeartBeat(this);
         var obs = new Rx_1.Subject();
-        var cn = this._collectionName;
         if (this.host && this.uptime) {
             statsd_1.statsdHeartbeat(this.host, this.uptime);
         }
         db.connect(function (err, dbObj) {
-            var coll = dbObj.collection(cn);
+            var coll = dbObj.collection(Heartbeat._collectionName);
             coll.insert(mongoObject, {}, function (e, results) {
                 if (e)
                     obs.error(e);
@@ -95,6 +85,48 @@ var Heartbeat = (function (_super) {
                     Heartbeat._pubsub.next(mongoObject);
                 }
             });
+        });
+        return obs.asObservable();
+    };
+    Heartbeat.getByID = function (id) {
+        var obs = new Rx_1.Subject();
+        db.connect(function (err, dbObj) {
+            var coll = dbObj.collection(Heartbeat._collectionName);
+            var objId = mongodb.ObjectId.createFromHexString(id);
+            coll.findOne({ _id: objId }, function (e, results) {
+                if (e)
+                    obs.error(e);
+                if (results) {
+                    var hb = new Heartbeat();
+                    hb.populate(results);
+                    obs.next(hb);
+                }
+                else {
+                    obs.error("NOT FOUND");
+                }
+            });
+        });
+        return obs.asObservable();
+    };
+    Heartbeat.prototype.deleteAll = function () {
+        var obs = new Rx_1.Subject();
+        db.connect(function (err, dbObj) {
+            var coll = dbObj.collection(Heartbeat._collectionName);
+            try {
+                coll.deleteMany({}, function (e, results) {
+                    if (e) {
+                        logger.error("Heartbeat.deleteAll.delete error: ", e);
+                        obs.error(e);
+                    }
+                    if (results) {
+                        obs.next(results.deletedCount);
+                    }
+                });
+            }
+            catch (ex) {
+                logger.error("Heartbeat.deleteAll.catch: ", ex);
+                obs.error(ex);
+            }
         });
         return obs.asObservable();
     };
@@ -137,6 +169,7 @@ var Heartbeat = (function (_super) {
             logger.error("TODO: insert or update sensor %s for host %s", value.type, host);
         }
     });
+    Heartbeat._collectionName = db.collectionName('model.heartbeat');
     return Heartbeat;
 }(HeartbeatPayload));
 exports.Heartbeat = Heartbeat;

@@ -126,6 +126,7 @@ export class SensorModel {
     return obs.asObservable();
   }
 
+
   getCollectionName(): string {
     return this._collectionName;
   }

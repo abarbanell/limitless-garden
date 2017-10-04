@@ -66,27 +66,18 @@ export class Heartbeat extends HeartbeatPayload {
     
   })
 
-  // constructor() {
-  //   super();
-  //   Heartbeat._pubsub.subscribe(s => {
-  //     log.error("pubsub event: %s", util.inspect(s));
-  //   })
-  // }
-
-  private _collectionName = db.collectionName('model.heartbeat');
-  //private dataPosted = new Subject<mongoObject>();
+  private static _collectionName = db.collectionName('model.heartbeat');
 
   post(): Observable<string> {
     var mongoObject = new MongoHeartbeat().fromHeartBeat(this);
     var obs = new Subject<string>();
-    var cn = this._collectionName;
 
     if (this.host && this.uptime) {
       statsdHeartbeat(this.host, this.uptime);
     }
 
     db.connect(function(err,dbObj){
-      var coll = dbObj.collection(cn);
+      var coll = dbObj.collection(Heartbeat._collectionName);
       coll.insert(mongoObject, {}, function(e, results){
         if (e) obs.error(e)
         if (results) {
@@ -96,6 +87,48 @@ export class Heartbeat extends HeartbeatPayload {
         }
       })
     })
+    return obs.asObservable();
+  }
+
+  public static getByID(id: string): Observable<Heartbeat> {
+    var obs = new Subject<Heartbeat>();
+    db.connect(function(err,dbObj){
+      var coll = dbObj.collection(Heartbeat._collectionName);
+      var objId = mongodb.ObjectId.createFromHexString(id);
+      coll.findOne({ _id: objId}, function(e, results){
+        if (e) obs.error(e)
+        if (results) {
+          var hb = new Heartbeat();
+          hb.populate(results);
+          obs.next(hb);
+        } else {
+          obs.error("NOT FOUND");
+        }
+      });
+    });
+    return obs.asObservable();
+  }
+
+  deleteAll(): Observable<Number> {
+    var obs = new Subject<Number>();
+    
+    db.connect(function (err, dbObj) {
+      var coll = dbObj.collection(Heartbeat._collectionName);
+      try {
+        coll.deleteMany({}, function (e, results) {
+          if (e) {
+            logger.error("Heartbeat.deleteAll.delete error: ", e);
+            obs.error(e);
+          }
+          if (results) {
+            obs.next(results.deletedCount);
+          }
+        });
+      } catch (ex) {
+        logger.error("Heartbeat.deleteAll.catch: ", ex)
+        obs.error(ex);
+      }
+    });
     return obs.asObservable();
   }
 

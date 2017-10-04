@@ -10,8 +10,12 @@ var db = require('../../src/util/db');
 var colname = db.collectionName('model.heartbeat');
 var mongodb = require("mongodb");
 describe('Heartbeat Model', function () {
-    beforeEach(function () {
+    beforeEach(function (done) {
         hb = new model_heartbeat_1.Heartbeat();
+        hb.deleteAll().subscribe(function (s) {
+            logger.info("deleteAll done");
+            done();
+        });
     });
     it('check Heartbeat Model', function () {
         expect(hb instanceof model_heartbeat_1.Heartbeat).toBe(true);
@@ -70,6 +74,54 @@ describe('Heartbeat Model', function () {
                     expect(res.date).toBeDefined();
                     return done();
                 });
+            });
+        });
+    });
+});
+describe("heartbeat model prepopulated tests", function () {
+    var insertedId;
+    beforeEach(function (done) {
+        hb = new model_heartbeat_1.Heartbeat();
+        hb.deleteAll().subscribe(function (s) {
+            logger.info("deleteAll done");
+            hb.host = "ESP_TEST";
+            hb.uptime = (new Date()).getMinutes();
+            hb.i2cDevices = 0;
+            hb.values = [
+                { type: "soil", val: 17 },
+                { type: "temperature", val: 27.3 }
+            ];
+            hb.post().subscribe(function (s) {
+                expect(s).toEqual(jasmine.any(String));
+                insertedId = s;
+                done();
+            });
+        });
+    });
+    it('deleteAll', function (done) {
+        var hb = new model_heartbeat_1.Heartbeat();
+        hb.deleteAll().subscribe(function (d) {
+            expect(d).toEqual(1);
+            done();
+        });
+    });
+    it('get by ID', function (done) {
+        logger.error("ID to get: %s", insertedId);
+        model_heartbeat_1.Heartbeat.getByID(insertedId).subscribe(function (d) {
+            expect(typeof (d)).toBe("object");
+            done();
+        });
+    });
+    it('get by ID - NOT FOUND', function (done) {
+        logger.error("ID to get: %s", insertedId);
+        var hb = new model_heartbeat_1.Heartbeat();
+        hb.deleteAll().subscribe(function (removed) {
+            model_heartbeat_1.Heartbeat.getByID(insertedId).subscribe(function (d) {
+                expect("You should get an exception").toBe("NOT FOUND");
+                done();
+            }, function (err) {
+                expect(err.toString()).toBe("NOT FOUND");
+                done();
             });
         });
     });

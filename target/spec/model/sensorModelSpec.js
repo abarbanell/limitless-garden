@@ -11,7 +11,7 @@ describe('Sensor Model V1', function () {
     beforeEach(function (done) {
         sensor = new model_sensor_1.SensorModel();
         sensor.deleteAll().subscribe(function (s) {
-            logger.error("deleteAll done");
+            logger.info("deleteAll done");
             done();
         });
     });
