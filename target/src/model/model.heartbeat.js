@@ -130,7 +130,6 @@ var Heartbeat = (function (_super) {
     };
     Heartbeat._pubsub = new Rx_1.Subject();
     Heartbeat.sub = Heartbeat._pubsub.subscribe(function (s) {
-        logger.error("TODO - handle pubsub event: %s", util.inspect(s));
         var host = s.host;
         var sensor = new model_sensor_1.SensorModel();
         for (var _i = 0, _a = s.values; _i < _a.length; _i++) {

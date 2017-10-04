@@ -58,7 +58,6 @@ export class Heartbeat extends HeartbeatPayload {
   public _id: string;
   private static  _pubsub = new Subject<MongoHeartbeat>();
   private static sub =  Heartbeat._pubsub.subscribe(s => {
-    logger.error("TODO - handle pubsub event: %s", util.inspect(s));
     var host = s.host;
     var sensor = new SensorModel();
     for (var value of s.values) {
