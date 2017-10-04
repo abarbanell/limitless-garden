@@ -1,5 +1,33 @@
 ## HOWTO for dokku on digitalocean
 
+### Maintenance
+
+How to cleanup old containers - before an OS upgrade
+
+1. dokku cleanup
+
+```
+dokku cleanup
+```
+
+2. remove exited containers
+
+```
+sudo -s
+docker ps -aq -f status=exited | xargs docker rm
+```
+
+3. OS upgrade
+
+```
+sudo apt-get update
+sudo apt-get upgrade
+```
+
+
+
+### Setup
+
 - create digitalocean account if you don't have one
 - create digital ocean server  with dokku image (1GB RAM for 10$/month should do) 
 - point your DNS to the new server with two A records (one for your
