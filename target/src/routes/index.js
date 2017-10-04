@@ -184,16 +184,6 @@ router.get('/about', function (req, res, next) {
         user: req.user
     });
 });
-/* GET photos page. */
-router.get('/photos', authenticated.cookie, function (req, res, next) {
-    photo.get(10, function (err, doc) {
-        logger.error('api call got back to surface');
-    });
-    res.render('photos', {
-        title: 'Photos',
-        user: req.user
-    });
-});
 router.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
