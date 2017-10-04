@@ -24,4 +24,16 @@ router.post('/', function (req, res, next) {
         logger.error('heartbeat router post("/") exception ', ex);
     }
 });
+router.get('/:id', function (req, res, next) {
+    try {
+        model_heartbeat_1.Heartbeat.getByID(req.params.id).subscribe(function (hb) {
+            res.json(hb);
+        }, function (e) {
+            logger.error('getById failed: ', e);
+        });
+    }
+    catch (ex) {
+        logger.error('heartbeat router getById("/") exception ', ex);
+    }
+});
 module.exports = router;

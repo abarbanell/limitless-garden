@@ -77,5 +77,38 @@ describe('heartbeat route test', function() {
 			done();
 		});
   })
+
+  it('GET heartbeat by ID - payload with values', (done) => {
+    var payload = { 
+      host: "ESP_TEST",
+			uptime: (new Date()).getMinutes(),
+			i2cDevices: 0,
+			values: [ 
+				{type: "soil", val: 17}, 
+				{ type: "temperature", val: 27.3} 
+			]
+		}
+    supertest(server)
+		.post('/api/heartbeat?user_key=' + user_key)
+		.send(payload)
+		.expect(httpStatus.OK)
+		.end(function(err, res) {
+			logger.info("err: " + util.inspect(err));
+			expect(err).toBeNull();
+			expect(res).toBeTruthy();
+			expect(res.body).toBeDefined()
+			logger.info('res.body: ' +  util.inspect(res.body));
+			expect(res.body._id).toBeDefined();
+			expect(res.body.rc).toBe("OK");
+			supertest(server)
+				.get('/api/heartbeat/'+ res.body._id + '?user_key=' + user_key)
+				.expect(httpStatus.OK)
+				.end(function(err, res) {
+					expect(err).toBeNull();
+					expect(res).toBeTruthy();
+					done();					
+				})
+		});
+  })
 })
 

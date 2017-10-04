@@ -26,6 +26,18 @@ router.post('/', function(req, res, next) {
 	}
 })
 
+router.get('/:id', function(req, res, next) {
+	try {
+		Heartbeat.getByID(req.params.id).subscribe(hb => {
+			res.json(hb);
+		}, e=> {
+			logger.error('getById failed: ', e);
+		})
+	} catch (ex) {
+		logger.error('heartbeat router getById("/") exception ', ex);
+	}
+})
+
 module.exports = router;
 
 
