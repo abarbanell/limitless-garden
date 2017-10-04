@@ -163,6 +163,7 @@ export class Heartbeat extends HeartbeatPayload {
     if (obj.values) {
       this.values = obj.values;
     }
+    return this;
   }
 }
 

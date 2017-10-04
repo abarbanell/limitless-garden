@@ -12,8 +12,7 @@ router.use(authenticated.cookieOrApikey);
 // POST /api/heartbeat -> log one entry
 router.post('/', function(req, res, next) {
 	try {
-		var hb = new Heartbeat();
-		hb.populate(req.body);
+		var hb = new Heartbeat().populate(req.body);
 		hb.post().subscribe(s => {
 			var str: string = s;
 			var payload = { _id: str, rc: "OK" }

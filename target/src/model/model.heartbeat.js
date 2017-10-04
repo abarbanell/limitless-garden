@@ -159,6 +159,7 @@ var Heartbeat = (function (_super) {
         if (obj.values) {
             this.values = obj.values;
         }
+        return this;
     };
     Heartbeat._pubsub = new Rx_1.Subject();
     Heartbeat.sub = Heartbeat._pubsub.subscribe(function (s) {

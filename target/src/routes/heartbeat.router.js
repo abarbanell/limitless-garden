@@ -10,8 +10,7 @@ router.use(authenticated.cookieOrApikey);
 // POST /api/heartbeat -> log one entry
 router.post('/', function (req, res, next) {
     try {
-        var hb = new model_heartbeat_1.Heartbeat();
-        hb.populate(req.body);
+        var hb = new model_heartbeat_1.Heartbeat().populate(req.body);
         hb.post().subscribe(function (s) {
             var str = s;
             var payload = { _id: str, rc: "OK" };
