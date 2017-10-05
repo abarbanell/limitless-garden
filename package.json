@@ -19,7 +19,6 @@
     "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec"
   },
   "dependencies": {
-    "3scale": "0.7.6",
     "@angular/common": "4.4.0-RC.0",
     "@angular/compiler": "4.4.0-RC.0",
     "@angular/core": "4.4.0-RC.0",
@@ -73,7 +72,7 @@
     "rimraf": "2.5.4",
     "superagent": "3.6.0",
     "supertest": "3.0.0",
-    "typescript": "2.4.2",
+    "typescript": "2.5.2",
     "watch": "1.0.2"
   }
 }
