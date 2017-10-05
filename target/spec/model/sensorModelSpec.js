@@ -11,7 +11,6 @@ describe('Sensor Model V1', function () {
     beforeEach(function (done) {
         sensor = new model_sensor_1.SensorModel();
         sensor.deleteAll().subscribe(function (s) {
-            logger.info("deleteAll done");
             done();
         });
     });
@@ -69,16 +68,14 @@ describe('Sensor Model V1', function () {
             expect(strId).not.toBe(nonExistingId);
             var sut = sensor.getById(nonExistingId);
             sut.subscribe(function (s) {
-                logger.info("got s = ", s);
                 expect(s).toBeNull();
                 done();
             }, function (e) {
-                logger.error('got e = ', e);
                 expect(e.toString()).toContain("you should not get here");
                 done();
             });
         }, function (e) {
-            logger.error('could not insert before get, e = ', e);
+            // could not insert before get
             expect(e).toBe("you-should-not-get-here-either");
             done();
         });
@@ -298,7 +295,6 @@ describe('Sensor Model V1 prepopulated', function () {
     beforeEach(function (done) {
         sensor = new model_sensor_1.SensorModel();
         sensor.deleteAll().subscribe(function (s) {
-            logger.error("deleteAll done");
             var sut1 = sensor.post(data[0]).subscribe(function (s) {
                 var sut2 = sensor.post(data[1]).subscribe(function (s) {
                     sensor.post(data[2]).subscribe(function (s) {

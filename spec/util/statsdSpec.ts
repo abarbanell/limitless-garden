@@ -24,7 +24,6 @@ describe('statsd tests', function () {
 
         };
         var next = function() {
-            console.info("next called");
             done();
         }
         statsdHits(req,res,next);
@@ -52,7 +51,6 @@ describe('statsd tests', function () {
 
         };
         var next = function() {
-            console.info("next called");
             done();
         }
         statsdData(req,res,next);

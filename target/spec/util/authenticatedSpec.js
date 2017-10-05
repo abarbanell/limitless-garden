@@ -13,7 +13,7 @@ describe('Middleware test for authentication', function () {
         var response = httpMocks.createResponse();
         auth.cookie(request, response, function next(error) {
             if (error) {
-                logger.error("error received");
+                expect("error received").toBe(error);
             }
             ;
             expect(response.statusCode).toEqual(200);
@@ -33,10 +33,10 @@ describe('Middleware test for authentication', function () {
         };
         auth.cookie(request, response, function next(error) {
             if (error) {
-                logger.error("error received");
+                expect("error received").toBe(error);
             }
             ;
-            logger.error("you should not get here");
+            // you should not get here
             expect(response.statusCode).not.toEqual(200);
             done();
         });
@@ -46,7 +46,7 @@ describe('Middleware test for authentication', function () {
         expect(str).toBeDefined();
         expect(typeof (str)).toBe("string");
         var obj = JSON.parse(str);
-        logger.error("API_KEYS: " + util.inspect(obj));
+        logger.info("API_KEYS: " + util.inspect(obj));
         expect(typeof (obj.includes)).toBe("function");
         expect(obj.length).toBeGreaterThan(0);
     });

@@ -19,7 +19,6 @@ export class SensorModel {
           obs.next(docs);
         })
       } catch (ex) {
-        logger.error("SensorModel.get.catch: ", ex)
         obs.error(ex);
       }
     }); 
@@ -29,7 +28,6 @@ export class SensorModel {
   getById(id: string): Observable<ISensor> {
     var cn = this._collectionName;
     var obs = new Subject<ISensor>();
-    logger.info("SensorModel.getById before mongo call");
 
     db.connect(function (err, dbObj) {
       var coll = dbObj.collection(cn);
@@ -48,7 +46,6 @@ export class SensorModel {
           obs.next(results);
         });
       } catch (ex) {
-        logger.error("SensorModel.getById.catch: ", ex)
         obs.error(ex);
       }
     });
@@ -76,7 +73,6 @@ export class SensorModel {
   delete(id: string): Observable<Number> {
     var cn = this._collectionName;
     var obs = new Subject<Number>();
-    logger.info("SensorModel.delete before mongo call");
 
     db.connect(function (err, dbObj) {
       var coll = dbObj.collection(cn);
@@ -84,16 +80,13 @@ export class SensorModel {
         var oid = mongodb.ObjectID.createFromHexString(id)
         coll.deleteOne({ _id: oid }, function (e, results) {
           if (e) {
-            logger.error("SensorModel.delete.delete error: ", e);
             obs.error(e);
           }
           if (results) {
-            logger.error('SensorModel.delete.delete results: ', results.deletedCount)
             obs.next(results.deletedCount);
           }
         });
       } catch (ex) {
-        logger.error("SensorModel.delete.catch: ", ex)
         obs.error(ex);
       }
     });
@@ -103,23 +96,19 @@ export class SensorModel {
   deleteAll(): Observable<Number> {
     var cn = this._collectionName;
     var obs = new Subject<Number>();
-    logger.info("SensorModel.deleteAll before mongo call");
 
     db.connect(function (err, dbObj) {
       var coll = dbObj.collection(cn);
       try {
         coll.deleteMany({}, function (e, results) {
           if (e) {
-            logger.error("SensorModel.deleteAll.delete error: ", e);
             obs.error(e);
           }
           if (results) {
-            logger.info('SensorModel.deleteAll.delete results: ', results.deletedCount)
             obs.next(results.deletedCount);
           }
         });
       } catch (ex) {
-        logger.error("SensorModel.deleteAll.catch: ", ex)
         obs.error(ex);
       }
     });
@@ -134,23 +123,19 @@ export class SensorModel {
   getByHost(host: string): Observable<ISensor[]> {
     var cn = this._collectionName;
     var obs = new Subject<ISensor[]>();
-    logger.error("SensorModel.getByhost.entry: %s", host);
     
     db.connect(function (err, dbObj) {
       var coll = dbObj.collection(cn);
       try {
         coll.find({ host: host }, {}, function (e, results) {
           if (e) {
-            logger.error("SensorModel.getByhost.find: error %s", util.inspect(e));
             obs.error(e);
           }
           results.toArray(function(err, docs) {
-            logger.error("SensorModel.getByhost.find: results %s", util.inspect(docs));
             obs.next(docs);
           })
         });
       } catch (ex) {
-        logger.error("SensorModel.getByHost.catch: ", ex)
         obs.error(ex);
       }
     });
@@ -160,23 +145,19 @@ export class SensorModel {
   find(pattern: ISensor): Observable<ISensor[]> {
     var cn = this._collectionName;
     var obs = new Subject<ISensor[]>();
-    logger.error("SensorModel.find.entry: %s", util.inspect(pattern));
     var mpattern = this.mongofy(pattern);
     db.connect(function (err, dbObj) {
       var coll = dbObj.collection(cn);
       try {
         coll.find(mpattern, {}, function (e, results) {
           if (e) {
-            logger.error("SensorModel.find: error %s", util.inspect(e));
             obs.error(e);
           }
           results.toArray(function(err, docs) {
-            logger.error("SensorModel.find: results %s", util.inspect(docs));
             obs.next(docs);
           })
         });
       } catch (ex) {
-        logger.error("SensorModel.find.catch: ", ex)
         obs.error(ex);
       }
     });
