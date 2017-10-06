@@ -38,9 +38,9 @@ describe('Sensor Model V0', function () {
         });
     });
     it('get a single value - broken sensor field', function (done) {
-        spyOn(logger, 'error');
+        spyOn(logger, 'warn');
         sensor.get(sensorHelper.insertedIds()[2], function (err, result) {
-            expect(logger.error).toHaveBeenCalled();
+            expect(logger.warn).toHaveBeenCalled();
             if (err) {
                 logger.error('err = ' + JSON.stringify(err));
                 done();
@@ -57,9 +57,9 @@ describe('Sensor Model V0', function () {
         });
     });
     it('should get an array of values', function (done) {
-        spyOn(logger, 'error');
+        spyOn(logger, 'warn');
         sensor.getMulti({}, {}, function (err, result) {
-            expect(logger.error).toHaveBeenCalled();
+            expect(logger.warn).toHaveBeenCalled();
             if (err) {
                 logger.error('err = ' + JSON.stringify(err));
                 done();

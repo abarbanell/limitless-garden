@@ -18,8 +18,6 @@ var sensor = function () {
                 obj.schema_version);
         }
         //rename some fields
-        logger.info('typeof(timestamp) = ' + typeof (obj.timestamp));
-        logger.info('typeof(timespamp) = ' + typeof (obj.timespamp));
         if (obj.timestamp) {
             if (typeof (obj.timestamp) == 'number') {
                 var date = new Date(obj.timestamp * 1000);
@@ -43,12 +41,12 @@ var sensor = function () {
                     rObj.sensor.push(obj.sensor[i]);
                 }
                 else {
-                    logger.error('model/sensor.js validateObj: sensor contains non-string value: ' + util.inspect(obj.sensor[i]));
+                    logger.warn('model/sensor.js validateObj: sensor contains non-string value (skipped): ' + util.inspect(obj.sensor[i]));
                 }
             }
         }
         else {
-            logger.error('model/sensor.js validateObj: sensor is not an array: ' + util.inspect(obj.sensor));
+            logger.warn('model/sensor.js validateObj: sensor is not an array (skipped): ' + util.inspect(obj.sensor));
         }
         // ignore all other fields and return
         return rObj;

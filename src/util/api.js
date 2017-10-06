@@ -3,13 +3,11 @@
 var api = function () {
 
     var https = require('https');
-    var logger = require('./logger');
 
     // get data from API call
     var get = function (options, callback) {
         var start = Date.now();
         var request = https.get(options, function (response) {
-            logger.info("Got response: " + response.statusCode);
             // data is streamed in chunks from the server
             // so we have to handle the "data" event    
             var buffer = "";
@@ -23,7 +21,6 @@ var api = function () {
                 // dump the raw data
                 if (buffer.length) {
                     var data = JSON.parse(buffer);
-                    logger.info('api call {' + options + '} returned - ' + (Date.now() - start) + ' ms');
                     callback(null, data);
                 } else {
                     callback({
