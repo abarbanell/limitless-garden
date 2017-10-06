@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var model_heartbeat_1 = require("../../src/model/model.heartbeat");
 var Rx_1 = require("rxjs/Rx");
 var util = require('util');
-//var sensor = require('../../model/sensor.js');
 var hb;
 var logger = require('../../src/util/logger');
 var db = require('../../src/util/db');
@@ -13,7 +12,6 @@ describe('Heartbeat Model', function () {
     beforeEach(function (done) {
         hb = new model_heartbeat_1.Heartbeat();
         hb.deleteAll().subscribe(function (s) {
-            logger.info("deleteAll done");
             done();
         });
     });
@@ -28,16 +26,11 @@ describe('Heartbeat Model', function () {
         expect(obs instanceof Rx_1.Observable).toBe(true);
         obs.subscribe(function (s) {
             expect(s).toEqual(jasmine.any(String));
-            logger.info("Heartbeat.post returned: %s", s);
             db.connect(function (err, dbObj) {
                 var oid = new mongodb.ObjectId.createFromHexString(s);
                 dbObj.collection(colname).findOne({ _id: oid }, function (err, res) {
-                    if (err) {
-                        logger.error('findOne Error: ' + err);
-                        return done();
-                    }
+                    expect(err).toBeNull();
                     expect(res).toBeTruthy();
-                    logger.info('findOne result: ' + JSON.stringify(res));
                     expect(res.host).toBe(hb.host);
                     expect(res.uptime).toBe(hb.uptime);
                     expect(res.date).toBeDefined();
@@ -59,16 +52,11 @@ describe('Heartbeat Model', function () {
         expect(obs instanceof Rx_1.Observable).toBe(true);
         obs.subscribe(function (s) {
             expect(s).toEqual(jasmine.any(String));
-            logger.info("Heartbeat.post returned: %s", s);
             db.connect(function (err, dbObj) {
                 var oid = new mongodb.ObjectId.createFromHexString(s);
                 dbObj.collection(colname).findOne({ _id: oid }, function (err, res) {
-                    if (err) {
-                        logger.error('findOne Error: ' + err);
-                        return done();
-                    }
+                    expect(err).toBeNull();
                     expect(res).toBeTruthy();
-                    logger.info('findOne result: ' + JSON.stringify(res));
                     expect(res.host).toBe(hb.host);
                     expect(res.uptime).toBe(hb.uptime);
                     expect(res.date).toBeDefined();
@@ -83,7 +71,6 @@ describe("heartbeat model prepopulated tests", function () {
     beforeEach(function (done) {
         hb = new model_heartbeat_1.Heartbeat();
         hb.deleteAll().subscribe(function (s) {
-            logger.info("deleteAll done");
             hb.host = "ESP_TEST";
             hb.uptime = (new Date()).getMinutes();
             hb.i2cDevices = 0;
@@ -106,18 +93,16 @@ describe("heartbeat model prepopulated tests", function () {
         });
     });
     it('get by ID', function (done) {
-        logger.error("ID to get: %s", insertedId);
         model_heartbeat_1.Heartbeat.getByID(insertedId).subscribe(function (d) {
             expect(typeof (d)).toBe("object");
             done();
         });
     });
     it('get by ID - NOT FOUND', function (done) {
-        logger.error("ID to get: %s", insertedId);
         var hb = new model_heartbeat_1.Heartbeat();
         hb.deleteAll().subscribe(function (removed) {
             model_heartbeat_1.Heartbeat.getByID(insertedId).subscribe(function (d) {
-                expect("You should get an exception").toBe("NOT FOUND");
+                expect("Failed to get an exception").toBe("NOT FOUND");
                 done();
             }, function (err) {
                 expect(err.toString()).toBe("NOT FOUND");
@@ -125,73 +110,4 @@ describe("heartbeat model prepopulated tests", function () {
             });
         });
     });
-    // it('post(obj) can getByID again', (done) => {
-    // 	var sut = sensor.post({
-    // 		 name: "sensor 3",
-    //   	 host: "rpi99",
-    //   	 type: {
-    //     	name: "soil"
-    //   	 }
-    // 		});
-    // 	expect(sut instanceof Observable).toBe(true);
-    // 	sut.subscribe(s => {
-    // 		expect(s).toEqual(jasmine.any(String));
-    // 		sensor.getById(s).subscribe(d => {
-    // 			expect(d._id.toString()).toEqual(s);
-    // 			done();
-    // 		})
-    // 	})
-    // });
-    // it('post(obj) can get again', (done) => {
-    // 	var sut = sensor.post({
-    // 		 name: "sensor 4",
-    //   	 host: "rpi99",
-    //   	 type: {
-    //     	name: "soil"
-    //   	 }
-    // 		});
-    // 	expect(sut instanceof Observable).toBe(true);
-    // 	sut.subscribe(s => {
-    // 		expect(s).toEqual(jasmine.any(String));
-    // 		sensor.get().subscribe(d => {
-    // 			expect(d.length).toBeGreaterThan(0);
-    // 			expect(d[0]._id.toString().length).toEqual(24);
-    // 			done();
-    // 		})
-    // 	})
-    // });
-    // it('post(obj) can delete again', (done) => {
-    // 	var sut = sensor.post({
-    // 		 name: "sensor 3",
-    //   	 host: "rpi99",
-    //   	 type: {
-    //     	name: "soil"
-    //   	 }
-    // 		});
-    // 	expect(sut instanceof Observable).toBe(true);
-    // 	sut.subscribe(s => {
-    // 		expect(s).toEqual(jasmine.any(String));
-    // 		sensor.delete(s).subscribe(d => {
-    // 			expect(d).toEqual(1);
-    // 			done();
-    // 		})
-    // 	})
-    // });
-    // 	it('post(obj) and deleteAll', (done) => {
-    // 	var sut = sensor.post({
-    // 		 name: "sensor 3",
-    //   	 host: "rpi99",
-    //   	 type: {
-    //     	name: "soil"
-    //   	 }
-    // 		});
-    // 	expect(sut instanceof Observable).toBe(true);
-    // 	sut.subscribe(s => {
-    // 		expect(s).toEqual(jasmine.any(String));
-    // 		sensor.deleteAll().subscribe(d => {
-    // 			expect(d).toEqual(1);
-    // 			done();
-    // 		})
-    // 	})
-    // });
 });

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var user = require('../model/user');
 var logger = require('../util/logger');
-var AuthSetup = /** @class */ (function () {
+var AuthSetup = (function () {
     function AuthSetup() {
     }
     AuthSetup.setAuth = function (app) {
