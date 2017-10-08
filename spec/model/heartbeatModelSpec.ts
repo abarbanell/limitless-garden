@@ -1,4 +1,4 @@
-import { Heartbeat } from '../../src/model/model.heartbeat';
+import { Heartbeat, MongoHeartbeat } from '../../src/model/model.heartbeat';
 import { Observable } from 'rxjs/Rx';
 
 var util = require('util');
@@ -9,10 +9,21 @@ var db = require('../../src/util/db');
 var colname = db.collectionName('model.heartbeat');
 import mongodb = require('mongodb');
 
+function getHeartbeatObject() {
+	var hb: Heartbeat = new Heartbeat();
+	hb.host = "ESP_TEST";
+	hb.uptime = (new Date()).getMinutes();
+	hb.i2cDevices = 0
+	hb.values = [
+		{ type: "soil", val: 17 },
+		{ type: "temperature", val: 27.3 }
+	];
+	return hb
+}
 
 describe('Heartbeat Model', function () {
 	beforeEach((done) => {
-		hb = new Heartbeat();
+		hb = getHeartbeatObject();
 		hb.deleteAll().subscribe(s => {
 			done()
 		})
@@ -46,18 +57,8 @@ describe('Heartbeat Model', function () {
 	});
 
 	it('post(full obj) returns string ID', (done) => {
-		var hb: Heartbeat = new Heartbeat();
-		hb.host = "ESP_TEST";
-		hb.uptime = (new Date()).getMinutes();
-		hb.i2cDevices = 0
-		hb.values = [
-			{ type: "soil", val: 17 },
-			{ type: "temperature", val: 27.3 }
-		];
 
-		var obs = hb.post();
-		expect(obs instanceof Observable).toBe(true);
-		obs.subscribe(s => {
+		hb.post().subscribe(s => {
 			expect(s).toEqual(jasmine.any(String));
 			db.connect(function (err, dbObj) {
 				var oid = new mongodb.ObjectId.createFromHexString(s)
@@ -72,9 +73,26 @@ describe('Heartbeat Model', function () {
 			});
 		})
 	});
-
-
 });
+
+it('calls observerHeartbeat() and asserts logger.error is called', function(done) {
+	var s = MongoHeartbeat.fromHeartbeat(hb);
+	// spyOn(logger, "error").and.callThrough();
+	spyOn(logger, "error");
+	MongoHeartbeat.observeHeartbeat(s);
+	expect(logger.error).toHaveBeenCalled();
+	done();
+});
+
+it('post(full obj) calls observeHeartbeat()', (done) => {
+
+	spyOn(MongoHeartbeat, 'observeHeartbeat');
+	hb.post().subscribe(s => {
+		expect(MongoHeartbeat.observeHeartbeat).toHaveBeenCalled();
+		done();
+	})
+});
+
 
 describe("heartbeat model prepopulated tests", function () {
 	var insertedId: string;

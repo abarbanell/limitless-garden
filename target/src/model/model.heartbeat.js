@@ -34,42 +34,41 @@ var MongoHeartbeat = (function (_super) {
     function MongoHeartbeat() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    MongoHeartbeat.prototype.fromHeartBeat = function (hb) {
+    MongoHeartbeat.fromHeartbeat = function (hb) {
+        var mhb = new MongoHeartbeat();
         if (hb._id) {
-            this._id = new mongodb.ObjectId.createFromHexString(hb._id);
+            mhb._id = new mongodb.ObjectId.createFromHexString(hb._id);
         }
-        this.host = hb.host || "UNKNOWN";
+        mhb.host = hb.host || "UNKNOWN";
         if (hb.uptime) {
-            this.uptime = hb.uptime;
+            mhb.uptime = hb.uptime;
         }
         if (hb.i2cDevices) {
-            this.i2cDevices = hb.i2cDevices;
+            mhb.i2cDevices = hb.i2cDevices;
         }
-        this.date = hb.date || new Date();
-        this.values = hb.values || [];
-        logger.info("Mongo object: %s", util.inspect(this));
-        return this;
+        mhb.date = hb.date || new Date();
+        mhb.values = hb.values || [];
+        logger.info("Mongo object: %s", util.inspect(mhb));
+        return mhb;
+    };
+    MongoHeartbeat.observeHeartbeat = function (s) {
+        var host = s.host;
+        var sensor = new model_sensor_1.SensorModel();
+        for (var _i = 0, _a = s.values; _i < _a.length; _i++) {
+            var value = _a[_i];
+            logger.error("TODO: insert or update sensor %s for host %s", value.type, host);
+        }
     };
     return MongoHeartbeat;
 }(HeartbeatPayload));
 exports.MongoHeartbeat = MongoHeartbeat;
-// class SensorClass  implements ISensor { 
-//   _id: string = null;
-//   name: string = null;
-//   host: string = null;
-//   type = { name: null };
-//   constructor(host: string, type: string) {
-//     this.host = host;
-//     this.type.name = type;
-//   }
-// }
 var Heartbeat = (function (_super) {
     __extends(Heartbeat, _super);
     function Heartbeat() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Heartbeat.prototype.post = function () {
-        var mongoObject = new MongoHeartbeat().fromHeartBeat(this);
+        var mongoObject = MongoHeartbeat.fromHeartbeat(this);
         var obs = new Rx_1.Subject();
         if (this.host && this.uptime) {
             statsd_1.statsdHeartbeat(this.host, this.uptime);
@@ -80,9 +79,11 @@ var Heartbeat = (function (_super) {
                 if (e)
                     obs.error(e);
                 if (results) {
-                    obs.next(results.ops[0]._id.toString());
                     // now process results - fire and forget...
-                    Heartbeat._pubsub.next(mongoObject);
+                    // Heartbeat._pubsub.next(mongoObject);
+                    // lets first keep this sync at this point
+                    MongoHeartbeat.observeHeartbeat(mongoObject);
+                    obs.next(results.ops[0]._id.toString());
                 }
             });
         });
@@ -162,14 +163,7 @@ var Heartbeat = (function (_super) {
         return this;
     };
     Heartbeat._pubsub = new Rx_1.Subject();
-    Heartbeat.sub = Heartbeat._pubsub.subscribe(function (s) {
-        var host = s.host;
-        var sensor = new model_sensor_1.SensorModel();
-        for (var _i = 0, _a = s.values; _i < _a.length; _i++) {
-            var value = _a[_i];
-            logger.error("TODO: insert or update sensor %s for host %s", value.type, host);
-        }
-    });
+    Heartbeat.sub = Heartbeat._pubsub.subscribe(MongoHeartbeat.observeHeartbeat);
     Heartbeat._collectionName = db.collectionName('model.heartbeat');
     return Heartbeat;
 }(HeartbeatPayload));

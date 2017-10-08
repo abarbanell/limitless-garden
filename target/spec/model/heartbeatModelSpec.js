@@ -8,9 +8,20 @@ var logger = require('../../src/util/logger');
 var db = require('../../src/util/db');
 var colname = db.collectionName('model.heartbeat');
 var mongodb = require("mongodb");
+function getHeartbeatObject() {
+    var hb = new model_heartbeat_1.Heartbeat();
+    hb.host = "ESP_TEST";
+    hb.uptime = (new Date()).getMinutes();
+    hb.i2cDevices = 0;
+    hb.values = [
+        { type: "soil", val: 17 },
+        { type: "temperature", val: 27.3 }
+    ];
+    return hb;
+}
 describe('Heartbeat Model', function () {
     beforeEach(function (done) {
-        hb = new model_heartbeat_1.Heartbeat();
+        hb = getHeartbeatObject();
         hb.deleteAll().subscribe(function (s) {
             done();
         });
@@ -40,17 +51,7 @@ describe('Heartbeat Model', function () {
         });
     });
     it('post(full obj) returns string ID', function (done) {
-        var hb = new model_heartbeat_1.Heartbeat();
-        hb.host = "ESP_TEST";
-        hb.uptime = (new Date()).getMinutes();
-        hb.i2cDevices = 0;
-        hb.values = [
-            { type: "soil", val: 17 },
-            { type: "temperature", val: 27.3 }
-        ];
-        var obs = hb.post();
-        expect(obs instanceof Rx_1.Observable).toBe(true);
-        obs.subscribe(function (s) {
+        hb.post().subscribe(function (s) {
             expect(s).toEqual(jasmine.any(String));
             db.connect(function (err, dbObj) {
                 var oid = new mongodb.ObjectId.createFromHexString(s);
@@ -64,6 +65,21 @@ describe('Heartbeat Model', function () {
                 });
             });
         });
+    });
+});
+it('calls observerHeartbeat() and asserts logger.error is called', function (done) {
+    var s = model_heartbeat_1.MongoHeartbeat.fromHeartbeat(hb);
+    // spyOn(logger, "error").and.callThrough();
+    spyOn(logger, "error");
+    model_heartbeat_1.MongoHeartbeat.observeHeartbeat(s);
+    expect(logger.error).toHaveBeenCalled();
+    done();
+});
+it('post(full obj) calls observeHeartbeat()', function (done) {
+    spyOn(model_heartbeat_1.MongoHeartbeat, 'observeHeartbeat');
+    hb.post().subscribe(function (s) {
+        expect(model_heartbeat_1.MongoHeartbeat.observeHeartbeat).toHaveBeenCalled();
+        done();
     });
 });
 describe("heartbeat model prepopulated tests", function () {

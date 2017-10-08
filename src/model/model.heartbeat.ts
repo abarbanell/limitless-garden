@@ -24,52 +24,44 @@ export class HeartbeatPayload {
 export class MongoHeartbeat extends HeartbeatPayload {
   _id: mongodb.ObjectId;
 
-  fromHeartBeat(hb: Heartbeat) {
+  static fromHeartbeat(hb: Heartbeat) {
+    var mhb = new MongoHeartbeat();
     if (hb._id) {
-      this._id = new mongodb.ObjectId.createFromHexString(hb._id)
+      mhb._id = new mongodb.ObjectId.createFromHexString(hb._id)
     }
-    this.host = hb.host || "UNKNOWN";
+    mhb.host = hb.host || "UNKNOWN";
     if (hb.uptime) { 
-      this.uptime = hb.uptime
+      mhb.uptime = hb.uptime
     }
     if (hb.i2cDevices) { 
-      this.i2cDevices = hb.i2cDevices
+      mhb.i2cDevices = hb.i2cDevices
     }
-    this.date = hb.date ||  new Date()
-    this.values = hb.values || []
-    logger.info("Mongo object: %s", util.inspect(this))
-    return this;
+    mhb.date = hb.date ||  new Date()
+    mhb.values = hb.values || []
+    logger.info("Mongo object: %s", util.inspect(mhb))
+    return mhb;
   }
-}
 
-// class SensorClass  implements ISensor { 
-//   _id: string = null;
-//   name: string = null;
-//   host: string = null;
-//   type = { name: null };
-
-//   constructor(host: string, type: string) {
-//     this.host = host;
-//     this.type.name = type;
-//   }
-// }
-
-export class Heartbeat extends HeartbeatPayload {
-  public _id: string;
-  private static  _pubsub = new Subject<MongoHeartbeat>();
-  private static sub =  Heartbeat._pubsub.subscribe(s => {
+  static observeHeartbeat(s:MongoHeartbeat) {
     var host = s.host;
     var sensor = new SensorModel();
     for (var value of s.values) {
       logger.error("TODO: insert or update sensor %s for host %s", value.type, host)
     }
-    
-  })
+  }
+}
+
+export class Heartbeat extends HeartbeatPayload {
+  public _id: string;
+  private static  _pubsub = new Subject<MongoHeartbeat>();
+  private static sub =  Heartbeat._pubsub.subscribe(MongoHeartbeat.observeHeartbeat);
+
+
 
   private static _collectionName = db.collectionName('model.heartbeat');
 
   post(): Observable<string> {
-    var mongoObject = new MongoHeartbeat().fromHeartBeat(this);
+    var mongoObject = MongoHeartbeat.fromHeartbeat(this);
     var obs = new Subject<string>();
 
     if (this.host && this.uptime) {
@@ -81,9 +73,13 @@ export class Heartbeat extends HeartbeatPayload {
       coll.insert(mongoObject, {}, function(e, results){
         if (e) obs.error(e)
         if (results) {
-          obs.next(results.ops[0]._id.toString());
           // now process results - fire and forget...
-          Heartbeat._pubsub.next(mongoObject);
+          // Heartbeat._pubsub.next(mongoObject);
+          // lets first keep this sync at this point
+          MongoHeartbeat.observeHeartbeat(mongoObject);
+          obs.next(results.ops[0]._id.toString());
+ 
+  
         }
       })
     })
