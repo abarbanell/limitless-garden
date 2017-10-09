@@ -6,7 +6,7 @@ import * as util from 'util';
 var logger = require('../util/logger');
 var db = require('../util/db');
 import { statsdHeartbeat } from '../util/statsd';
-import { SensorModel, ISensor } from './model.sensor';
+import { SensorModel, ISensor, Sensor } from './model.sensor';
 
 export class Value {
   public type: string;
@@ -42,12 +42,27 @@ export class MongoHeartbeat extends HeartbeatPayload {
     return mhb;
   }
 
-  static observeHeartbeat(s:MongoHeartbeat) {
+  static observeHeartbeat(s:MongoHeartbeat): Observable<string> {
+    var obs = new Subject<string>();
     var host = s.host;
     var sensor = new SensorModel();
     for (var value of s.values) {
-      logger.error("TODO: insert or update sensor %s for host %s", value.type, host)
+      var pattern: ISensor = new Sensor();
+      pattern.host = host;
+      pattern.type = { name: value.type };
+      sensor.find(pattern).subscribe(d => {
+        if (d.length ==0 ) {
+          obs.next("TODO: insert or update sensor " + value.type + " for host " + host);
+        } 
+        if (d.length == 1) {
+          obs.next("TODO: sensor exists, need to insert sensor data");
+        }
+        if (d.length > 1) {
+          obs.next("TODO: handle duplicate sensor on same host");
+        }
+      })
     }
+    return obs.asObservable();
   }
 }
 

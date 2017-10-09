@@ -52,12 +52,27 @@ var MongoHeartbeat = (function (_super) {
         return mhb;
     };
     MongoHeartbeat.observeHeartbeat = function (s) {
+        var obs = new Rx_1.Subject();
         var host = s.host;
         var sensor = new model_sensor_1.SensorModel();
         for (var _i = 0, _a = s.values; _i < _a.length; _i++) {
             var value = _a[_i];
-            logger.error("TODO: insert or update sensor %s for host %s", value.type, host);
+            var pattern = new model_sensor_1.Sensor();
+            pattern.host = host;
+            pattern.type = { name: value.type };
+            sensor.find(pattern).subscribe(function (d) {
+                if (d.length == 0) {
+                    obs.next("TODO: insert or update sensor " + value.type + " for host " + host);
+                }
+                if (d.length == 1) {
+                    obs.next("TODO: sensor exists, need to insert sensor data");
+                }
+                if (d.length > 1) {
+                    obs.next("TODO: handle duplicate sensor on same host");
+                }
+            });
         }
+        return obs.asObservable();
     };
     return MongoHeartbeat;
 }(HeartbeatPayload));

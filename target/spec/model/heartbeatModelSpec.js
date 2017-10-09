@@ -67,13 +67,14 @@ describe('Heartbeat Model', function () {
         });
     });
 });
-it('calls observerHeartbeat() and asserts logger.error is called', function (done) {
+it('calls observerHeartbeat() and asserts observable returns TODO message', function (done) {
     var s = model_heartbeat_1.MongoHeartbeat.fromHeartbeat(hb);
-    // spyOn(logger, "error").and.callThrough();
-    spyOn(logger, "error");
-    model_heartbeat_1.MongoHeartbeat.observeHeartbeat(s);
-    expect(logger.error).toHaveBeenCalled();
-    done();
+    var obs = model_heartbeat_1.MongoHeartbeat.observeHeartbeat(s);
+    expect(obs instanceof Rx_1.Observable).toBe(true);
+    obs.subscribe(function (s) {
+        expect(s).toContain("TODO: ");
+        done();
+    });
 });
 it('post(full obj) calls observeHeartbeat()', function (done) {
     spyOn(model_heartbeat_1.MongoHeartbeat, 'observeHeartbeat');

@@ -2,13 +2,12 @@ import { SensorModel, Sensor, ISensor } from '../../src/model/model.sensor';
 import { Observable } from 'rxjs/Rx';
 
 var util = require('util');
-//var sensor = require('../../model/sensor.js');
 var sensor: SensorModel; 
 
 var logger = require('../../src/util/logger');
-var sensorHelper = require('../helpers/sensor.js');
+// var sensorHelper = require('../helpers/sensor');
 
-describe('Sensor Model V1', function() {
+describe('SensorModel - not prepopulated', function() {
 	beforeEach ((done) => {
 		sensor = new SensorModel();
 		sensor.deleteAll().subscribe(s => {
@@ -93,7 +92,7 @@ describe('Sensor Model V1', function() {
 			expect(s).toBeNull();
 			done();
 		}, e => {
-			expect(e.toString()).toContain("Argument passed");
+			expect(e.toString()).toBe("Error: Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
 			done();
 		})
 	});
@@ -255,8 +254,6 @@ describe('Sensor Model V1', function() {
 	});
 
 
-
-
 	it('multiple post(obj) and get by host returns multiple', (done) => {
 		var sut1 = sensor.post({
 			 name: "sensor 44",
@@ -338,7 +335,7 @@ describe('Sensor Model V1 prepopulated', function() {
 		})
 	})
 
-	it('multiple post(obj) and get by host returns multple', (done) => {
+	it('multiple post(obj) and get by host returns multiple', (done) => {
 		sensor.getByHost("rpi77").subscribe(d => {
 			expect(d.length).toBe(2);
 			expect(d[0].host).toBe("rpi77");
@@ -353,6 +350,37 @@ describe('Sensor Model V1 prepopulated', function() {
 			done();
 		})
 	});
+
+	it('find by host and type yields single result', (done) => {
+		var pattern: ISensor = new Sensor();
+		pattern.host = "rpi01";
+		pattern.type = { name:  "soil" };
+		sensor.find(pattern).subscribe(d => {
+			expect(d.length).toBe(1);
+			done();
+		})
+	});
+
+	it('find by host and type yields duplicate', (done) => {
+		var pattern: ISensor = new Sensor();
+		pattern.host = "rpi77";
+		pattern.type = { name:  "soil" };
+		sensor.find(pattern).subscribe(d => {
+			expect(d.length).toBe(2);
+			done();
+		})
+	});
+
+	it('find by host and type yields no result', (done) => {
+		var pattern: ISensor = new Sensor();
+		pattern.host = "rpi99";
+		pattern.type = { name:  "soil" };		
+		sensor.find(pattern).subscribe(d => {
+			expect(d.length).toBe(0);
+			done();
+		})
+	});
+
 
 });
 

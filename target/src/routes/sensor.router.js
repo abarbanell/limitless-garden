@@ -19,7 +19,6 @@ router.get('/', function (req, res, next) {
 });
 // GET /api/sensors/:sensorid -> details about one sensor (host, name, type,...)
 router.get('/:id', function (req, res, next) {
-    logger.error('get id : ', req.params);
     sensorModel.getById(req.params.id).subscribe(function (s) {
         res.json(s);
     }, function (e) {

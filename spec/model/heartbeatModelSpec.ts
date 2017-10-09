@@ -75,13 +75,15 @@ describe('Heartbeat Model', function () {
 	});
 });
 
-it('calls observerHeartbeat() and asserts logger.error is called', function(done) {
+it('calls observerHeartbeat() and asserts observable returns TODO message', function(done) {
 	var s = MongoHeartbeat.fromHeartbeat(hb);
-	// spyOn(logger, "error").and.callThrough();
-	spyOn(logger, "error");
-	MongoHeartbeat.observeHeartbeat(s);
-	expect(logger.error).toHaveBeenCalled();
-	done();
+
+	var obs = MongoHeartbeat.observeHeartbeat(s);
+	expect(obs instanceof Observable).toBe(true);
+	obs.subscribe(s => {
+		expect(s).toContain("TODO: ");
+		done();
+	});
 });
 
 it('post(full obj) calls observeHeartbeat()', (done) => {

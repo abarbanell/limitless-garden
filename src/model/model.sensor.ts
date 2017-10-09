@@ -12,10 +12,11 @@ export class SensorModel {
   get(): Observable<ISensor[]> {
     var cn = this._collectionName;
     var obs = new Subject<ISensor[]>();
+    var sv = this._schema_version;
     db.connect(function(err, dbObj) {
       var coll = dbObj.collection(cn);
       try {
-        coll.find({ schema_version: 1 }).toArray().then(function(docs) {
+        coll.find({ schema_version: sv }).toArray().then(function(docs) {
           obs.next(docs);
         })
       } catch (ex) {

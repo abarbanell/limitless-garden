@@ -12,10 +12,11 @@ var SensorModel = (function () {
     SensorModel.prototype.get = function () {
         var cn = this._collectionName;
         var obs = new Rx_1.Subject();
+        var sv = this._schema_version;
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
             try {
-                coll.find({ schema_version: 1 }).toArray().then(function (docs) {
+                coll.find({ schema_version: sv }).toArray().then(function (docs) {
                     obs.next(docs);
                 });
             }

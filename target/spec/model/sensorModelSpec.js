@@ -3,11 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var model_sensor_1 = require("../../src/model/model.sensor");
 var Rx_1 = require("rxjs/Rx");
 var util = require('util');
-//var sensor = require('../../model/sensor.js');
 var sensor;
 var logger = require('../../src/util/logger');
-var sensorHelper = require('../helpers/sensor.js');
-describe('Sensor Model V1', function () {
+// var sensorHelper = require('../helpers/sensor');
+describe('SensorModel - not prepopulated', function () {
     beforeEach(function (done) {
         sensor = new model_sensor_1.SensorModel();
         sensor.deleteAll().subscribe(function (s) {
@@ -87,7 +86,7 @@ describe('Sensor Model V1', function () {
             expect(s).toBeNull();
             done();
         }, function (e) {
-            expect(e.toString()).toContain("Argument passed");
+            expect(e.toString()).toBe("Error: Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
             done();
         });
     });
@@ -316,7 +315,7 @@ describe('Sensor Model V1 prepopulated', function () {
             });
         });
     });
-    it('multiple post(obj) and get by host returns multple', function (done) {
+    it('multiple post(obj) and get by host returns multiple', function (done) {
         sensor.getByHost("rpi77").subscribe(function (d) {
             expect(d.length).toBe(2);
             expect(d[0].host).toBe("rpi77");
@@ -326,6 +325,33 @@ describe('Sensor Model V1 prepopulated', function () {
     });
     it('get by host fails for nonexisting host', function (done) {
         sensor.getByHost("no-host").subscribe(function (d) {
+            expect(d.length).toBe(0);
+            done();
+        });
+    });
+    it('find by host and type yields single result', function (done) {
+        var pattern = new model_sensor_1.Sensor();
+        pattern.host = "rpi01";
+        pattern.type = { name: "soil" };
+        sensor.find(pattern).subscribe(function (d) {
+            expect(d.length).toBe(1);
+            done();
+        });
+    });
+    it('find by host and type yields duplicate', function (done) {
+        var pattern = new model_sensor_1.Sensor();
+        pattern.host = "rpi77";
+        pattern.type = { name: "soil" };
+        sensor.find(pattern).subscribe(function (d) {
+            expect(d.length).toBe(2);
+            done();
+        });
+    });
+    it('find by host and type yields no result', function (done) {
+        var pattern = new model_sensor_1.Sensor();
+        pattern.host = "rpi99";
+        pattern.type = { name: "soil" };
+        sensor.find(pattern).subscribe(function (d) {
             expect(d.length).toBe(0);
             done();
         });

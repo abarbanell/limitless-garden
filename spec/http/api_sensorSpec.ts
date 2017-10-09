@@ -98,7 +98,6 @@ it('POST and GET again, returns Object', function(done) {
 		.send(input)
 		.expect(httpStatus.OK)
 		.end(function(err, res) {
-			logger.error('res.body: ', res.body);
 			expect(res.body._id).toBeDefined();
 			expect(res.body.rc).toBeDefined();
 			var id = res.body._id;
@@ -130,7 +129,6 @@ it('POST and GET again, returns Object', function(done) {
 		.send(input)
 		.expect(httpStatus.OK)
 		.end(function(err, res) {
-			logger.error('res.body: ', res.body);
 			expect(res.body._id).toBeDefined();
 			expect(res.body.rc).toBeDefined();
 			var id = res.body._id;
@@ -138,7 +136,6 @@ it('POST and GET again, returns Object', function(done) {
 			supertest(server)
 				.del(getUrl)
 				.end((err, res) => {
-					logger.info('del after post: status: ', res.status);
 					expect(res.status).toBe(httpStatus.OK);
 					expect(res.body.rc).toEqual('OK');
 					expect(res.body.deletedCount).toEqual(1);
