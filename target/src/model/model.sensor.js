@@ -4,7 +4,7 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 var mongodb = require("mongodb");
 var Rx_1 = require("rxjs/Rx");
-var SensorModel = (function () {
+var SensorModel = /** @class */ (function () {
     function SensorModel() {
         this._schema_version = 1;
         this._collectionName = db.collectionName('model.sensor');
@@ -180,13 +180,13 @@ var SensorModel = (function () {
     return SensorModel;
 }());
 exports.SensorModel = SensorModel;
-var Sensor = (function () {
+var Sensor = /** @class */ (function () {
     function Sensor() {
     }
     return Sensor;
 }());
 exports.Sensor = Sensor;
-var MongoSensorClass = (function () {
+var MongoSensorClass = /** @class */ (function () {
     function MongoSensorClass(is) {
         this._id = null;
         this.schema_version = 1;

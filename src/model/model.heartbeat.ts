@@ -143,24 +143,6 @@ export class Heartbeat extends HeartbeatPayload {
     return obs.asObservable();
   }
 
-  // private mongofy(): MongoHeartbeat  {
-  //   var rc: any = {};
-
-  //   if (this._id) {
-  //     rc._id = new mongodb.ObjectId.createFromHexString(this._id)
-  //   }
-  //   rc.host = this.host || "UNKNOWN";
-  //   if (this.uptime) { 
-  //     rc.uptime = this.uptime
-  //   }
-  //   if (this.i2cDevices) { 
-  //     rc.i2cDevices = this.i2cDevices
-  //   }
-  //   rc.date = this.date ||  new Date().toISOString()
-  //   logger.info("Mongo object: %s", util.inspect(rc))
-  //   return rc;
-  // }
-
   public populate(obj: any) {
     if (obj.host) { 
       this.host = obj.host;

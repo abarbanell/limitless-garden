@@ -7,15 +7,15 @@
   },
   "scripts": {
     "start": "node ./target/src/server.js",
-    "start:watch": "watch 'npm start'",
+    "start:watch": "watch 'npm start' target",
     "start:full": "rimraf node_modules && npm install && npm start",
     "jshint": "jshint ./target/src/**.js",
     "jscs": "jscs --preset=google **.js",
     "copyfiles": "copyfiles 'public/**' 'spec/**/*.json' 'src/**/*.ejs'  target/",
     "tsc": "tsc",
     "tsc:watch": "tsc -w",
-    "test": "cd target; node ./jasmine.js",
-    "test:watch": "watch 'npm run test'",
+    "test": "cd target &&  node ./jasmine.js",
+    "test:watch": "watch 'npm run tsc && npm run test' src spec public",
     "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec"
   },
   "dependencies": {

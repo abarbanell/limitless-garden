@@ -17,19 +17,19 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 var statsd_1 = require("../util/statsd");
 var model_sensor_1 = require("./model.sensor");
-var Value = (function () {
+var Value = /** @class */ (function () {
     function Value() {
     }
     return Value;
 }());
 exports.Value = Value;
-var HeartbeatPayload = (function () {
+var HeartbeatPayload = /** @class */ (function () {
     function HeartbeatPayload() {
     }
     return HeartbeatPayload;
 }());
 exports.HeartbeatPayload = HeartbeatPayload;
-var MongoHeartbeat = (function (_super) {
+var MongoHeartbeat = /** @class */ (function (_super) {
     __extends(MongoHeartbeat, _super);
     function MongoHeartbeat() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -77,7 +77,7 @@ var MongoHeartbeat = (function (_super) {
     return MongoHeartbeat;
 }(HeartbeatPayload));
 exports.MongoHeartbeat = MongoHeartbeat;
-var Heartbeat = (function (_super) {
+var Heartbeat = /** @class */ (function (_super) {
     __extends(Heartbeat, _super);
     function Heartbeat() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -146,22 +146,6 @@ var Heartbeat = (function (_super) {
         });
         return obs.asObservable();
     };
-    // private mongofy(): MongoHeartbeat  {
-    //   var rc: any = {};
-    //   if (this._id) {
-    //     rc._id = new mongodb.ObjectId.createFromHexString(this._id)
-    //   }
-    //   rc.host = this.host || "UNKNOWN";
-    //   if (this.uptime) { 
-    //     rc.uptime = this.uptime
-    //   }
-    //   if (this.i2cDevices) { 
-    //     rc.i2cDevices = this.i2cDevices
-    //   }
-    //   rc.date = this.date ||  new Date().toISOString()
-    //   logger.info("Mongo object: %s", util.inspect(rc))
-    //   return rc;
-    // }
     Heartbeat.prototype.populate = function (obj) {
         if (obj.host) {
             this.host = obj.host;

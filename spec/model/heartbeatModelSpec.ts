@@ -80,10 +80,14 @@ it('calls observerHeartbeat() and asserts observable returns TODO message', func
 
 	var obs = MongoHeartbeat.observeHeartbeat(s);
 	expect(obs instanceof Observable).toBe(true);
+	var i = 0
 	obs.subscribe(s => {
 		// TODO: should check that we get one message for each of the 2 values
 		expect(s).toContain("TODO: ");
-		done();
+		i++;
+		if (i == 2) {
+			done();			
+		}
 	});
 });
 
