@@ -62,13 +62,16 @@ var MongoHeartbeat = /** @class */ (function (_super) {
             pattern.type = { name: value.type };
             sensor.find(pattern).subscribe(function (d) {
                 if (d.length == 0) {
-                    obs.next("TODO: insert or update sensor " + value.type + " for host " + host);
+                    sensor.post(pattern).subscribe(function (s) {
+                        obs.next("sensor inserted with id " + s
+                            + " for value " + value.type + " for host " + host);
+                    });
                 }
                 if (d.length == 1) {
-                    obs.next("TODO: sensor exists, need to insert sensor data");
+                    obs.next("TODO: sensor exists for value " + value.type + " for host " + host);
                 }
                 if (d.length > 1) {
-                    obs.next("TODO: handle duplicate sensor on same host");
+                    obs.next("TODO: handle duplicate sensor on same host for value " + value.type + " for host " + host);
                 }
             });
         }
@@ -131,7 +134,6 @@ var Heartbeat = /** @class */ (function (_super) {
             try {
                 coll.deleteMany({}, function (e, results) {
                     if (e) {
-                        logger.error("Heartbeat.deleteAll.delete error: ", e);
                         obs.error(e);
                     }
                     if (results) {

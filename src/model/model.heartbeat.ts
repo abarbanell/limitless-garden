@@ -51,14 +51,17 @@ export class MongoHeartbeat extends HeartbeatPayload {
       pattern.host = host;
       pattern.type = { name: value.type };
       sensor.find(pattern).subscribe(d => {
-        if (d.length ==0 ) {
-          obs.next("TODO: insert or update sensor " + value.type + " for host " + host);
+        if (d.length == 0 ) {
+          sensor.post(pattern).subscribe(s => {
+            obs.next("sensor inserted with id " + s 
+              + " for value " + value.type + " for host " + host);
+          })
         } 
         if (d.length == 1) {
-          obs.next("TODO: sensor exists, need to insert sensor data");
+          obs.next("TODO: sensor exists for value " + value.type + " for host " + host);
         }
         if (d.length > 1) {
-          obs.next("TODO: handle duplicate sensor on same host");
+          obs.next("TODO: handle duplicate sensor on same host for value " + value.type + " for host " + host);
         }
       })
     }
@@ -128,7 +131,6 @@ export class Heartbeat extends HeartbeatPayload {
       try {
         coll.deleteMany({}, function (e, results) {
           if (e) {
-            logger.error("Heartbeat.deleteAll.delete error: ", e);
             obs.error(e);
           }
           if (results) {

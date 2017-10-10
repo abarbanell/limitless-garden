@@ -1,4 +1,5 @@
 import { Heartbeat, MongoHeartbeat } from '../../src/model/model.heartbeat';
+import { SensorModel, Sensor, ISensor } from '../../src/model/model.sensor';
 import { Observable } from 'rxjs/Rx';
 
 var util = require('util');
@@ -24,8 +25,13 @@ function getHeartbeatObject() {
 describe('Heartbeat Model', function () {
 	beforeEach((done) => {
 		hb = getHeartbeatObject();
-		hb.deleteAll().subscribe(s => {
-			done()
+		var sensor = new SensorModel();
+		hb.deleteAll().subscribe(hb => {
+			sensor.deleteAll().subscribe(s => {
+				sensor.get().subscribe(res => {
+					done();
+				})
+			})
 		})
 	});
 
@@ -73,33 +79,32 @@ describe('Heartbeat Model', function () {
 			});
 		})
 	});
-});
 
-it('calls observerHeartbeat() and asserts observable returns TODO message', function(done) {
-	var s = MongoHeartbeat.fromHeartbeat(hb);
+	it('calls observerHeartbeat() and asserts observable returns 2xinserted message', function (done) {
+		var s = MongoHeartbeat.fromHeartbeat(hb);
 
-	var obs = MongoHeartbeat.observeHeartbeat(s);
-	expect(obs instanceof Observable).toBe(true);
-	var i = 0
-	obs.subscribe(s => {
-		// TODO: should check that we get one message for each of the 2 values
-		expect(s).toContain("TODO: ");
-		i++;
-		if (i == 2) {
-			done();			
-		}
+		var obs = MongoHeartbeat.observeHeartbeat(s);
+		expect(obs instanceof Observable).toBe(true);
+		var i = 0
+		obs.subscribe(msg => {
+			expect(msg).toContain("inserted");
+			i++;
+			if (i == 2) {
+				done();
+			}
+		});
 	});
+
+	it('post(full obj) calls observeHeartbeat()', (done) => {
+
+		spyOn(MongoHeartbeat, 'observeHeartbeat');
+		hb.post().subscribe(s => {
+			expect(MongoHeartbeat.observeHeartbeat).toHaveBeenCalled();
+			done();
+		})
+	});
+
 });
-
-it('post(full obj) calls observeHeartbeat()', (done) => {
-
-	spyOn(MongoHeartbeat, 'observeHeartbeat');
-	hb.post().subscribe(s => {
-		expect(MongoHeartbeat.observeHeartbeat).toHaveBeenCalled();
-		done();
-	})
-});
-
 
 describe("heartbeat model prepopulated tests", function () {
 	var insertedId: string;
@@ -131,7 +136,7 @@ describe("heartbeat model prepopulated tests", function () {
 
 	it('get by ID', (done) => {
 		Heartbeat.getByID(insertedId).subscribe(d => {
-			expect(typeof(d)).toBe("object");
+			expect(typeof (d)).toBe("object");
 			done();
 		})
 	});
@@ -145,7 +150,7 @@ describe("heartbeat model prepopulated tests", function () {
 			}, err => {
 				expect(err.toString()).toBe("NOT FOUND");
 				done();
-			})	
+			})
 		})
 	});
 

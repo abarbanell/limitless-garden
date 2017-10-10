@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var model_heartbeat_1 = require("../../src/model/model.heartbeat");
+var model_sensor_1 = require("../../src/model/model.sensor");
 var Rx_1 = require("rxjs/Rx");
 var util = require('util');
 var hb;
@@ -22,8 +23,13 @@ function getHeartbeatObject() {
 describe('Heartbeat Model', function () {
     beforeEach(function (done) {
         hb = getHeartbeatObject();
-        hb.deleteAll().subscribe(function (s) {
-            done();
+        var sensor = new model_sensor_1.SensorModel();
+        hb.deleteAll().subscribe(function (hb) {
+            sensor.deleteAll().subscribe(function (s) {
+                sensor.get().subscribe(function (res) {
+                    done();
+                });
+            });
         });
     });
     it('check Heartbeat Model', function () {
@@ -66,26 +72,25 @@ describe('Heartbeat Model', function () {
             });
         });
     });
-});
-it('calls observerHeartbeat() and asserts observable returns TODO message', function (done) {
-    var s = model_heartbeat_1.MongoHeartbeat.fromHeartbeat(hb);
-    var obs = model_heartbeat_1.MongoHeartbeat.observeHeartbeat(s);
-    expect(obs instanceof Rx_1.Observable).toBe(true);
-    var i = 0;
-    obs.subscribe(function (s) {
-        // TODO: should check that we get one message for each of the 2 values
-        expect(s).toContain("TODO: ");
-        i++;
-        if (i == 2) {
-            done();
-        }
+    it('calls observerHeartbeat() and asserts observable returns 2xinserted message', function (done) {
+        var s = model_heartbeat_1.MongoHeartbeat.fromHeartbeat(hb);
+        var obs = model_heartbeat_1.MongoHeartbeat.observeHeartbeat(s);
+        expect(obs instanceof Rx_1.Observable).toBe(true);
+        var i = 0;
+        obs.subscribe(function (msg) {
+            expect(msg).toContain("inserted");
+            i++;
+            if (i == 2) {
+                done();
+            }
+        });
     });
-});
-it('post(full obj) calls observeHeartbeat()', function (done) {
-    spyOn(model_heartbeat_1.MongoHeartbeat, 'observeHeartbeat');
-    hb.post().subscribe(function (s) {
-        expect(model_heartbeat_1.MongoHeartbeat.observeHeartbeat).toHaveBeenCalled();
-        done();
+    it('post(full obj) calls observeHeartbeat()', function (done) {
+        spyOn(model_heartbeat_1.MongoHeartbeat, 'observeHeartbeat');
+        hb.post().subscribe(function (s) {
+            expect(model_heartbeat_1.MongoHeartbeat.observeHeartbeat).toHaveBeenCalled();
+            done();
+        });
     });
 });
 describe("heartbeat model prepopulated tests", function () {
