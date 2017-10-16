@@ -117,6 +117,14 @@ describe('util/db tests', function () {
         expect(typeof (db.collectionName('test'))).toBe('string');
         done();
     });
+    it('collectionName is returning proper values', function (done) {
+        var db = rewire('../../src/util/db');
+        var collectionName = db.collectionName('model.sensor');
+        var dataCollectionName = db.collectionName('model.sensorData');
+        expect(collectionName).toBe('dev.model.sensor');
+        expect(dataCollectionName).toBe('dev.model.sensorData');
+        done();
+    });
     it('collectionName starts with environment', function (done) {
         var env = process.env.ENVIRONMENT;
         process.env.ENVIRONMENT = 'jsm';

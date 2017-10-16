@@ -7,10 +7,11 @@ import * as util from 'util';
 
 export class SensorModel {
   private _schema_version = 1;
-  private _collectionName = db.collectionName('model.sensor');
+  private static _collectionName = db.collectionName('model.sensor');
+  private static _dataCollectionName = db.collectionName('model.sensorData');
 
   get(): Observable<ISensor[]> {
-    var cn = this._collectionName;
+    var cn = SensorModel._collectionName;
     var obs = new Subject<ISensor[]>();
     var sv = this._schema_version;
     db.connect(function(err, dbObj) {
@@ -27,7 +28,7 @@ export class SensorModel {
   }
 
   getById(id: string): Observable<ISensor> {
-    var cn = this._collectionName;
+    var cn = SensorModel._collectionName;
     var obs = new Subject<ISensor>();
 
     db.connect(function (err, dbObj) {
@@ -57,7 +58,7 @@ export class SensorModel {
     var id: string = "error";
     var ms = new MongoSensorClass(data);
     var obs = new Subject<string>();
-    var cn = this._collectionName;
+    var cn = SensorModel._collectionName;
 
     db.connect(function(err,dbObj){
       var coll = dbObj.collection(cn);
@@ -71,8 +72,41 @@ export class SensorModel {
     return obs.asObservable();
   }
 
+  postData(sensorId: string, host: string, type: string, val: number) {
+    var obs = new Subject<string>();
+    var mongoSensorId: mongodb.ObjectID;
+    try {
+      logger.error("try to convert to ObjectID: " + sensorId)
+      mongoSensorId = mongodb.ObjectID.createFromHexString(sensorId)
+      db.connect(function(err,dbObj){
+        var coll = dbObj.collection(SensorModel._dataCollectionName);
+        coll.insert({
+          sensorId: mongoSensorId,
+          host: host,
+          type: type,
+          val: val
+        }, {}, function(e, results){
+          if (e) {
+            var msg = e.toString();
+            logger.error(msg);
+            obs.error(msg);
+          }
+          if (results) {
+            obs.next(results.ops[0]._id.toString());
+          }
+        })
+      })
+    } catch (e) {
+      logger.error("could not convert to ObjectID: " + sensorId)
+      obs.error(e.toString())
+    }
+
+    return obs.asObservable();
+  };
+
+
   delete(id: string): Observable<Number> {
-    var cn = this._collectionName;
+    var cn = SensorModel._collectionName;
     var obs = new Subject<Number>();
 
     db.connect(function (err, dbObj) {
@@ -95,7 +129,7 @@ export class SensorModel {
   }
 
   deleteAll(): Observable<Number> {
-    var cn = this._collectionName;
+    var cn = SensorModel._collectionName;
     var obs = new Subject<Number>();
 
     db.connect(function (err, dbObj) {
@@ -118,11 +152,11 @@ export class SensorModel {
 
 
   getCollectionName(): string {
-    return this._collectionName;
+    return SensorModel._collectionName;
   }
 
   getByHost(host: string): Observable<ISensor[]> {
-    var cn = this._collectionName;
+    var cn = SensorModel._collectionName;
     var obs = new Subject<ISensor[]>();
     
     db.connect(function (err, dbObj) {
@@ -144,7 +178,7 @@ export class SensorModel {
   }
 
   find(pattern: ISensor): Observable<ISensor[]> {
-    var cn = this._collectionName;
+    var cn = SensorModel._collectionName;
     var obs = new Subject<ISensor[]>();
     var mpattern = this.mongofy(pattern);
     db.connect(function (err, dbObj) {

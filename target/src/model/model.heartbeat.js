@@ -63,15 +63,25 @@ var MongoHeartbeat = /** @class */ (function (_super) {
             sensor.find(pattern).subscribe(function (d) {
                 if (d.length == 0) {
                     sensor.post(pattern).subscribe(function (s) {
-                        obs.next("sensor inserted with id " + s
-                            + " for value " + value.type + " for host " + host);
+                        sensor.postData(s, host, value.type, value.val).subscribe(function (rc) {
+                            obs.next("sensorData inserted with sensor id " + s
+                                + " for value " + value.type + " for host " + host);
+                        });
                     });
                 }
                 if (d.length == 1) {
-                    obs.next("TODO: sensor exists for value " + value.type + " for host " + host);
+                    logger.error("sensorData trying to insert with sensor id " + d[0]._id);
+                    sensor.postData(d[0]._id, host, value.type, value.val).subscribe(function (rc) {
+                        obs.next("sensorData inserted with sensor id " + d[0]._id
+                            + " for value " + value.type + " for host " + host);
+                    }, function (err) {
+                        var msg = "could not post with sensor id " + d[0]._id;
+                        logger.error(msg);
+                        obs.error(msg);
+                    });
                 }
                 if (d.length > 1) {
-                    obs.next("TODO: handle duplicate sensor on same host for value " + value.type + " for host " + host);
+                    obs.error("TODO: handle duplicate sensor on same host for value " + value.type + " for host " + host);
                 }
             });
         }

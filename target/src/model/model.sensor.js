@@ -7,10 +7,9 @@ var Rx_1 = require("rxjs/Rx");
 var SensorModel = /** @class */ (function () {
     function SensorModel() {
         this._schema_version = 1;
-        this._collectionName = db.collectionName('model.sensor');
     }
     SensorModel.prototype.get = function () {
-        var cn = this._collectionName;
+        var cn = SensorModel._collectionName;
         var obs = new Rx_1.Subject();
         var sv = this._schema_version;
         db.connect(function (err, dbObj) {
@@ -27,7 +26,7 @@ var SensorModel = /** @class */ (function () {
         return obs.asObservable();
     };
     SensorModel.prototype.getById = function (id) {
-        var cn = this._collectionName;
+        var cn = SensorModel._collectionName;
         var obs = new Rx_1.Subject();
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
@@ -56,7 +55,7 @@ var SensorModel = /** @class */ (function () {
         var id = "error";
         var ms = new MongoSensorClass(data);
         var obs = new Rx_1.Subject();
-        var cn = this._collectionName;
+        var cn = SensorModel._collectionName;
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
             coll.insert(ms, {}, function (e, results) {
@@ -69,8 +68,40 @@ var SensorModel = /** @class */ (function () {
         });
         return obs.asObservable();
     };
+    SensorModel.prototype.postData = function (sensorId, host, type, val) {
+        var obs = new Rx_1.Subject();
+        var mongoSensorId;
+        try {
+            logger.error("try to convert to ObjectID: " + sensorId);
+            mongoSensorId = mongodb.ObjectID.createFromHexString(sensorId);
+            db.connect(function (err, dbObj) {
+                var coll = dbObj.collection(SensorModel._dataCollectionName);
+                coll.insert({
+                    sensorId: mongoSensorId,
+                    host: host,
+                    type: type,
+                    val: val
+                }, {}, function (e, results) {
+                    if (e) {
+                        var msg = e.toString();
+                        logger.error(msg);
+                        obs.error(msg);
+                    }
+                    if (results) {
+                        obs.next(results.ops[0]._id.toString());
+                    }
+                });
+            });
+        }
+        catch (e) {
+            logger.error("could not convert to ObjectID: " + sensorId);
+            obs.error(e.toString());
+        }
+        return obs.asObservable();
+    };
+    ;
     SensorModel.prototype.delete = function (id) {
-        var cn = this._collectionName;
+        var cn = SensorModel._collectionName;
         var obs = new Rx_1.Subject();
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
@@ -92,7 +123,7 @@ var SensorModel = /** @class */ (function () {
         return obs.asObservable();
     };
     SensorModel.prototype.deleteAll = function () {
-        var cn = this._collectionName;
+        var cn = SensorModel._collectionName;
         var obs = new Rx_1.Subject();
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
@@ -113,10 +144,10 @@ var SensorModel = /** @class */ (function () {
         return obs.asObservable();
     };
     SensorModel.prototype.getCollectionName = function () {
-        return this._collectionName;
+        return SensorModel._collectionName;
     };
     SensorModel.prototype.getByHost = function (host) {
-        var cn = this._collectionName;
+        var cn = SensorModel._collectionName;
         var obs = new Rx_1.Subject();
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
@@ -137,7 +168,7 @@ var SensorModel = /** @class */ (function () {
         return obs.asObservable();
     };
     SensorModel.prototype.find = function (pattern) {
-        var cn = this._collectionName;
+        var cn = SensorModel._collectionName;
         var obs = new Rx_1.Subject();
         var mpattern = this.mongofy(pattern);
         db.connect(function (err, dbObj) {
@@ -177,6 +208,8 @@ var SensorModel = /** @class */ (function () {
         }
         return lrc;
     };
+    SensorModel._collectionName = db.collectionName('model.sensor');
+    SensorModel._dataCollectionName = db.collectionName('model.sensorData');
     return SensorModel;
 }());
 exports.SensorModel = SensorModel;

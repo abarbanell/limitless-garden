@@ -57,7 +57,7 @@ var count = function(name, callback) {
 	});
 }
 
-var collectionName = function(n) {
+var collectionName = function(n: string) {
 		return env + '.'+ n;
 }
 		
