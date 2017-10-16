@@ -133,10 +133,11 @@ describe('util/db tests', function() {
 	
 	it('collectionName is returning proper values', function(done) {
 		var db = rewire('../../src/util/db');
+		var env = process.env.ENVIRONMENT;
 		var collectionName = db.collectionName('model.sensor');
 		var dataCollectionName = db.collectionName('model.sensorData');
-		expect(collectionName).toBe('dev.model.sensor');
-		expect(dataCollectionName).toBe('dev.model.sensorData');
+		expect(collectionName).toBe(env + '.' + 'model.sensor');
+		expect(dataCollectionName).toBe(env + '.' + 'model.sensorData');
 		done();
 	});
 
