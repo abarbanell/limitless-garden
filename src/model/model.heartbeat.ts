@@ -87,7 +87,6 @@ export class Heartbeat extends HeartbeatPayload {
   private static sub =  Heartbeat._pubsub.subscribe(MongoHeartbeat.observeHeartbeat);
 
 
-
   private static _collectionName = db.collectionName('model.heartbeat');
 
   post(): Observable<string> {
@@ -103,13 +102,11 @@ export class Heartbeat extends HeartbeatPayload {
       coll.insert(mongoObject, {}, function(e, results){
         if (e) obs.error(e)
         if (results) {
-          // now process results - fire and forget...
-          // Heartbeat._pubsub.next(mongoObject);
-          // lets first keep this sync at this point
+          // now process results - we do not subscribe to the 
+          // results, just fire & forget
           MongoHeartbeat.observeHeartbeat(mongoObject);
+          // we send back the id of the Heartbeat object in the DB
           obs.next(results.ops[0]._id.toString());
- 
-  
         }
       })
     })
