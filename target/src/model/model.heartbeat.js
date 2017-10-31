@@ -17,19 +17,19 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 var statsd_1 = require("../util/statsd");
 var model_sensor_1 = require("./model.sensor");
-var Value = /** @class */ (function () {
+var Value = (function () {
     function Value() {
     }
     return Value;
 }());
 exports.Value = Value;
-var HeartbeatPayload = /** @class */ (function () {
+var HeartbeatPayload = (function () {
     function HeartbeatPayload() {
     }
     return HeartbeatPayload;
 }());
 exports.HeartbeatPayload = HeartbeatPayload;
-var MongoHeartbeat = /** @class */ (function (_super) {
+var MongoHeartbeat = (function (_super) {
     __extends(MongoHeartbeat, _super);
     function MongoHeartbeat() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -91,7 +91,7 @@ var MongoHeartbeat = /** @class */ (function (_super) {
     return MongoHeartbeat;
 }(HeartbeatPayload));
 exports.MongoHeartbeat = MongoHeartbeat;
-var Heartbeat = /** @class */ (function (_super) {
+var Heartbeat = (function (_super) {
     __extends(Heartbeat, _super);
     function Heartbeat() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -108,10 +108,10 @@ var Heartbeat = /** @class */ (function (_super) {
                 if (e)
                     obs.error(e);
                 if (results) {
-                    // now process results - fire and forget...
-                    // Heartbeat._pubsub.next(mongoObject);
-                    // lets first keep this sync at this point
+                    // now process results - we do not subscribe to the 
+                    // results, just fire & forget
                     MongoHeartbeat.observeHeartbeat(mongoObject);
+                    // we send back the id of the Heartbeat object in the DB
                     obs.next(results.ops[0]._id.toString());
                 }
             });
