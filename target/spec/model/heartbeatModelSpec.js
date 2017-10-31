@@ -72,7 +72,7 @@ describe('Heartbeat Model', function () {
             });
         });
     });
-    it('calls observerHeartbeat() and asserts observable returns 2xinserted message', function (done) {
+    it('calls observeHeartbeat() and asserts observable returns 2xinserted message', function (done) {
         var s = model_heartbeat_1.MongoHeartbeat.fromHeartbeat(hb);
         var obs = model_heartbeat_1.MongoHeartbeat.observeHeartbeat(s);
         expect(obs instanceof Rx_1.Observable).toBe(true);
@@ -84,6 +84,38 @@ describe('Heartbeat Model', function () {
                 done();
             }
         });
+    });
+    it('calls observerHeartbeat() twice and asserts observable returns each 2xinserted message', function (done) {
+        pending("not implemented");
+        // var s = MongoHeartbeat.fromHeartbeat(hb);
+        // var obs = MongoHeartbeat.observeHeartbeat(s);
+        // expect(obs instanceof Observable).toBe(true);
+        // var i = 0
+        // obs.subscribe(msg => {
+        // 	expect(msg).toContain("sensor and sensorData inserted");
+        // 	i++;
+        // 	if (i == 2) {
+        // 		s.uptime++;
+        // 		var obs2 = MongoHeartbeat.observeHeartbeat(s);
+        // 		var i2 = 0;
+        // 		obs2.subscribe(msg2 => {
+        // 			expect(msg2).toContain("sensorData inserted");
+        // 			expect(msg2).not.toContain("sensor and sensorData inserted");
+        // 			i2++;
+        // 			if (i2 == 2) {
+        // 				done();
+        // 			}
+        // 		},
+        // 		err => {
+        // 			expect("unexpected error (2) ").toBe(err);
+        // 			done();
+        // 		});
+        // 	}
+        // },
+        // err => {
+        // 	expect("unexpected error").toBe(err);
+        // 	done();
+        // });
     });
     it('post(full obj) calls observeHeartbeat()', function (done) {
         spyOn(model_heartbeat_1.MongoHeartbeat, 'observeHeartbeat');

@@ -7,6 +7,7 @@ var Rx_1 = require("rxjs/Rx");
 var SensorModel = /** @class */ (function () {
     function SensorModel() {
         this._schema_version = 1;
+        logger.error("TODO: model.sensor constructor - ensure index");
     }
     SensorModel.prototype.get = function () {
         var cn = SensorModel._collectionName;

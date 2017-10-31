@@ -52,9 +52,9 @@ export class MongoHeartbeat extends HeartbeatPayload {
       pattern.type = { name: value.type };
       sensor.find(pattern).subscribe(d => {
         if (d.length == 0 ) {
-          sensor.post(pattern).subscribe(s => {
-            sensor.postData(s, host, value.type, value.val).subscribe(rc => {
-              obs.next("sensorData inserted with sensor id " + s 
+          sensor.post(pattern).subscribe(id => {
+            sensor.postData(id, host, value.type, value.val).subscribe(rc => {
+              obs.next("sensor and sensorData inserted with sensor id " + id 
               + " for value " + value.type + " for host " + host);
             })
           })
@@ -73,6 +73,7 @@ export class MongoHeartbeat extends HeartbeatPayload {
             })
         }
         if (d.length > 1) {
+          logger.error("duplicate sensor: " + util.inspect(d));
           obs.error("TODO: handle duplicate sensor on same host for value " + value.type + " for host " + host);
         }
       })

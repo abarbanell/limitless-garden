@@ -62,9 +62,9 @@ var MongoHeartbeat = /** @class */ (function (_super) {
             pattern.type = { name: value.type };
             sensor.find(pattern).subscribe(function (d) {
                 if (d.length == 0) {
-                    sensor.post(pattern).subscribe(function (s) {
-                        sensor.postData(s, host, value.type, value.val).subscribe(function (rc) {
-                            obs.next("sensorData inserted with sensor id " + s
+                    sensor.post(pattern).subscribe(function (id) {
+                        sensor.postData(id, host, value.type, value.val).subscribe(function (rc) {
+                            obs.next("sensor and sensorData inserted with sensor id " + id
                                 + " for value " + value.type + " for host " + host);
                         });
                     });
@@ -81,6 +81,7 @@ var MongoHeartbeat = /** @class */ (function (_super) {
                     });
                 }
                 if (d.length > 1) {
+                    logger.error("duplicate sensor: " + util.inspect(d));
                     obs.error("TODO: handle duplicate sensor on same host for value " + value.type + " for host " + host);
                 }
             });

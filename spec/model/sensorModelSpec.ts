@@ -169,6 +169,7 @@ describe('SensorModel - not prepopulated', function() {
 		})
 	});
 
+	
 	it('post(obj) can get again', (done) => {
 		var sut = sensor.post({
 			 name: "sensor 4",
@@ -342,6 +343,18 @@ describe('Sensor Model V1 prepopulated', function() {
 			expect(d[1].host).toBe("rpi77");
 			done();
 		})
+	});	
+	
+	it('post same obj twice is blocked', (done) => {
+		pending("not implemented");
+		// sensor.post(data[0]).subscribe(d => {
+		// 	expect("expected error but got: ").toBe(d);
+		// 	done();
+		// },
+		// e => {
+		// 	expect("got error as expected: ").toBe(e);
+		// 	done();
+		// })
 	});
 
 	it('get by host fails for nonexisting host', (done) => {

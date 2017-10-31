@@ -323,6 +323,17 @@ describe('Sensor Model V1 prepopulated', function () {
             done();
         });
     });
+    it('post same obj twice is blocked', function (done) {
+        pending("not implemented");
+        // sensor.post(data[0]).subscribe(d => {
+        // 	expect("expected error but got: ").toBe(d);
+        // 	done();
+        // },
+        // e => {
+        // 	expect("got error as expected: ").toBe(e);
+        // 	done();
+        // })
+    });
     it('get by host fails for nonexisting host', function (done) {
         sensor.getByHost("no-host").subscribe(function (d) {
             expect(d.length).toBe(0);

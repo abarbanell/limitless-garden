@@ -10,6 +10,10 @@ export class SensorModel {
   private static _collectionName = db.collectionName('model.sensor');
   private static _dataCollectionName = db.collectionName('model.sensorData');
 
+  constructor() {
+    logger.error("TODO: model.sensor constructor - ensure index");
+  }
+
   get(): Observable<ISensor[]> {
     var cn = SensorModel._collectionName;
     var obs = new Subject<ISensor[]>();
