@@ -9,7 +9,7 @@ var logger = require('../../src/util/logger');
 
 describe('SensorModel - not prepopulated', function() {
 	beforeEach ((done) => {
-		sensor = new SensorModel();
+		sensor = SensorModel.getInstance();
 		sensor.deleteAll().subscribe(s => {
 			done()
 		})
@@ -311,7 +311,7 @@ describe('Sensor Model V1 prepopulated', function() {
 		}
 	];
 	beforeEach ((done) => {
-		sensor = new SensorModel();
+		sensor = SensorModel.getInstance();
 		sensor.deleteAll().subscribe(s => {
 			var sut1 = sensor.post(data[0]).subscribe(s => {
 			 var sut2 = sensor.post(data[1]).subscribe(s => {
@@ -346,15 +346,15 @@ describe('Sensor Model V1 prepopulated', function() {
 	});	
 	
 	it('post same obj twice is blocked', (done) => {
-		pending("not implemented");
-		// sensor.post(data[0]).subscribe(d => {
-		// 	expect("expected error but got: ").toBe(d);
-		// 	done();
-		// },
-		// e => {
-		// 	expect("got error as expected: ").toBe(e);
-		// 	done();
-		// })
+		pending("not implemented");		
+		sensor.post(data[0]).subscribe(d => {
+			expect("expected error but got: ").toBe(d);
+			done();
+		},
+		e => {
+			expect("got error as expected: ").toBe(e);
+			done();
+		})
 	});
 
 	it('get by host fails for nonexisting host', (done) => {

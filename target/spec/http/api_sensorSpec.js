@@ -17,7 +17,7 @@ var user_key = arr[0];
 var server = require('../../src/server');
 describe('sensor API tests', function () {
     beforeEach(function (done) {
-        var s = new model_sensor_1.SensorModel();
+        var s = model_sensor_1.SensorModel.getInstance();
         s.deleteAll().subscribe(function (s) {
             logger.info('beforeAll: deleted row count is ', s);
             done();

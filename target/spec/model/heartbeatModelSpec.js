@@ -23,7 +23,7 @@ function getHeartbeatObject() {
 describe('Heartbeat Model', function () {
     beforeEach(function (done) {
         hb = getHeartbeatObject();
-        var sensor = new model_sensor_1.SensorModel();
+        var sensor = model_sensor_1.SensorModel.getInstance();
         hb.deleteAll().subscribe(function (hb) {
             sensor.deleteAll().subscribe(function (s) {
                 sensor.get().subscribe(function (res) {
@@ -85,7 +85,7 @@ describe('Heartbeat Model', function () {
             }
         });
     });
-    it('calls observerHeartbeat() twice and asserts observable returns each 2xinserted message', function (done) {
+    it('calls observeHeartbeat() twice and asserts observable returns each 2xinserted message', function (done) {
         pending("not implemented");
         // var s = MongoHeartbeat.fromHeartbeat(hb);
         // var obs = MongoHeartbeat.observeHeartbeat(s);

@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Rx'
 var authenticated = require('../util/authenticated');
 router.use(authenticated.cookieOrApikey);
 
-var sensorModel = new SensorModel();
+var sensorModel = SensorModel.getInstance();
 
 // GET /api/sensors -> list of sensors
 router.get('/', function(req, res, next) {

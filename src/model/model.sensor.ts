@@ -9,9 +9,17 @@ export class SensorModel {
   private _schema_version = 1;
   private static _collectionName = db.collectionName('model.sensor');
   private static _dataCollectionName = db.collectionName('model.sensorData');
+  private static  _instance: SensorModel = null;
 
-  constructor() {
+  private constructor() {
     logger.error("TODO: model.sensor constructor - ensure index");
+  }
+
+  static getInstance() {
+    if (SensorModel._instance == null) {
+      SensorModel._instance = new SensorModel();
+    }
+    return SensorModel._instance;
   }
 
   get(): Observable<ISensor[]> {

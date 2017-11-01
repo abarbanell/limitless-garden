@@ -122,7 +122,7 @@ router.delete('/collections/:collectionName/:id', function (req, res, next) {
         });
     });
 });
-var QueryMapper = (function () {
+var QueryMapper = /** @class */ (function () {
     function QueryMapper() {
     }
     QueryMapper.qmap = function (q) {

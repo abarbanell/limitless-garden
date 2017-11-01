@@ -45,7 +45,7 @@ export class MongoHeartbeat extends HeartbeatPayload {
   static observeHeartbeat(s:MongoHeartbeat): Observable<string> {
     var obs = new Subject<string>();
     var host = s.host;
-    var sensor = new SensorModel();
+    var sensor = SensorModel.getInstance();
     for (var value of s.values) {
       var pattern: ISensor = new Sensor();
       pattern.host = host;

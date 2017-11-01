@@ -17,19 +17,19 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 var statsd_1 = require("../util/statsd");
 var model_sensor_1 = require("./model.sensor");
-var Value = (function () {
+var Value = /** @class */ (function () {
     function Value() {
     }
     return Value;
 }());
 exports.Value = Value;
-var HeartbeatPayload = (function () {
+var HeartbeatPayload = /** @class */ (function () {
     function HeartbeatPayload() {
     }
     return HeartbeatPayload;
 }());
 exports.HeartbeatPayload = HeartbeatPayload;
-var MongoHeartbeat = (function (_super) {
+var MongoHeartbeat = /** @class */ (function (_super) {
     __extends(MongoHeartbeat, _super);
     function MongoHeartbeat() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -54,7 +54,7 @@ var MongoHeartbeat = (function (_super) {
     MongoHeartbeat.observeHeartbeat = function (s) {
         var obs = new Rx_1.Subject();
         var host = s.host;
-        var sensor = new model_sensor_1.SensorModel();
+        var sensor = model_sensor_1.SensorModel.getInstance();
         for (var _i = 0, _a = s.values; _i < _a.length; _i++) {
             var value = _a[_i];
             var pattern = new model_sensor_1.Sensor();
@@ -91,7 +91,7 @@ var MongoHeartbeat = (function (_super) {
     return MongoHeartbeat;
 }(HeartbeatPayload));
 exports.MongoHeartbeat = MongoHeartbeat;
-var Heartbeat = (function (_super) {
+var Heartbeat = /** @class */ (function (_super) {
     __extends(Heartbeat, _super);
     function Heartbeat() {
         return _super !== null && _super.apply(this, arguments) || this;

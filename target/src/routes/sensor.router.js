@@ -7,7 +7,7 @@ var util = require('util');
 var model_sensor_1 = require("../model/model.sensor");
 var authenticated = require('../util/authenticated');
 router.use(authenticated.cookieOrApikey);
-var sensorModel = new model_sensor_1.SensorModel();
+var sensorModel = model_sensor_1.SensorModel.getInstance();
 // GET /api/sensors -> list of sensors
 router.get('/', function (req, res, next) {
     logger.info("sensor.route: GET /api/sensors");

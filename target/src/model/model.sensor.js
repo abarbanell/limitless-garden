@@ -4,11 +4,17 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 var mongodb = require("mongodb");
 var Rx_1 = require("rxjs/Rx");
-var SensorModel = (function () {
+var SensorModel = /** @class */ (function () {
     function SensorModel() {
         this._schema_version = 1;
         logger.error("TODO: model.sensor constructor - ensure index");
     }
+    SensorModel.getInstance = function () {
+        if (SensorModel._instance == null) {
+            SensorModel._instance = new SensorModel();
+        }
+        return SensorModel._instance;
+    };
     SensorModel.prototype.get = function () {
         var cn = SensorModel._collectionName;
         var obs = new Rx_1.Subject();
@@ -211,16 +217,17 @@ var SensorModel = (function () {
     };
     SensorModel._collectionName = db.collectionName('model.sensor');
     SensorModel._dataCollectionName = db.collectionName('model.sensorData');
+    SensorModel._instance = null;
     return SensorModel;
 }());
 exports.SensorModel = SensorModel;
-var Sensor = (function () {
+var Sensor = /** @class */ (function () {
     function Sensor() {
     }
     return Sensor;
 }());
 exports.Sensor = Sensor;
-var MongoSensorClass = (function () {
+var MongoSensorClass = /** @class */ (function () {
     function MongoSensorClass(is) {
         this._id = null;
         this.schema_version = 1;

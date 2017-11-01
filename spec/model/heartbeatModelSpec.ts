@@ -25,7 +25,7 @@ function getHeartbeatObject() {
 describe('Heartbeat Model', function () {
 	beforeEach((done) => {
 		hb = getHeartbeatObject();
-		var sensor = new SensorModel();
+		var sensor = SensorModel.getInstance();
 		hb.deleteAll().subscribe(hb => {
 			sensor.deleteAll().subscribe(s => {
 				sensor.get().subscribe(res => {
@@ -95,7 +95,7 @@ describe('Heartbeat Model', function () {
 		});
 	});
 
-	it('calls observerHeartbeat() twice and asserts observable returns each 2xinserted message', function (done) {
+	it('calls observeHeartbeat() twice and asserts observable returns each 2xinserted message', function (done) {
 		pending("not implemented");
 		// var s = MongoHeartbeat.fromHeartbeat(hb);
 

@@ -21,7 +21,7 @@ var server = require('../../src/server');
 
 describe('sensor API tests', function() {
 	beforeEach(done => {
-		var s = new SensorModel();
+		var s = SensorModel.getInstance();
 		s.deleteAll().subscribe(s => { 
 			logger.info('beforeAll: deleted row count is ', s);
 			done(); 
