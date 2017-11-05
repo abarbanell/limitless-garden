@@ -46,3 +46,10 @@ So you need network to start the devenv VM, but then you can continue to work of
 
 *Note: sometimes the dokku application just hangs and responds with
 error 502 or 503 from nginx. Have not yet found out why.*
+
+
+## More information
+
+- [dokku installation](dokku.md)
+- [angular 5 setup](angular5.md)
+
