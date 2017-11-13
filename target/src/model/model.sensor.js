@@ -4,11 +4,33 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 var mongodb = require("mongodb");
 var Rx_1 = require("rxjs/Rx");
+var util = require("util");
 var SensorModel = /** @class */ (function () {
     function SensorModel() {
         this._schema_version = 1;
-        logger.error("TODO: model.sensor constructor - ensure index");
+        this.createIndex();
     }
+    SensorModel.prototype.createIndex = function () {
+        logger.error("model.sensor.createIndex - called");
+        var options = { unique: true, background: true, w: 1 };
+        db.connect(function (err, dbObj) {
+            var collection = dbObj.collection(SensorModel._collectionName);
+            // delete all - remove this later...
+            collection.deleteMany({}, function (e, results) {
+                collection.createIndex({ name: 1 }, options, function (err, indexName) {
+                    logger.error("model.sensor.createIndex - callback");
+                    if (err) {
+                        logger.error("model.sensor.createIndex - error: %s", err);
+                    }
+                    if (indexName) {
+                        SensorModel._indexName = indexName;
+                        logger.error("model.sensor.createIndex - indexName: %s", util.inspect(indexName));
+                    }
+                });
+            });
+        });
+        logger.error("model.sensor.createIndex - return(void)");
+    };
     SensorModel.getInstance = function () {
         if (SensorModel._instance == null) {
             SensorModel._instance = new SensorModel();
@@ -60,18 +82,28 @@ var SensorModel = /** @class */ (function () {
     };
     SensorModel.prototype.post = function (data) {
         var id = "error";
+        if (!data.name) {
+            data.name = data.host + "." + data.type;
+            logger.error("sensor.post(): name set to %s", data.name);
+        }
         var ms = new MongoSensorClass(data);
         var obs = new Rx_1.Subject();
         var cn = SensorModel._collectionName;
         db.connect(function (err, dbObj) {
             var coll = dbObj.collection(cn);
-            coll.insert(ms, {}, function (e, results) {
-                if (e)
-                    obs.error(e);
-                if (results) {
-                    obs.next(results.ops[0]._id.toString());
-                }
-            });
+            try {
+                coll.insert(ms, {}, function (e, results) {
+                    if (e) {
+                        return obs.error("insert error: " + e);
+                    }
+                    if (results) {
+                        return obs.next(results.ops[0]._id.toString());
+                    }
+                });
+            }
+            catch (ex) {
+                obs.error("exception: " + ex);
+            }
         });
         return obs.asObservable();
     };
@@ -79,8 +111,8 @@ var SensorModel = /** @class */ (function () {
         var obs = new Rx_1.Subject();
         var mongoSensorId;
         try {
-            logger.error("try to convert to ObjectID: " + sensorId);
-            mongoSensorId = mongodb.ObjectID.createFromHexString(sensorId);
+            logger.error("sensor.postData() - try to convert to ObjectID: " + sensorId);
+            mongoSensorId = mongodb.ObjectID.createFromHexString(sensorId.toString());
             db.connect(function (err, dbObj) {
                 var coll = dbObj.collection(SensorModel._dataCollectionName);
                 coll.insert({
@@ -101,7 +133,7 @@ var SensorModel = /** @class */ (function () {
             });
         }
         catch (e) {
-            logger.error("could not convert to ObjectID: " + sensorId);
+            logger.error("sensor.postData() - could not convert to ObjectID: %s, error: %s", sensorId, e.toString());
             obs.error(e.toString());
         }
         return obs.asObservable();
@@ -208,16 +240,14 @@ var SensorModel = /** @class */ (function () {
             lrc.name = s.name;
         }
         if (s.type) {
-            lrc.type = {};
-            if (s.type.name) {
-                lrc.type.name = s.type.name;
-            }
+            lrc.type = s.type;
         }
         return lrc;
     };
     SensorModel._collectionName = db.collectionName('model.sensor');
     SensorModel._dataCollectionName = db.collectionName('model.sensorData');
     SensorModel._instance = null;
+    SensorModel._indexName = null;
     return SensorModel;
 }());
 exports.SensorModel = SensorModel;
@@ -233,7 +263,7 @@ var MongoSensorClass = /** @class */ (function () {
         this.schema_version = 1;
         this.name = null;
         this.host = null;
-        this.type = { name: null };
+        this.type = null;
         if (is._id) {
             this._id = new mongodb.ObjectId.createFromHexString(is._id);
         }

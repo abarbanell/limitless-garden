@@ -10,9 +10,18 @@ var user_key = obj[0];
 var port = process.env.TEST_PORT || "4321";
 process.env.PORT = port;
 import * as server from '../../src/server';
+import { SensorModel } from '../../src/model/model.sensor';
+import { HeartbeatPayload } from '../../src/model/model.heartbeat';
 
 
 describe('heartbeat route test', function() {
+	beforeEach(done => {
+		var s = SensorModel.getInstance();
+		s.deleteAll().subscribe(s => { 
+			logger.error('beforeAll: deleted sensor row count is ', s);
+			done(); 
+		});
+	})
 	it('server should be valid', function(done){
 		expect(server).toBeTruthy();
 		expect(server.listen).toBeDefined();
@@ -52,13 +61,14 @@ describe('heartbeat route test', function() {
 			done();
 		});
 	})
+
 	it('POST heartbeat - payload with values', (done) => {
     var payload = { 
       host: "ESP_TEST",
 			uptime: (new Date()).getMinutes(),
 			i2cDevices: 0,
 			values: [ 
-				{type: "soil", val: 17}, 
+				{ type: "soil", val: 17}, 
 				{ type: "temperature", val: 27.3} 
 			]
 		}
@@ -79,12 +89,12 @@ describe('heartbeat route test', function() {
   })
 
   it('GET heartbeat by ID - payload with values', (done) => {
-    var payload = { 
+    let payload: HeartbeatPayload = { 
       host: "ESP_TEST",
 			uptime: (new Date()).getMinutes(),
 			i2cDevices: 0,
 			values: [ 
-				{type: "soil", val: 17}, 
+				{ type: "soil", val: 17}, 
 				{ type: "temperature", val: 27.3} 
 			]
 		}

@@ -6,8 +6,33 @@ var util = require('util');
 var sensor;
 var logger = require('../../src/util/logger');
 // var sensorHelper = require('../helpers/sensor');
+var data = [
+    {
+        name: "sensor 43",
+        host: "rpi77",
+        type: "soil"
+    },
+    {
+        name: "sensor 44",
+        host: "rpi77",
+        type: "soil"
+    },
+    {
+        name: "sensor 01",
+        host: "rpi01",
+        type: "soil"
+    }
+];
 describe('SensorModel - not prepopulated', function () {
     beforeEach(function (done) {
+        sensor = model_sensor_1.SensorModel.getInstance();
+        sensor.deleteAll().subscribe(function (s) {
+            logger.error("SensorModel.deleteAll() affected %d rows", s);
+            done();
+        });
+    });
+    afterEach(function (done) {
+        logger.error("TODO: sensorModelSpec.ts change to afterAll()");
         sensor = model_sensor_1.SensorModel.getInstance();
         sensor.deleteAll().subscribe(function (s) {
             done();
@@ -30,40 +55,35 @@ describe('SensorModel - not prepopulated', function () {
         var id = sensor.post({
             name: "sensor 3",
             host: "rpi99",
-            type: {
-                name: "soil"
-            }
+            type: "soil"
         });
         id.subscribe(function (strId) {
             expect(strId).toEqual(jasmine.any(String));
             logger.info("id = ", strId);
             var sut = sensor.getById(strId);
             sut.subscribe(function (s) {
+                expect(s).toBeDefined();
                 expect(s._id).toBe(strId);
                 done();
             }, function (e) {
                 expect(e.toString()).toContain("you should not get here");
                 done();
             });
-            done();
         }, function (e) {
             expect(e).toBe("you-should-not-get-here-either");
             done();
         });
     });
     it('getById missing id', function (done) {
-        var id = sensor.post({
+        sensor.post({
             name: "sensor 3",
             host: "rpi99",
-            type: {
-                name: "soil"
-            }
-        });
-        id.subscribe(function (strId) {
+            type: "soil"
+        }).subscribe(function (strId) {
             var nonExistingId = "58cd177e9900ff4a2a741bbc";
             expect(strId).toEqual(jasmine.any(String));
-            logger.info("inserted id = ", strId);
-            logger.info("non-existing id = ", nonExistingId);
+            logger.error("inserted id = ", strId);
+            logger.error("non-existing id = ", nonExistingId);
             expect(strId).not.toBe(nonExistingId);
             var sut = sensor.getById(nonExistingId);
             sut.subscribe(function (s) {
@@ -99,13 +119,12 @@ describe('SensorModel - not prepopulated', function () {
         var sut = sensor.post({
             name: "sensor 3",
             host: "rpi99",
-            type: {
-                name: "soil"
-            }
+            type: "soil"
         });
         expect(sut instanceof Rx_1.Observable).toBe(true);
         sut.subscribe(function (s) {
             expect(s).toEqual(jasmine.any(String));
+            expect(s.length).toBe(24);
             done();
         });
     });
@@ -113,9 +132,7 @@ describe('SensorModel - not prepopulated', function () {
         var sut = sensor.post({
             name: "sensor 3",
             host: "rpi99",
-            type: {
-                name: "soil"
-            }
+            type: "soil"
         });
         expect(sut instanceof Rx_1.Observable).toBe(true);
         sut.subscribe(function (s) {
@@ -126,32 +143,23 @@ describe('SensorModel - not prepopulated', function () {
             });
         });
     });
-    it('multiple post(obj) can find by pattern', function (done) {
-        var sut1 = sensor.post({
-            name: "sensor 44",
-            host: "rpi99",
-            type: {
-                name: "soil"
-            }
-        });
+    it('multiple post(obj) can find by name', function (done) {
+        var sut1 = sensor.post(data[0]);
         expect(sut1 instanceof Rx_1.Observable).toBe(true);
         sut1.subscribe(function (s) {
-            var sut2 = sensor.post({
-                name: "sensor 42",
-                host: "rpi01",
-                type: {
-                    name: "soil"
-                }
-            });
+            logger.error("sensor inserted as id %s: %s", s, util.inspect(data[0]));
+            var sut2 = sensor.post(data[1]);
             expect(sut2 instanceof Rx_1.Observable).toBe(true);
             sut2.subscribe(function (s) {
+                logger.error("sensor inserted as id %s: %s", s, util.inspect(data[1]));
                 expect(s).toEqual(jasmine.any(String));
-                var sen = new model_sensor_1.Sensor();
-                sen.host = "rpi01";
-                sen.type = { name: "soil" };
-                sensor.find(sen).subscribe(function (d) {
+                var pattern = new model_sensor_1.Sensor();
+                pattern.name = data[1].name;
+                logger.error("pattern for find: %s", util.inspect(pattern));
+                sensor.find(pattern).subscribe(function (d) {
+                    logger.error("find %s returned: %s", util.inspect(pattern), util.inspect(d));
                     expect(d.length).toBe(1);
-                    expect(d[0].host).toBe("rpi01");
+                    expect(d[0].host).toBe(data[1].host);
                     done();
                 });
             });
@@ -161,9 +169,7 @@ describe('SensorModel - not prepopulated', function () {
         var sut = sensor.post({
             name: "sensor 4",
             host: "rpi99",
-            type: {
-                name: "soil"
-            }
+            type: "soil"
         });
         expect(sut instanceof Rx_1.Observable).toBe(true);
         sut.subscribe(function (s) {
@@ -179,9 +185,7 @@ describe('SensorModel - not prepopulated', function () {
         var sut = sensor.post({
             name: "sensor 3",
             host: "rpi99",
-            type: {
-                name: "soil"
-            }
+            type: "soil"
         });
         expect(sut instanceof Rx_1.Observable).toBe(true);
         sut.subscribe(function (s) {
@@ -196,9 +200,7 @@ describe('SensorModel - not prepopulated', function () {
         var sut = sensor.post({
             name: "sensor 3",
             host: "rpi99",
-            type: {
-                name: "soil"
-            }
+            type: "soil"
         });
         expect(sut instanceof Rx_1.Observable).toBe(true);
         sut.subscribe(function (s) {
@@ -213,18 +215,14 @@ describe('SensorModel - not prepopulated', function () {
         var sut1 = sensor.post({
             name: "sensor 44",
             host: "rpi99",
-            type: {
-                name: "soil"
-            }
+            type: "soil"
         });
         expect(sut1 instanceof Rx_1.Observable).toBe(true);
         sut1.subscribe(function (s) {
             var sut2 = sensor.post({
                 name: "sensor 42",
                 host: "rpi01",
-                type: {
-                    name: "soil"
-                }
+                type: "soil"
             });
             expect(sut2 instanceof Rx_1.Observable).toBe(true);
             sut2.subscribe(function (s) {
@@ -241,18 +239,14 @@ describe('SensorModel - not prepopulated', function () {
         var sut1 = sensor.post({
             name: "sensor 44",
             host: "rpi77",
-            type: {
-                name: "soil"
-            }
+            type: "soil"
         });
         expect(sut1 instanceof Rx_1.Observable).toBe(true);
         sut1.subscribe(function (s) {
             var sut2 = sensor.post({
                 name: "sensor 42",
                 host: "rpi77",
-                type: {
-                    name: "soil"
-                }
+                type: "soil"
             });
             expect(sut2 instanceof Rx_1.Observable).toBe(true);
             sut2.subscribe(function (s) {
@@ -268,31 +262,8 @@ describe('SensorModel - not prepopulated', function () {
     });
 });
 describe('Sensor Model V1 prepopulated', function () {
-    var data = [
-        {
-            name: "sensor 43",
-            host: "rpi77",
-            type: {
-                name: "soil"
-            }
-        },
-        {
-            name: "sensor 44",
-            host: "rpi77",
-            type: {
-                name: "soil"
-            }
-        },
-        {
-            name: "sensor 01",
-            host: "rpi01",
-            type: {
-                name: "soil"
-            }
-        }
-    ];
     beforeEach(function (done) {
-        sensor = model_sensor_1.SensorModel.getInstance();
+        var sensor = model_sensor_1.SensorModel.getInstance();
         sensor.deleteAll().subscribe(function (s) {
             var sut1 = sensor.post(data[0]).subscribe(function (s) {
                 var sut2 = sensor.post(data[1]).subscribe(function (s) {
@@ -324,12 +295,12 @@ describe('Sensor Model V1 prepopulated', function () {
         });
     });
     it('post same obj twice is blocked', function (done) {
-        pending("not implemented");
+        // pending("not implemented");		
         sensor.post(data[0]).subscribe(function (d) {
             expect("expected error but got: ").toBe(d);
             done();
         }, function (e) {
-            expect("got error as expected: ").toBe(e);
+            expect(e).toContain("E11000 duplicate key error");
             done();
         });
     });
@@ -339,11 +310,22 @@ describe('Sensor Model V1 prepopulated', function () {
             done();
         });
     });
+    it('find all yields three result2', function (done) {
+        var pattern = new model_sensor_1.Sensor();
+        logger.error("find pattern: %s", util.inspect(pattern));
+        sensor.find(pattern).subscribe(function (d) {
+            logger.error("find result: %s", util.inspect(d));
+            expect(d.length).toBe(3);
+            done();
+        });
+    });
     it('find by host and type yields single result', function (done) {
         var pattern = new model_sensor_1.Sensor();
         pattern.host = "rpi01";
-        pattern.type = { name: "soil" };
+        pattern.type = "soil";
+        logger.error("find pattern: %s", util.inspect(pattern));
         sensor.find(pattern).subscribe(function (d) {
+            logger.error("find result: %s", util.inspect(d));
             expect(d.length).toBe(1);
             done();
         });
@@ -351,8 +333,10 @@ describe('Sensor Model V1 prepopulated', function () {
     it('find by host and type yields duplicate', function (done) {
         var pattern = new model_sensor_1.Sensor();
         pattern.host = "rpi77";
-        pattern.type = { name: "soil" };
+        pattern.type = "soil";
+        logger.error("find pattern: %s", util.inspect(pattern));
         sensor.find(pattern).subscribe(function (d) {
+            logger.error("find result: %s", util.inspect(d));
             expect(d.length).toBe(2);
             done();
         });
@@ -360,7 +344,7 @@ describe('Sensor Model V1 prepopulated', function () {
     it('find by host and type yields no result', function (done) {
         var pattern = new model_sensor_1.Sensor();
         pattern.host = "rpi99";
-        pattern.type = { name: "soil" };
+        pattern.type = "soil";
         sensor.find(pattern).subscribe(function (d) {
             expect(d.length).toBe(0);
             done();

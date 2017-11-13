@@ -28,9 +28,8 @@ describe('Heartbeat Model', function () {
 		var sensor = SensorModel.getInstance();
 		hb.deleteAll().subscribe(hb => {
 			sensor.deleteAll().subscribe(s => {
-				sensor.get().subscribe(res => {
-					done();
-				})
+				logger.error("beforeEach: Heartbeat and Sensor deleteAll() done'");
+				done();
 			})
 		})
 	});
@@ -89,44 +88,48 @@ describe('Heartbeat Model', function () {
 		obs.subscribe(msg => {
 			expect(msg).toContain("inserted");
 			i++;
+			logger.error("observeHeartBeat() response %d is %s", i, msg);
 			if (i == 2) {
 				done();
 			}
+		},
+		err => {
+			expect(err).toBe("unexpected");
+			done();
 		});
 	});
 
 	it('calls observeHeartbeat() twice and asserts observable returns each 2xinserted message', function (done) {
-		pending("not implemented");
-		// var s = MongoHeartbeat.fromHeartbeat(hb);
+		var s = MongoHeartbeat.fromHeartbeat(hb);
 
-		// var obs = MongoHeartbeat.observeHeartbeat(s);
-		// expect(obs instanceof Observable).toBe(true);
-		// var i = 0
-		// obs.subscribe(msg => {
-		// 	expect(msg).toContain("sensor and sensorData inserted");
-		// 	i++;
-		// 	if (i == 2) {
-		// 		s.uptime++;
-		// 		var obs2 = MongoHeartbeat.observeHeartbeat(s);
-		// 		var i2 = 0;
-		// 		obs2.subscribe(msg2 => {
-		// 			expect(msg2).toContain("sensorData inserted");
-		// 			expect(msg2).not.toContain("sensor and sensorData inserted");
-		// 			i2++;
-		// 			if (i2 == 2) {
-		// 				done();
-		// 			}
-		// 		},
-		// 		err => {
-		// 			expect("unexpected error (2) ").toBe(err);
-		// 			done();
-		// 		});
-		// 	}
-		// },
-		// err => {
-		// 	expect("unexpected error").toBe(err);
-		// 	done();
-		// });
+		var obs = MongoHeartbeat.observeHeartbeat(s);
+		expect(obs instanceof Observable).toBe(true);
+		var i = 0
+		obs.subscribe(msg => {
+			expect(msg).toContain("sensor and sensorData inserted");
+			i++;
+			if (i == 2) {
+				s.uptime++;
+				var obs2 = MongoHeartbeat.observeHeartbeat(s);
+				var i2 = 0;
+				obs2.subscribe(msg2 => {
+					expect(msg2).toContain("sensorData inserted");
+					expect(msg2).not.toContain("sensor and sensorData inserted");
+					i2++;
+					if (i2 == 2) {
+						done();
+					}
+				},
+				err => {
+					expect("unexpected error (2) ").toBe(err);
+					done();
+				});
+			}
+		},
+		err => {
+			expect("unexpected error").toBe(err);
+			done();
+		});
 	});
 
 	it('post(full obj) calls observeHeartbeat()', (done) => {
@@ -143,25 +146,22 @@ describe('Heartbeat Model', function () {
 describe("heartbeat model prepopulated tests", function () {
 	var insertedId: string;
 	beforeEach((done) => {
-		hb = new Heartbeat();
+		hb = getHeartbeatObject();
 		hb.deleteAll().subscribe(s => {
-			hb.host = "ESP_TEST";
-			hb.uptime = (new Date()).getMinutes();
-			hb.i2cDevices = 0
-			hb.values = [
-				{ type: "soil", val: 17 },
-				{ type: "temperature", val: 27.3 }
-			];
 			hb.post().subscribe(s => {
 				expect(s).toEqual(jasmine.any(String));
 				insertedId = s;
 				done()
-			});
+			},
+			e => {
+				expect(e).toBeUndefined();
+				done();
+			}
+		);
 		});
 	});
 
 	it('deleteAll', (done) => {
-		var hb: Heartbeat = new Heartbeat();
 		hb.deleteAll().subscribe(d => {
 			expect(d).toEqual(1);
 			done();
@@ -176,7 +176,6 @@ describe("heartbeat model prepopulated tests", function () {
 	});
 
 	it('get by ID - NOT FOUND', (done) => {
-		var hb = new Heartbeat();
 		hb.deleteAll().subscribe(removed => {
 			Heartbeat.getByID(insertedId).subscribe(d => {
 				expect("Failed to get an exception").toBe("NOT FOUND");

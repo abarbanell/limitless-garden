@@ -47,27 +47,33 @@ export class MongoHeartbeat extends HeartbeatPayload {
     var host = s.host;
     var sensor = SensorModel.getInstance();
     for (var value of s.values) {
-      var pattern: ISensor = new Sensor();
+      logger.error("observeHeartbeat() - value to insert: %s", util.inspect(value));
+      // problem is var (global scope) vs let (local scope) - should be fine now...
+      let pattern: ISensor = new Sensor();
       pattern.host = host;
-      pattern.type = { name: value.type };
+      pattern.type = value.type;
+      logger.error("observeHeartbeat() - going to find existing sensor pattern: %s", 
+          util.inspect(pattern));
       sensor.find(pattern).subscribe(d => {
+        logger.error("observeHeartbeat() - find existing sensor pattern: %s - found entries %s", 
+          util.inspect(pattern), util.inspect(d))
         if (d.length == 0 ) {
           sensor.post(pattern).subscribe(id => {
             sensor.postData(id, host, value.type, value.val).subscribe(rc => {
-              obs.next("sensor and sensorData inserted with sensor id " + id 
+              obs.next("observeHeartbeat() - sensor and sensorData inserted with sensor id " + id 
               + " for value " + value.type + " for host " + host);
             })
           })
         } 
         if (d.length == 1) {
-          logger.error("sensorData trying to insert with sensor id " + d[0]._id)
+          logger.error("observeHeartbeat() - sensorData trying to insert with sensor id " + d[0]._id)
           sensor.postData(d[0]._id, host, value.type, value.val).subscribe(
             rc => {
-            obs.next("sensorData inserted with sensor id " + d[0]._id 
+            obs.next("observeHeartBeat() - sensorData inserted with sensor id " + d[0]._id 
             + " for value " + value.type + " for host " + host);
             },
             err => {
-              var msg = "could not post with sensor id " + d[0]._id;
+              var msg = "observeHeartbeat() - could not post with sensor id " + d[0]._id;
               logger.error(msg)
               obs.error(msg)
             })

@@ -7,8 +7,35 @@ var sensor: SensorModel;
 var logger = require('../../src/util/logger');
 // var sensorHelper = require('../helpers/sensor');
 
+var data: ISensor[] = [
+	{
+		name: "sensor 43",
+		host: "rpi77",
+		type: "soil"
+	},
+	{
+		name: "sensor 44",
+		host: "rpi77",
+		type: "soil"
+	},
+	{
+		name: "sensor 01",
+		host: "rpi01",
+		type: "soil"
+	}
+];
+
 describe('SensorModel - not prepopulated', function() {
 	beforeEach ((done) => {
+		sensor = SensorModel.getInstance();
+		sensor.deleteAll().subscribe(s => {
+			logger.error("SensorModel.deleteAll() affected %d rows", s)
+			done()
+		})
+	});
+
+	afterEach ((done) => {
+		logger.error("TODO: sensorModelSpec.ts change to afterAll()");
 		sensor = SensorModel.getInstance();
 		sensor.deleteAll().subscribe(s => {
 			done()
@@ -32,43 +59,38 @@ describe('SensorModel - not prepopulated', function() {
 
 	it('getById valid id', (done) => {
 		var id = sensor.post({
-			 name: "sensor 3",
-    	 host: "rpi99",
-    	 type: {
-      	name: "soil"
-    	 }
+			name: "sensor 3",
+			host: "rpi99",
+			type: "soil"
 		});
 		id.subscribe(strId => {
 			expect(strId).toEqual(jasmine.any(String));
 			logger.info("id = ", strId);
 			var sut = sensor.getById(strId);
 			sut.subscribe(s => {
+				expect(s).toBeDefined();
 				expect(s._id).toBe(strId);
 				done();
 			}, e => {
 				expect(e.toString()).toContain("you should not get here");
 				done();
-		})
-			done();
+			})
 		}, e => {
 			expect(e).toBe("you-should-not-get-here-either");
-		 	done();
+			done();
 		});
 	});
 
 	it('getById missing id', (done) => {
-		var id = sensor.post({
-			 name: "sensor 3",
-    	 host: "rpi99",
-    	 type: {
-      	name: "soil"
-    	 }
-		});
-		id.subscribe(strId => {
+		sensor.post({
+			name: "sensor 3",
+			host: "rpi99",
+			type: "soil"
+		}).subscribe(strId => {
 			let nonExistingId = "58cd177e9900ff4a2a741bbc";
 			expect(strId).toEqual(jasmine.any(String));
-			logger.info("inserted id = ", strId);
-			logger.info("non-existing id = ", nonExistingId);
+			logger.error("inserted id = ", strId);
+			logger.error("non-existing id = ", nonExistingId);
 			expect(strId).not.toBe(nonExistingId);
 			var sut = sensor.getById(nonExistingId);
 			sut.subscribe(s => {
@@ -105,27 +127,24 @@ describe('SensorModel - not prepopulated', function() {
 
 	it('post(obj) returns string ID', (done) => {
 		var sut = sensor.post({
-			 name: "sensor 3",
-    	 host: "rpi99",
-    	 type: {
-      	name: "soil"
-    	 }
-			});
+			name: "sensor 3",
+			host: "rpi99",
+			type: "soil"
+		});
 		expect(sut instanceof Observable).toBe(true);
 		sut.subscribe(s => {
 			expect(s).toEqual(jasmine.any(String));
+			expect(s.length).toBe(24);
 			done();
 		})
 	});
 
 	it('post(obj) can getByID again', (done) => {
 		var sut = sensor.post({
-			 name: "sensor 3",
-    	 host: "rpi99",
-    	 type: {
-      	name: "soil"
-    	 }
-			});
+			name: "sensor 3",
+			host: "rpi99",
+			type: "soil"
+		});
 		expect(sut instanceof Observable).toBe(true);
 		sut.subscribe(s => {
 			expect(s).toEqual(jasmine.any(String));
@@ -137,32 +156,23 @@ describe('SensorModel - not prepopulated', function() {
 	});
 
 
-	it('multiple post(obj) can find by pattern', (done) => {
-		var sut1 = sensor.post({
-			 name: "sensor 44",
-    	 host: "rpi99",
-    	 type: {
-      	name: "soil"
-    	 }
-			});
+	it('multiple post(obj) can find by name', (done) => {
+		let sut1 = sensor.post(data[0]);
 		expect(sut1 instanceof Observable).toBe(true);
 		sut1.subscribe(s => {
-			var sut2 = sensor.post({
-				name: "sensor 42",
-				host: "rpi01",
-				type: {
-				 name: "soil"
-				}
-			});
+			logger.error("sensor inserted as id %s: %s", s, util.inspect(data[0]));
+			let sut2 = sensor.post(data[1]);
 			expect(sut2 instanceof Observable).toBe(true);
 			sut2.subscribe(s => {
+				logger.error("sensor inserted as id %s: %s", s, util.inspect(data[1]));
 				expect(s).toEqual(jasmine.any(String));
-				var sen = new Sensor();
-				sen.host = "rpi01";
-				sen.type = { name: "soil"} ;
-				sensor.find(sen).subscribe(d => {
+				let pattern = new Sensor();
+				pattern.name = data[1].name;
+				logger.error("pattern for find: %s", util.inspect(pattern));
+				sensor.find(pattern).subscribe(d => {
+						logger.error("find %s returned: %s", util.inspect(pattern), util.inspect(d));
 					expect(d.length).toBe(1);
-					expect(d[0].host).toBe("rpi01");
+					expect(d[0].host).toBe(data[1].host);
 					done();
 				})
 			})
@@ -172,12 +182,10 @@ describe('SensorModel - not prepopulated', function() {
 	
 	it('post(obj) can get again', (done) => {
 		var sut = sensor.post({
-			 name: "sensor 4",
-    	 host: "rpi99",
-    	 type: {
-      	name: "soil"
-    	 }
-			});
+			name: "sensor 4",
+			host: "rpi99",
+			type: "soil"
+		});
 		expect(sut instanceof Observable).toBe(true);
 		sut.subscribe(s => {
 			expect(s).toEqual(jasmine.any(String));
@@ -191,12 +199,10 @@ describe('SensorModel - not prepopulated', function() {
 
 	it('post(obj) can delete again', (done) => {
 		var sut = sensor.post({
-			 name: "sensor 3",
-    	 host: "rpi99",
-    	 type: {
-      	name: "soil"
-    	 }
-			});
+			name: "sensor 3",
+			host: "rpi99",
+			type: "soil"
+		});
 		expect(sut instanceof Observable).toBe(true);
 		sut.subscribe(s => {
 			expect(s).toEqual(jasmine.any(String));
@@ -208,12 +214,10 @@ describe('SensorModel - not prepopulated', function() {
 	});
 
 		it('post(obj) and deleteAll', (done) => {
-		var sut = sensor.post({
-			 name: "sensor 3",
-    	 host: "rpi99",
-    	 type: {
-      	name: "soil"
-    	 }
+			var sut = sensor.post({
+				name: "sensor 3",
+				host: "rpi99",
+				type: "soil"
 			});
 		expect(sut instanceof Observable).toBe(true);
 		sut.subscribe(s => {
@@ -227,20 +231,16 @@ describe('SensorModel - not prepopulated', function() {
 
 	it('multiple post(obj) can get by host', (done) => {
 		var sut1 = sensor.post({
-			 name: "sensor 44",
-    	 host: "rpi99",
-    	 type: {
-      	name: "soil"
-    	 }
-			});
+			name: "sensor 44",
+			host: "rpi99",
+			type: "soil"
+		});
 		expect(sut1 instanceof Observable).toBe(true);
 		sut1.subscribe(s => {
 			var sut2 = sensor.post({
 				name: "sensor 42",
 				host: "rpi01",
-				type: {
-				 name: "soil"
-				}
+				type: "soil"
 			});
 			expect(sut2 instanceof Observable).toBe(true);
 			sut2.subscribe(s => {
@@ -257,20 +257,16 @@ describe('SensorModel - not prepopulated', function() {
 
 	it('multiple post(obj) and get by host returns multiple', (done) => {
 		var sut1 = sensor.post({
-			 name: "sensor 44",
-    	 host: "rpi77",
-    	 type: {
-      	name: "soil"
-    	 }
-			});
+			name: "sensor 44",
+			host: "rpi77",
+			type: "soil"
+		});
 		expect(sut1 instanceof Observable).toBe(true);
 		sut1.subscribe(s => {
 			var sut2 = sensor.post({
 				name: "sensor 42",
 				host: "rpi77",
-				type: {
-				 name: "soil"
-				}
+				type: "soil"
 			});
 			expect(sut2 instanceof Observable).toBe(true);
 			sut2.subscribe(s => {
@@ -287,34 +283,12 @@ describe('SensorModel - not prepopulated', function() {
 });
 
 describe('Sensor Model V1 prepopulated', function() {
-	var data = [
-		{
-			name: "sensor 43",
-			host: "rpi77",
-			type: {
-				name: "soil"
-			}
-		},
-		{
-			name: "sensor 44",
-			host: "rpi77",
-			type: {
-				name: "soil"
-			}
-		},
-		{
-			name: "sensor 01",
-			host: "rpi01",
-			type: {
-				name: "soil"
-			}
-		}
-	];
+
 	beforeEach ((done) => {
-		sensor = SensorModel.getInstance();
+		let sensor = SensorModel.getInstance();
 		sensor.deleteAll().subscribe(s => {
-			var sut1 = sensor.post(data[0]).subscribe(s => {
-			 var sut2 = sensor.post(data[1]).subscribe(s => {
+			let sut1 = sensor.post(data[0]).subscribe(s => {
+			 let sut2 = sensor.post(data[1]).subscribe(s => {
 				sensor.post(data[2]).subscribe(s => {
 					done();
 				})
@@ -346,13 +320,13 @@ describe('Sensor Model V1 prepopulated', function() {
 	});	
 	
 	it('post same obj twice is blocked', (done) => {
-		pending("not implemented");		
+		// pending("not implemented");		
 		sensor.post(data[0]).subscribe(d => {
 			expect("expected error but got: ").toBe(d);
 			done();
 		},
 		e => {
-			expect("got error as expected: ").toBe(e);
+			expect(e).toContain("E11000 duplicate key error");
 			done();
 		})
 	});
@@ -363,12 +337,24 @@ describe('Sensor Model V1 prepopulated', function() {
 			done();
 		})
 	});
+	
+	it('find all yields three result2', (done) => {
+		var pattern: ISensor = new Sensor();
+		logger.error("find pattern: %s", util.inspect(pattern))
+		sensor.find(pattern).subscribe(d => {
+			logger.error("find result: %s", util.inspect(d))			
+			expect(d.length).toBe(3);
+			done();
+		})
+	});
 
 	it('find by host and type yields single result', (done) => {
 		var pattern: ISensor = new Sensor();
 		pattern.host = "rpi01";
-		pattern.type = { name:  "soil" };
+		pattern.type = "soil";
+		logger.error("find pattern: %s", util.inspect(pattern))
 		sensor.find(pattern).subscribe(d => {
+			logger.error("find result: %s", util.inspect(d))			
 			expect(d.length).toBe(1);
 			done();
 		})
@@ -377,8 +363,10 @@ describe('Sensor Model V1 prepopulated', function() {
 	it('find by host and type yields duplicate', (done) => {
 		var pattern: ISensor = new Sensor();
 		pattern.host = "rpi77";
-		pattern.type = { name:  "soil" };
+		pattern.type = "soil";		
+		logger.error("find pattern: %s", util.inspect(pattern))
 		sensor.find(pattern).subscribe(d => {
+			logger.error("find result: %s", util.inspect(d))						
 			expect(d.length).toBe(2);
 			done();
 		})
@@ -387,7 +375,7 @@ describe('Sensor Model V1 prepopulated', function() {
 	it('find by host and type yields no result', (done) => {
 		var pattern: ISensor = new Sensor();
 		pattern.host = "rpi99";
-		pattern.type = { name:  "soil" };		
+		pattern.type = "soil";		
 		sensor.find(pattern).subscribe(d => {
 			expect(d.length).toBe(0);
 			done();

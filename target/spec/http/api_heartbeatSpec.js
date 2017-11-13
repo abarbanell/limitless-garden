@@ -11,7 +11,15 @@ var user_key = obj[0];
 var port = process.env.TEST_PORT || "4321";
 process.env.PORT = port;
 var server = require("../../src/server");
+var model_sensor_1 = require("../../src/model/model.sensor");
 describe('heartbeat route test', function () {
+    beforeEach(function (done) {
+        var s = model_sensor_1.SensorModel.getInstance();
+        s.deleteAll().subscribe(function (s) {
+            logger.error('beforeAll: deleted sensor row count is ', s);
+            done();
+        });
+    });
     it('server should be valid', function (done) {
         expect(server).toBeTruthy();
         expect(server.listen).toBeDefined();

@@ -10,9 +10,33 @@ export class SensorModel {
   private static _collectionName = db.collectionName('model.sensor');
   private static _dataCollectionName = db.collectionName('model.sensorData');
   private static  _instance: SensorModel = null;
+  private static _indexName: string = null;
 
   private constructor() {
-    logger.error("TODO: model.sensor constructor - ensure index");
+    this.createIndex();
+  }
+
+  private createIndex() {
+    logger.error("model.sensor.createIndex - called");
+    var options = {unique:true, background:true, w:1};
+    db.connect(function(err, dbObj) {
+      var collection = dbObj.collection(SensorModel._collectionName);
+      // delete all - remove this later...
+      collection.deleteMany({}, function (e, results) {
+        collection.createIndex({name:1}
+          , options, function(err: string, indexName: string) {
+            logger.error("model.sensor.createIndex - callback");
+            if (err) {
+              logger.error("model.sensor.createIndex - error: %s", err);         
+            }
+            if (indexName) {
+              SensorModel._indexName = indexName;
+              logger.error("model.sensor.createIndex - indexName: %s", util.inspect(indexName));            
+            }
+        });
+      });
+    });
+    logger.error("model.sensor.createIndex - return(void)");    
   }
 
   static getInstance() {
@@ -67,20 +91,30 @@ export class SensorModel {
   }
 
   post(data: ISensor): Observable<string> {
-    var id: string = "error";
-    var ms = new MongoSensorClass(data);
-    var obs = new Subject<string>();
-    var cn = SensorModel._collectionName;
+    let id: string = "error";
+    if (!data.name) {
+      data.name = data.host + "." + data.type;
+      logger.error("sensor.post(): name set to %s", data.name);
+    }
+    let ms = new MongoSensorClass(data);
+    let obs = new Subject<string>();
+    let cn = SensorModel._collectionName;
 
     db.connect(function(err,dbObj){
-      var coll = dbObj.collection(cn);
-      coll.insert(ms, {}, function(e, results){
-        if (e) obs.error(e)
-        if (results) {
-          obs.next(results.ops[0]._id.toString());
-        }
-      })
-    })
+      let coll = dbObj.collection(cn);
+      try {
+        coll.insert(ms, {}, function(e, results){
+          if (e) {
+            return obs.error("insert error: "+ e)
+          }
+          if (results) {
+            return obs.next(results.ops[0]._id.toString());
+          }
+        });
+      } catch (ex) {
+        obs.error("exception: " + ex);
+      }
+   })
     return obs.asObservable();
   }
 
@@ -88,8 +122,8 @@ export class SensorModel {
     var obs = new Subject<string>();
     var mongoSensorId: mongodb.ObjectID;
     try {
-      logger.error("try to convert to ObjectID: " + sensorId)
-      mongoSensorId = mongodb.ObjectID.createFromHexString(sensorId)
+      logger.error("sensor.postData() - try to convert to ObjectID: " + sensorId)
+      mongoSensorId = mongodb.ObjectID.createFromHexString(sensorId.toString())
       db.connect(function(err,dbObj){
         var coll = dbObj.collection(SensorModel._dataCollectionName);
         coll.insert({
@@ -109,7 +143,8 @@ export class SensorModel {
         })
       })
     } catch (e) {
-      logger.error("could not convert to ObjectID: " + sensorId)
+      logger.error("sensor.postData() - could not convert to ObjectID: %s, error: %s", 
+            sensorId, e.toString())
       obs.error(e.toString())
     }
 
@@ -223,27 +258,17 @@ export class SensorModel {
       lrc.name = s.name
     }
     if (s.type) {
-      lrc.type = {}
-      if (s.type.name) {
-        lrc.type.name = s.type.name
-      }
+      lrc.type = s.type;
     }
     return lrc;
   }
-
 }
 
 // our payload data model: 
 interface SensorPayload {
   name: string,
   host: string,
-  type: {
-    name: string,
-    uom?: string,
-    min?: number,
-    max?: number,
-    tolerance?: number
-  }
+  type: string
 }
 
 // this should be the object stored in DB. 
@@ -263,13 +288,7 @@ export class Sensor implements ISensor {
   _id?: string;
   name: string;
   host: string;
-  type: {
-    name: string,
-    uom?: string,
-    min?: number,
-    max?: number,
-    tolerance?: number
-  }
+  type: string;
 }
 
 class MongoSensorClass implements MongoSensor { 
@@ -277,7 +296,7 @@ class MongoSensorClass implements MongoSensor {
   schema_version = 1;
   name = null;
   host = null;
-  type = { name: null };
+  type = null;
 
   constructor(is: ISensor) {
     if (is._id) {

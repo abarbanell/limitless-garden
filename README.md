@@ -1,14 +1,24 @@
 # limitless-garden ![Build status](https://travis-ci.org/abarbanell/limitless-garden.svg)
 
 This is a small backend using 
-Heroku / node.js / 3scale / MongoLab / Newrelic / d3.js
+
+- Heroku / dokku 
+- node.js
+- 3scale
+- Mongo
+- Newrelic
+- d3.js
+
 
 Continuous Integration is using [travis](https://travis-ci.org/abarbanell/limitless-garden)
 
-It is deployed via heroku/github integration to 
-http://limitless-garden-9668.herokuapp.com
+It is running on a [Dokku]() server at https:lg.dokku.abarbanell.de
 
 we have a [HOWTO for setup with dokku on digitalocean](dokku.md)
+
+## Local environment
+
+### Option 1: heroku local
 
 How to run this locally for dev and test: 
 
