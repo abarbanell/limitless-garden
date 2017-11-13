@@ -86,7 +86,7 @@ var SensorModel = /** @class */ (function () {
             data.name = data.host + "." + data.type;
             logger.error("sensor.post(): name set to %s", data.name);
         }
-        var ms = new MongoSensorClass(data);
+        var ms = new MongoSensor(data);
         var obs = new Rx_1.Subject();
         var cn = SensorModel._collectionName;
         db.connect(function (err, dbObj) {
@@ -111,7 +111,7 @@ var SensorModel = /** @class */ (function () {
         var obs = new Rx_1.Subject();
         var mongoSensorId;
         try {
-            logger.error("sensor.postData() - try to convert to ObjectID: " + sensorId);
+            logger.error("sensor.postData() - try to convert to ObjectID: %s [%s]", sensorId, typeof (sensorId));
             mongoSensorId = mongodb.ObjectID.createFromHexString(sensorId.toString());
             db.connect(function (err, dbObj) {
                 var coll = dbObj.collection(SensorModel._dataCollectionName);
@@ -257,8 +257,8 @@ var Sensor = /** @class */ (function () {
     return Sensor;
 }());
 exports.Sensor = Sensor;
-var MongoSensorClass = /** @class */ (function () {
-    function MongoSensorClass(is) {
+var MongoSensor = /** @class */ (function () {
+    function MongoSensor(is) {
         this._id = null;
         this.schema_version = 1;
         this.name = null;
@@ -271,5 +271,5 @@ var MongoSensorClass = /** @class */ (function () {
         this.host = is.host;
         this.type = is.type;
     }
-    return MongoSensorClass;
+    return MongoSensor;
 }());

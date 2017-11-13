@@ -96,7 +96,7 @@ export class SensorModel {
       data.name = data.host + "." + data.type;
       logger.error("sensor.post(): name set to %s", data.name);
     }
-    let ms = new MongoSensorClass(data);
+    let ms = new MongoSensor(data);
     let obs = new Subject<string>();
     let cn = SensorModel._collectionName;
 
@@ -122,7 +122,7 @@ export class SensorModel {
     var obs = new Subject<string>();
     var mongoSensorId: mongodb.ObjectID;
     try {
-      logger.error("sensor.postData() - try to convert to ObjectID: " + sensorId)
+      logger.error("sensor.postData() - try to convert to ObjectID: %s [%s]", sensorId, typeof(sensorId))
       mongoSensorId = mongodb.ObjectID.createFromHexString(sensorId.toString())
       db.connect(function(err,dbObj){
         var coll = dbObj.collection(SensorModel._dataCollectionName);
@@ -274,7 +274,7 @@ interface SensorPayload {
 // this should be the object stored in DB. 
 // payload plus mongo id plus schema_version
 // 
-interface MongoSensor extends SensorPayload {
+interface IMongoSensor extends SensorPayload {
   _id: mongodb.ObjectId,
   schema_version: number //0 reserved for rows without schema_version field
 }
@@ -291,7 +291,7 @@ export class Sensor implements ISensor {
   type: string;
 }
 
-class MongoSensorClass implements MongoSensor { 
+class MongoSensor implements IMongoSensor { 
   _id = null;
   schema_version = 1;
   name = null;
