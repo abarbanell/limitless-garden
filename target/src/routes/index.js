@@ -12,7 +12,7 @@ var sensorRoute = function (req, res, next) {
         logger.info('sensor.getMulti returned: err=' + err);
         if (err) {
             logger.error(err);
-            res.status(500).render(error, { err: err });
+            res.status(500).render('error', { err: err });
         }
         else {
             res.render('sensor', {
@@ -31,7 +31,7 @@ var collectionsListRoute = function (req, res, next) {
     db.collections(function (err, names) {
         if (err) {
             logger.error(err);
-            res.status(500).render(error, { err: err });
+            res.status(500).render('error', { err: err });
         }
         else {
             res.render('index', {
@@ -53,7 +53,7 @@ var collectionsRoute = function (req, res, next) {
             req.collection.find({}, { limit: 20, sort: { "_id": -1 } }, function (err, result) {
                 if (err) {
                     logger.error('error in collectionRoute(); %s', util.inspect(err));
-                    res.status(500).render(error, { err: err });
+                    res.status(500).render('error', { err: err });
                 }
                 else {
                     result.toArray(function (err, arr) {
@@ -76,7 +76,7 @@ var hostsRoute = function (req, res, next) {
     sensor.getUniqueHosts(function (err, result) {
         if (err) {
             logger.error(err);
-            res.status(500).render(error, { err: err });
+            res.status(500).render('error', { err: err });
         }
         else {
             logger.info('routes/index.js hostsRoute(), result = ' + JSON.stringify(result));
@@ -94,7 +94,7 @@ var hostDataRoute = function (req, res, next) {
         logger.info('sensor.getMulti returned: err=' + err);
         if (err) {
             logger.error(err);
-            res.status(500).render(error, { err: err });
+            res.status(500).render('error', { err: err });
         }
         else {
             logger.info('routes/index.js hostsDataRoute(), result = ' + JSON.stringify(result));
@@ -153,6 +153,11 @@ var hostDataRoute = function (req, res, next) {
         ;
     });
 };
+var spaRoute = function (req, res, next) {
+    var url = __dirname + '/../../public/app/index.html';
+    logger.error('url: %s', url);
+    return res.sendFile(url);
+};
 router.param('collectionName', function (req, res, next, collectionName) {
     db.connect(function (err, dbObj) {
         req.collection = dbObj.collection(db.collectionName(collectionName));
@@ -170,6 +175,8 @@ router.get('/sensor', authenticated.cookie, sensorRoute);
 /* temporarily park some routes which will be filled later */
 router.get('/hosts/:host', authenticated.cookie, hostDataRoute);
 router.get('/hosts', authenticated.cookie, hostsRoute);
+/* SPA */
+router.get('/spa', authenticated.cookie, spaRoute);
 /* GET login page. */
 router.get('/login', function (req, res, next) {
     res.render('login', {

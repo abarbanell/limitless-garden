@@ -8,6 +8,7 @@ var logger = require('../../src/util/logger');
 var httpMocks = require('node-mocks-http');
 var rewire = require('rewire');
 var sensorHelper = require('../helpers/sensor');
+var authenticated = require('../../src/util/authenticated');
 
 // environment
 var port = process.env.TEST_PORT || "4321";
@@ -20,7 +21,7 @@ var server = require('../../src/server');
 var indexrouter = rewire('../../src/routes/index.js');
 //var indexrouter = require('../../src/routes/index.js');
 
-describe('collections index.js route supertests', function() {
+describe('index.js route anonymous', function() {
 
 	it('GET about page - no auth needed', function(done) {
 		supertest(server)
@@ -39,10 +40,9 @@ describe('collections index.js route supertests', function() {
 		.get('/logout')
 		.expect(httpStatus.FOUND, done);
 	});
-
 });
 
-describe('Middleware test for for index routes', function() {
+describe('index.js routes with mocked auth', function() {
 	var request, response; 
 
 	beforeEach(function(done) {
@@ -192,6 +192,63 @@ describe('Middleware test for for index routes', function() {
 			});
 		});
 	});
+
+	describe('index.js SPA', function () {
+		let request, response;
+
+
+
+		it('spa route returns http status OK', function (done) {
+			request = httpMocks.createRequest({
+				method: 'GET',
+				url: '/spa',
+				isAuthenticated: function () { return true; }
+			});
+			response = httpMocks.createResponse();
+			response.sendFile = function(url) {
+				expect(url).toContain('index.html');
+			}
+
+			let sr = indexrouter.__get__('spaRoute');
+			sr(request, response);
+
+			expect(response.statusCode).toBe(200);
+			done();
+		});
+
+
+		it('mocked cookie authentication OK', function (done) {
+			request = httpMocks.createRequest({
+				method: 'GET',
+				url: '/spa',
+				isAuthenticated: function () { return true; }
+			});
+			response = httpMocks.createResponse();
+
+			var next = function(req, res) {}
+			authenticated.cookie(request, response, next);
+			expect(response.statusCode).toBe(200);
+			done();
+		});
+
+		it('mocked without cookie should fail authentication', function (done) {
+			request = httpMocks.createRequest({
+				method: 'GET',
+				url: '/spa',
+				isAuthenticated: function () { return false; }
+			});
+			response = httpMocks.createResponse();
+
+			var next = function(req, res) {}
+			authenticated.cookie(request, response, next);
+
+			// expect redirect to login
+			expect(response.statusCode).toBe(302);
+			expect(response._getRedirectUrl()).toContain('login');
+			done();
+		});
+	});
+
 		
 });		
 	

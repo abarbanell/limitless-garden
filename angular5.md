@@ -37,6 +37,14 @@ Note2:
 
 limitless garden runs already on Typescript 2.5.2 - not sure Angular can handle this, most documentation shows Typescript 2.4.2
 
+## bring SPA, Karma, webpack back.
 
+Tickets: LG-44, ..
+
+- src/router/index.js -> add route for SPA and tests
+
+This works but the file with the angular pplication (and corresponding assets / bundles) is not up to date. Gives a 403 FORBIDDEN error now.
+
+TODO: rebuild an Angular app with deploy to target/public/app
 
 
