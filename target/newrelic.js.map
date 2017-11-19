@@ -1,0 +1,1 @@
+{"version":3,"file":"newrelic.js","sourceRoot":"","sources":["../newrelic.js"],"names":[],"mappings":"AAAA;;;;;GAKG;AAEH,sDAAsD;AAEtD,OAAO,CAAC,MAAM,GAAG;IACf;;OAEG;IACH,QAAQ,EAAE,CAAC,kBAAkB,CAAC;IAC9B;;OAEG;IACH,WAAW,EAAE,OAAO,CAAC,GAAG,CAAC,qBAAqB;IAC9C,OAAO,EAAE;QACP;;;;WAIG;QACH,KAAK,EAAE,MAAM;KACd;CACF,CAAC"}

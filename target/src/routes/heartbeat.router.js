@@ -36,3 +36,4 @@ router.get('/:id', function (req, res, next) {
     }
 });
 module.exports = router;
+//# sourceMappingURL=heartbeat.router.js.map

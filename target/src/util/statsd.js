@@ -44,3 +44,4 @@ function statsdHeartbeat(host, uptime) {
     client.gauge(metric, uptime);
 }
 exports.statsdHeartbeat = statsdHeartbeat;
+//# sourceMappingURL=statsd.js.map

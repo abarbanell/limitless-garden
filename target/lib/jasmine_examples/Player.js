@@ -17,3 +17,4 @@ Player.prototype.makeFavorite = function () {
     this.currentlyPlayingSong.persistFavoriteStatus(true);
 };
 module.exports = Player;
+//# sourceMappingURL=Player.js.map

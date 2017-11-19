@@ -4,7 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "allowJs": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "outDir": "./target/",
     "rootDir": ".",
     "emitDecoratorMetadata": true,
@@ -23,6 +23,6 @@
     "typings/browser",
     "target",
     "coverage",
-    "public"
+    "public/js"
   ]
 }

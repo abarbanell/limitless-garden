@@ -61,3 +61,4 @@ var plant = function () {
     };
 }();
 module.exports = plant;
+//# sourceMappingURL=plant.js.map

@@ -17,19 +17,19 @@ var logger = require('../util/logger');
 var db = require('../util/db');
 var statsd_1 = require("../util/statsd");
 var model_sensor_1 = require("./model.sensor");
-var Value = /** @class */ (function () {
+var Value = (function () {
     function Value() {
     }
     return Value;
 }());
 exports.Value = Value;
-var HeartbeatPayload = /** @class */ (function () {
+var HeartbeatPayload = (function () {
     function HeartbeatPayload() {
     }
     return HeartbeatPayload;
 }());
 exports.HeartbeatPayload = HeartbeatPayload;
-var MongoHeartbeat = /** @class */ (function (_super) {
+var MongoHeartbeat = (function (_super) {
     __extends(MongoHeartbeat, _super);
     function MongoHeartbeat() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -98,7 +98,7 @@ var MongoHeartbeat = /** @class */ (function (_super) {
     return MongoHeartbeat;
 }(HeartbeatPayload));
 exports.MongoHeartbeat = MongoHeartbeat;
-var Heartbeat = /** @class */ (function (_super) {
+var Heartbeat = (function (_super) {
     __extends(Heartbeat, _super);
     function Heartbeat() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -187,3 +187,4 @@ var Heartbeat = /** @class */ (function (_super) {
     return Heartbeat;
 }(HeartbeatPayload));
 exports.Heartbeat = Heartbeat;
+//# sourceMappingURL=model.heartbeat.js.map

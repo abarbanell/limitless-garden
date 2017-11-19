@@ -122,7 +122,7 @@ router.delete('/collections/:collectionName/:id', function (req, res, next) {
         });
     });
 });
-var QueryMapper = /** @class */ (function () {
+var QueryMapper = (function () {
     function QueryMapper() {
     }
     QueryMapper.qmap = function (q) {
@@ -147,3 +147,4 @@ var QueryMapper = /** @class */ (function () {
     return QueryMapper;
 }());
 module.exports = router;
+//# sourceMappingURL=api.js.map

@@ -48,3 +48,4 @@ var user = function () {
     };
 }();
 module.exports = user;
+//# sourceMappingURL=user.js.map

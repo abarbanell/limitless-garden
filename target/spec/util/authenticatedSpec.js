@@ -51,3 +51,4 @@ describe('Middleware test for authentication', function () {
         expect(obj.length).toBeGreaterThan(0);
     });
 });
+//# sourceMappingURL=authenticatedSpec.js.map

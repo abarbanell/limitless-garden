@@ -82,3 +82,4 @@ describe('Sensor Model V0', function () {
         });
     });
 });
+//# sourceMappingURL=sensorSpec.js.map

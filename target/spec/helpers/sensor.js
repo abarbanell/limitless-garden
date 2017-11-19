@@ -63,3 +63,4 @@ module.exports = {
     insertedIds: getIds,
     getCollection: getCollection
 };
+//# sourceMappingURL=sensor.js.map

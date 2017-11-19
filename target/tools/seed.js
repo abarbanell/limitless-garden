@@ -23,3 +23,4 @@ col.insert(objs, function (err, result) {
     logger.info('result' + JSON.stringify(result));
     process.exit(0);
 });
+//# sourceMappingURL=seed.js.map

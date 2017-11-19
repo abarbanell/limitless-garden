@@ -1,4 +1,5 @@
-	
+// test configuration for the node server side tests
+
 var Jasmine = require('jasmine');
 var jasmine = new Jasmine();
 jasmine.loadConfigFile('spec/support/jasmine.json');

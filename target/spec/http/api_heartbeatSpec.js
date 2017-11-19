@@ -113,3 +113,4 @@ describe('heartbeat route test', function () {
         });
     });
 });
+//# sourceMappingURL=api_heartbeatSpec.js.map

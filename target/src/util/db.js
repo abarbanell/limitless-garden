@@ -64,3 +64,4 @@ module.exports = {
     count: count,
     collectionName: collectionName
 };
+//# sourceMappingURL=db.js.map

@@ -17,3 +17,4 @@ col.find({}, function (err, result) {
         process.exit(0);
     });
 });
+//# sourceMappingURL=cleanUser.js.map

@@ -18,3 +18,4 @@ var output = input.map(function (item) {
 });
 console.log(util.inspect(output));
 fs.writeFileSync('./public/data/data.json', JSON.stringify(output));
+//# sourceMappingURL=data.js.map

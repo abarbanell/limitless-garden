@@ -169,3 +169,4 @@ describe('sensor API tests', function () {
     // 	});
     // });
 });
+//# sourceMappingURL=api_sensorSpec.js.map

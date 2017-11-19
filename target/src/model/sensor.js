@@ -128,3 +128,4 @@ var sensor = function () {
     };
 }();
 module.exports = sensor;
+//# sourceMappingURL=sensor.js.map

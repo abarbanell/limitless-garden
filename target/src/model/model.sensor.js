@@ -5,7 +5,7 @@ var db = require('../util/db');
 var mongodb = require("mongodb");
 var Rx_1 = require("rxjs/Rx");
 var util = require("util");
-var SensorModel = /** @class */ (function () {
+var SensorModel = (function () {
     function SensorModel() {
         this._schema_version = 1;
         this.createIndex();
@@ -251,13 +251,13 @@ var SensorModel = /** @class */ (function () {
     return SensorModel;
 }());
 exports.SensorModel = SensorModel;
-var Sensor = /** @class */ (function () {
+var Sensor = (function () {
     function Sensor() {
     }
     return Sensor;
 }());
 exports.Sensor = Sensor;
-var MongoSensor = /** @class */ (function () {
+var MongoSensor = (function () {
     function MongoSensor(is) {
         this._id = null;
         this.schema_version = 1;
@@ -273,3 +273,4 @@ var MongoSensor = /** @class */ (function () {
     }
     return MongoSensor;
 }());
+//# sourceMappingURL=model.sensor.js.map

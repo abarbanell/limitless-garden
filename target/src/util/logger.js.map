@@ -1,0 +1,1 @@
+{"version":3,"file":"logger.js","sourceRoot":"","sources":["../../../src/util/logger.ts"],"names":[],"mappings":";AAAA,IAAI,MAAM,GAAG;IAET,oFAAoF;IACpF,qDAAqD;IAEvD,IAAI,OAAO,GAAG,OAAO,CAAC,SAAS,CAAC,CAAC;IACjC,OAAO,CAAC,KAAK,GAAG,OAAO,CAAC,GAAG,CAAC,SAAS,IAAI,OAAO,CAAC;IACjD,MAAM,CAAC,OAAO,CAAC;AACjB,CAAC,EAAE,CAAC;AAEJ,iBAAS,MAAM,CAAC"}

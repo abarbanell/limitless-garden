@@ -28,3 +28,4 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
     res.redirect('/');
 });
 module.exports = router;
+//# sourceMappingURL=auth.js.map

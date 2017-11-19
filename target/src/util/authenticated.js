@@ -37,3 +37,4 @@ module.exports = {
     cookieOrApikey: ensureCookieOrApikey,
     admin: isAdmin
 };
+//# sourceMappingURL=authenticated.js.map

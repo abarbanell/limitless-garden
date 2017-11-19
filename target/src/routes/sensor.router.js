@@ -55,3 +55,4 @@ router.delete('/:id', function (req, res, next) {
     }
 });
 module.exports = router;
+//# sourceMappingURL=sensor.router.js.map

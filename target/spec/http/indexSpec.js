@@ -227,3 +227,4 @@ describe('index.js routes with mocked auth', function () {
         });
     });
 });
+//# sourceMappingURL=indexSpec.js.map

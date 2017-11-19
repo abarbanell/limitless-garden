@@ -1,3 +1,4 @@
+// test configuration for the node server side tests
 var Jasmine = require('jasmine');
 var jasmine = new Jasmine();
 jasmine.loadConfigFile('spec/support/jasmine.json');
@@ -12,3 +13,4 @@ var reporter = new JasmineConsoleReporter({
 process.env.PORT = process.env.TEST_PORT;
 jasmine.addReporter(reporter);
 jasmine.execute();
+//# sourceMappingURL=jasmine.js.map

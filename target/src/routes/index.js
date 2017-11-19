@@ -205,3 +205,4 @@ router.get('/dashboard/:host/:field', authenticated.cookie, function (req, res) 
     });
 });
 module.exports = router;
+//# sourceMappingURL=index.js.map

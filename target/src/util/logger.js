@@ -7,3 +7,4 @@ var logger = function () {
     return winston;
 }();
 module.exports = logger;
+//# sourceMappingURL=logger.js.map

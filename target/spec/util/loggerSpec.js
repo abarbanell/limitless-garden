@@ -11,3 +11,4 @@ describe('logger tests', function () {
         done();
     });
 });
+//# sourceMappingURL=loggerSpec.js.map

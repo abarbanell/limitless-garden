@@ -285,3 +285,4 @@ describe('collections API integration tests', function () {
         });
     });
 });
+//# sourceMappingURL=apiSpec.js.map
