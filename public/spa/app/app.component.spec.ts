@@ -1,11 +1,27 @@
 import { TestBed, async } from '@angular/core/testing';
+import { APP_BASE_HREF } from '@angular/common';
+
+
 import { AppComponent } from './app.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { HomeComponent } from './home/home.component';
+
+import { routing } from './app.routing';
+
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        NavbarComponent,
+        HomeComponent
       ],
+      providers: [
+        {provide: APP_BASE_HREF, useValue: '/' }
+      ],
+      imports: [
+        routing
+      ]
     }).compileComponents();
   }));
   it('should create the app', async(() => {

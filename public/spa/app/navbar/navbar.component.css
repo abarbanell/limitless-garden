@@ -1,0 +1,14 @@
+a.navbar-brand { padding-top: 0px; }
+
+.navbar {
+  background-color: #d5ffd5;
+  height: 50px;
+}
+.navbar-inverse {
+  background-color: darkgreen;
+  color: yellow;
+}
+
+.navbar-inverse > li > a {
+  color:blue;
+}
