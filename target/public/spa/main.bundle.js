@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n<h1>Welcome to app!</h1>\n\n<router-outlet></router-outlet>\n\n"
+module.exports = "<app-navbar></app-navbar>\n<div class=\"container\">\n    <h1>Welcome to app!</h1>\n    app.component.html\n    \n    <router-outlet></router-outlet>\n</div>\n\n\n"
 
 /***/ }),
 
@@ -158,7 +158,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"starter-template\">\n  <h1>\n    {{title}}\n  </h1>\n</div>"
+module.exports = "<div class=\"panel panel-default\">\n  <div class=\"panel-body\">\n      <h1>\n          {{title}}\n        </h1>\n  </div>\n</div>"
 
 /***/ }),
 
