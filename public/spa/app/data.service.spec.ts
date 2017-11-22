@@ -1,4 +1,4 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed, async, inject } from '@angular/core/testing';
 
 import { DataService } from './data.service';
 
@@ -13,7 +13,10 @@ describe('DataService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it("should return collection list", inject([DataService], (service: DataService) => {
-    expect(service.getCollections().length).toBe(3);
+  it("should return collection list", async(() => {
+    let service = TestBed.get(DataService);
+    service.getCollections().subscribe(data => {
+      expect(data.length).toBe(3);      
+    })
   }));
 });
