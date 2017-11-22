@@ -20,20 +20,25 @@
 
         <div id="lgnavbar" class="collapse navbar-collapse navbar-left">
           <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
-            <li><a href="/hosts">Hosts</a></li>
-            <li><a href="/photos">Photos</a></li>            
+            <li><a href="/">Home</a></li>           
             <li><a href="/about">About</a></li>
             <li><a href="/about#contact">Contact</a></li>
-						<li>
+						
             <% if (user && user.profile && user.profile.id ) { %>
+              <li>
+                <a href="/spa">Spa</a>
+              </li>
+              <li>
                <a href="/logout">[<%= user.profile.displayName %> 
                 <% if (user.admin) { %>
                    <i class="fa fa-wrench" aria-hidden="true"></i>
                 <% } %>]
-               </a> 
+               </a>
+               </li> 
             <% } else { %>
-               <a href="/auth/google">Login</a>
+              <li>
+                  <a href="/auth/google">Login</a>                  
+              </li>
             <% } %>
 						</li>
           </ul>

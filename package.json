@@ -12,6 +12,7 @@
     "jshint": "jshint ./target/src/**.js",
     "jscs": "jscs --preset=google **.js",
     "copyfiles": "copyfiles 'public/**' 'spec/**/*.json' 'src/**/*.ejs'  target/",
+    "build": "npm run tsc && npm run copyfiles && ng build",
     "tsc": "tsc",
     "tsc:watch": "tsc -w",
     "test": "cd target &&  node ./jasmine.js && ng test --single-run",
