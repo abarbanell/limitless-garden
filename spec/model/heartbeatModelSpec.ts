@@ -11,7 +11,7 @@ var colname = db.collectionName('model.heartbeat');
 import mongodb = require('mongodb');
 
 function getHeartbeatObject() {
-	var hb: Heartbeat = new Heartbeat();
+	let hb: Heartbeat = new Heartbeat();
 	hb.host = "ESP_TEST";
 	hb.uptime = (new Date()).getMinutes();
 	hb.i2cDevices = 0
@@ -25,7 +25,7 @@ function getHeartbeatObject() {
 describe('Heartbeat Model', function () {
 	beforeEach((done) => {
 		hb = getHeartbeatObject();
-		var sensor = SensorModel.getInstance();
+		let sensor = SensorModel.getInstance();
 		hb.deleteAll().subscribe(hb => {
 			sensor.deleteAll().subscribe(s => {
 				logger.error("beforeEach: Heartbeat and Sensor deleteAll() done'");
@@ -39,16 +39,16 @@ describe('Heartbeat Model', function () {
 	});
 
 	it('post(minimal obj) returns string ID', (done) => {
-		var hb: Heartbeat = new Heartbeat();
+		let hb: Heartbeat = new Heartbeat();
 		hb.host = "ESP_TEST";
-		hb.uptime = (new Date()).getMinutes();
+		hb.uptime = Date.now(); 
 
-		var obs = hb.post();
+		let obs = hb.post();
 		expect(obs instanceof Observable).toBe(true);
 		obs.subscribe(s => {
 			expect(s).toEqual(jasmine.any(String));
 			db.connect(function (err, dbObj) {
-				var oid = new mongodb.ObjectId.createFromHexString(s)
+				let oid = new mongodb.ObjectId.createFromHexString(s)
 				dbObj.collection(colname).findOne({ _id: oid }, function (err, res) {
 					expect(err).toBeNull();
 					expect(res).toBeTruthy();
@@ -66,7 +66,7 @@ describe('Heartbeat Model', function () {
 		hb.post().subscribe(s => {
 			expect(s).toEqual(jasmine.any(String));
 			db.connect(function (err, dbObj) {
-				var oid = new mongodb.ObjectId.createFromHexString(s)
+				let oid = new mongodb.ObjectId.createFromHexString(s)
 				dbObj.collection(colname).findOne({ _id: oid }, function (err, res) {
 					expect(err).toBeNull();
 					expect(res).toBeTruthy();
@@ -80,11 +80,11 @@ describe('Heartbeat Model', function () {
 	});
 
 	it('calls observeHeartbeat() and asserts observable returns 2xinserted message', function (done) {
-		var s = MongoHeartbeat.fromHeartbeat(hb);
+		let s = MongoHeartbeat.fromHeartbeat(hb);
 
-		var obs = MongoHeartbeat.observeHeartbeat(s);
+		let obs = MongoHeartbeat.observeHeartbeat(s);
 		expect(obs instanceof Observable).toBe(true);
-		var i = 0
+		let i = 0
 		obs.subscribe(msg => {
 			expect(msg).toContain("inserted");
 			i++;
@@ -100,11 +100,11 @@ describe('Heartbeat Model', function () {
 	});
 
 	it('calls observeHeartbeat() twice and asserts observable returns each 2xinserted message', function (done) {
-		var s = MongoHeartbeat.fromHeartbeat(hb);
+		let s = MongoHeartbeat.fromHeartbeat(hb);
 
-		var obs = MongoHeartbeat.observeHeartbeat(s);
+		let obs = MongoHeartbeat.observeHeartbeat(s);
 		expect(obs instanceof Observable).toBe(true);
-		var i = 0
+		let i = 0
 		obs.subscribe(msg => {
 			expect(msg).toContain("sensor and sensorData inserted");
 			i++;
@@ -144,7 +144,7 @@ describe('Heartbeat Model', function () {
 });
 
 describe("heartbeat model prepopulated tests", function () {
-	var insertedId: string;
+	let insertedId: string;
 	beforeEach((done) => {
 		hb = getHeartbeatObject();
 		hb.deleteAll().subscribe(s => {
