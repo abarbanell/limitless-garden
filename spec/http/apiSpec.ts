@@ -310,7 +310,11 @@ describe('collections API integration tests', function() {
                         logger.info('insert result=%s', util.inspect(res.body));
 						done();
                 });
-        });
-
+		});
 });
+
+
+
+
+
 

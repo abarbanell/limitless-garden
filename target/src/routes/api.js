@@ -23,6 +23,10 @@ router.param('collectionName', function (req, res, next, collectionName) {
 router.get('/', function (req, res, next) {
     res.json({ msg: 'please select a collection, e.g., /collections/messages' });
 });
+var meRoute = function (req, res, next) {
+    res.json({ rc: "OK", user: req.user });
+};
+router.get("/me", meRoute);
 router.get('/collections', function (req, res, next) {
     // return array of valid collection names 
     db.collections(function (err, names) {
