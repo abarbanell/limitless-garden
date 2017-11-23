@@ -9,6 +9,7 @@ import { HomeComponent } from './home/home.component';
 
 // Services
 import { DataService } from "./data.service";
+import { AuthService } from "./auth.service";
 
 // routing
 import { routing } from './app.routing';
@@ -24,6 +25,7 @@ import { routing } from './app.routing';
     routing
   ],
   providers: [
+    AuthService,
     DataService
   ],
   bootstrap: [AppComponent]

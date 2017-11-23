@@ -7,6 +7,6 @@ export class AuthService {
 
   public authenticated() {
     return true;
- }
+  }
 
 }

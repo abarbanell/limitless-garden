@@ -5,7 +5,7 @@ import { APP_BASE_HREF } from '@angular/common';
 import { NavbarComponent } from './navbar.component';
 import { HomeComponent } from '../home/home.component';
 
-
+import { AuthService } from '../auth.service';
 import { routing } from '../app.routing';
 
 describe('NavbarComponent', () => {
@@ -19,7 +19,8 @@ describe('NavbarComponent', () => {
         HomeComponent
       ],
       providers: [ 
-        {provide: APP_BASE_HREF, useValue: '/' }
+        {provide: APP_BASE_HREF, useValue: '/' },
+        AuthService
       ],
       imports: [
         FormsModule,

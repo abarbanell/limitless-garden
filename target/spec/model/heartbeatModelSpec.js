@@ -37,7 +37,7 @@ describe('Heartbeat Model', function () {
     it('post(minimal obj) returns string ID', function (done) {
         var hb = new model_heartbeat_1.Heartbeat();
         hb.host = "ESP_TEST";
-        hb.uptime = (new Date()).getMinutes();
+        hb.uptime = Date.now();
         var obs = hb.post();
         expect(obs instanceof Rx_1.Observable).toBe(true);
         obs.subscribe(function (s) {

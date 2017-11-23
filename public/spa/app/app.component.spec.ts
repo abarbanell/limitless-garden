@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HomeComponent } from './home/home.component';
 
+import { AuthService } from './auth.service';
 import { routing } from './app.routing';
 
 describe('AppComponent', () => {
@@ -17,7 +18,8 @@ describe('AppComponent', () => {
         HomeComponent
       ],
       providers: [
-        {provide: APP_BASE_HREF, useValue: '/' }
+        {provide: APP_BASE_HREF, useValue: '/' },
+        AuthService
       ],
       imports: [
         routing
