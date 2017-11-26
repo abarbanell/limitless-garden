@@ -15,7 +15,7 @@
     "build": "npm run tsc && npm run copyfiles && ng build",
     "tsc": "tsc",
     "tsc:watch": "tsc -w",
-    "test": "cd target &&  node ./jasmine.js && ng test --single-run",
+    "test": "./test.sh",
     "test:watch": "watch 'npm run tsc && npm run test' src spec public",
     "coverage": "./node_modules/.bin/istanbul cover --include-all-sources jasmine-node spec"
   },

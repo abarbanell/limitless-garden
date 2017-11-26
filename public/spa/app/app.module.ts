@@ -13,6 +13,7 @@ import { AuthService } from "./auth.service";
 
 // routing
 import { routing } from './app.routing';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { routing } from './app.routing';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     routing
   ],
   providers: [
