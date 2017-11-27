@@ -1,13 +1,13 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 
-import { AuthService } from './auth.service';
-import { HttpClientModule } from '@angular/common/http';
+import { AuthService, IProfile } from './auth.service';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientModule
+        HttpClientTestingModule
       ],
       providers: [
         AuthService
@@ -19,14 +19,19 @@ describe('AuthService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should be authenticated', inject([AuthService], (service: AuthService) => {
+  it('authenticated', inject([AuthService], (service: AuthService) => {
     expect(service.authenticated()).toBe(true);
   }));
 
-  xit('should get Profile', async(() => {
-    let authService = TestBed.get(AuthService);
+  it('Profile/not logged in returns FORBIDDEN', async(() => {
+    let authService: AuthService = TestBed.get(AuthService);
     authService.getProfile().subscribe(user => {
-      expect(user).toBeNull();      
+      // check the response...
+      expect(user.httpStatus).toBe(403);
+      expect(user.rc).toBe("Forbidden");
+      expect(user.displayName).toBe(""); // temporary, while we have no "real" authentication      
+    }, err => {
+      expect(err).toBe("error"); // should not get here, so it will fail if it is executed
     })
   }))
 });
