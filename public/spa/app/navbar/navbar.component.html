@@ -18,6 +18,9 @@
       <ul class="nav navbar-nav">
         <li><a routerLink=""> Home </a></li>
         <li><a *ngIf="isLoggedin" routerLink="#data">Data</a></li>
+        <li><a *ngIf="isLoggedin" routerLink="#logout"> (Logout)</a></li>
+        <li><a *ngIf="! isLoggedin" routerLink="#login"> (Login)</a></li>
+        
       </ul>
     </div>
     <!-- /.navbar-collapse -->

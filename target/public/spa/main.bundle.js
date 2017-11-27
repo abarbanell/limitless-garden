@@ -86,6 +86,7 @@ var AppComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__data_service__ = __webpack_require__("../../../../../public/spa/app/data.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__auth_service__ = __webpack_require__("../../../../../public/spa/app/auth.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_routing__ = __webpack_require__("../../../../../public/spa/app/app.routing.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -104,6 +105,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 // routing
 
+
 var AppModule = (function () {
     function AppModule() {
     }
@@ -116,6 +118,7 @@ var AppModule = (function () {
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_8__angular_common_http__["b" /* HttpClientModule */],
                 __WEBPACK_IMPORTED_MODULE_7__app_routing__["a" /* routing */]
             ],
             providers: [
@@ -154,6 +157,8 @@ var routing = __WEBPACK_IMPORTED_MODULE_0__angular_router__["b" /* RouterModule 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -164,19 +169,50 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var AuthService = (function () {
-    function AuthService() {
+    function AuthService(_http) {
+        var _this = this;
+        this._http = _http;
+        this._url = "/api/me";
+        this._baseurl = "";
+        this.initialized = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
+        this.getProfile().subscribe(function (u) {
+            _this.user = u;
+            _this.initialized.next(true);
+        });
     }
     AuthService.prototype.authenticated = function () {
         return true;
     };
+    AuthService.prototype.getProfile = function () {
+        return this._http.get(this._baseurl + this._url).map(function (res) {
+            var p = new Profile();
+            p.displayName = res['user'].profile.displayName; // TODO: need dig deeper in resource object, once we get it....
+            p.rc = res['rc'] || "UNDEFINED";
+            p.httpStatus = 200;
+            return p;
+        }).catch(function (e) {
+            var p = new Profile();
+            p.httpStatus = e.status;
+            p.rc = e.statusText;
+            p.displayName = "";
+            return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["a" /* Observable */].of(p);
+        });
+    };
     AuthService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */]])
     ], AuthService);
     return AuthService;
 }());
 
+var Profile = (function () {
+    function Profile() {
+    }
+    return Profile;
+}());
 
 
 /***/ }),
@@ -303,7 +339,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-fixed-top\">\n  <div class=\"container\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#lgnavbar\" aria-expanded=\"false\">\n                <span class=\"sr-only\">Toggle Navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n      <a class=\"navbar-brand\" href=\"#\">\n        <img src=\"assets/img/logo.png\" alt=\"SPA\" height=\"50\" width=\"50\">\n      </a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse navbar-left\" id=\"lgnavbar\">\n      <ul class=\"nav navbar-nav\">\n        <li><a routerLink=\"\"> Home </a></li>\n        <li><a *ngIf=\"isLoggedin\" routerLink=\"#data\">Data</a></li>\n      </ul>\n    </div>\n    <!-- /.navbar-collapse -->\n\n  </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-fixed-top\">\n  <div class=\"container\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#lgnavbar\" aria-expanded=\"false\">\n                <span class=\"sr-only\">Toggle Navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n      <a class=\"navbar-brand\" href=\"#\">\n        <img src=\"assets/img/logo.png\" alt=\"SPA\" height=\"50\" width=\"50\">\n      </a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse navbar-left\" id=\"lgnavbar\">\n      <ul class=\"nav navbar-nav\">\n        <li><a routerLink=\"\"> Home </a></li>\n        <li><a *ngIf=\"isLoggedin\" routerLink=\"#data\">Data</a></li>\n        <li><a *ngIf=\"isLoggedin\" routerLink=\"#logout\"> (Logout)</a></li>\n        <li><a *ngIf=\"! isLoggedin\" routerLink=\"#login\"> (Login)</a></li>\n        \n      </ul>\n    </div>\n    <!-- /.navbar-collapse -->\n\n  </div>\n</nav>"
 
 /***/ }),
 
@@ -333,9 +369,13 @@ var NavbarComponent = (function () {
         this._router = _router;
         this.isLoggedin = false;
         this.userName = "not logged in";
-        this.isLoggedin = this._authService.authenticated();
     }
     NavbarComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this._authService.initialized.subscribe(function (s) {
+            _this.isLoggedin = s;
+            _this.userName = _this._authService.user.displayName;
+        });
     };
     NavbarComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -343,7 +383,8 @@ var NavbarComponent = (function () {
             template: __webpack_require__("../../../../../public/spa/app/navbar/navbar.component.html"),
             styles: [__webpack_require__("../../../../../public/spa/app/navbar/navbar.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__auth_service__["a" /* AuthService */],
+            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]])
     ], NavbarComponent);
     return NavbarComponent;
 }());

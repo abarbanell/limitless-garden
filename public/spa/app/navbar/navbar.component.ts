@@ -14,10 +14,17 @@ export class NavbarComponent implements OnInit {
   isLoggedin = false;
   userName = "not logged in";
 
-  constructor(private _authService: AuthService, private _router: Router) { 
-     this.isLoggedin = this._authService.authenticated(); 
+  constructor(
+    private _authService: AuthService, 
+    private _router: Router
+  ) { 
+ 
   }
 
   ngOnInit() {
+    this._authService.initialized.subscribe(s => {
+      this.isLoggedin = s;
+      this.userName = this._authService.user.displayName;
+   })
   }
 }
