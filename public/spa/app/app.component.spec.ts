@@ -1,7 +1,6 @@
 import { TestBed, async } from '@angular/core/testing';
 import { APP_BASE_HREF } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -23,7 +22,7 @@ describe('AppComponent', () => {
         AuthService
       ],
       imports: [
-        HttpClientModule,
+        HttpClientTestingModule,
         routing
       ]
     }).compileComponents();

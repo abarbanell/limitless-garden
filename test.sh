@@ -9,15 +9,15 @@ then
 	exit $rc
 fi
 
-	echo "---- starting server for frontend test  --- "
-	npm start & 
-	pid=$!
-	echo " server PID is $pid"
-	sleep 5
+	# echo "---- starting server for frontend test  --- "
+	# npm start & 
+	# pid=$!
+	# echo " server PID is $pid"
+	# sleep 5
 
 	echo "---- frontend test  --- "
 	ng test --single-run 
 	rc=$?
 
-	kill $pid
+	# kill $pid
 	exit $?

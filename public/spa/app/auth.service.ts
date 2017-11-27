@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
+import { Observable, Subject } from 'rxjs/Rx';
 import { HttpClient, HttpResponse, HttpHeaders} from '@angular/common/http';
 
 @Injectable()
 export class AuthService {
   private _url = "/api/me";
-  private _baseurl = "http://localhost:5000";
+  private _baseurl = "";
 
-  public user: any;
-  public initializing = true;
+  public user: IProfile;
+  public initialized = new Subject<boolean>();
 
   constructor(private _http: HttpClient) {
     this.getProfile().subscribe(u => {
       this.user = u;
-      this.initializing = false;
+      this.initialized.next(true);
     })
   }
 
