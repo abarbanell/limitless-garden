@@ -192,12 +192,14 @@ var AuthService = (function () {
             p.displayName = res['user'].profile.displayName; // TODO: need dig deeper in resource object, once we get it....
             p.rc = res['rc'] || "UNDEFINED";
             p.httpStatus = 200;
+            console.log("AuthService.getProfile response status: " + p.httpStatus);
             return p;
         }).catch(function (e) {
             var p = new Profile();
             p.httpStatus = e.status;
             p.rc = e.statusText;
             p.displayName = "";
+            console.log("AuthService.getProfile catch status: " + p.httpStatus);
             return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["a" /* Observable */].of(p);
         });
     };
@@ -339,7 +341,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-fixed-top\">\n  <div class=\"container\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#lgnavbar\" aria-expanded=\"false\">\n                <span class=\"sr-only\">Toggle Navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n      <a class=\"navbar-brand\" href=\"#\">\n        <img src=\"assets/img/logo.png\" alt=\"SPA\" height=\"50\" width=\"50\">\n      </a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse navbar-left\" id=\"lgnavbar\">\n      <ul class=\"nav navbar-nav\">\n        <li><a routerLink=\"\"> Home </a></li>\n        <li><a *ngIf=\"isLoggedin\" routerLink=\"#data\">Data</a></li>\n        <li><a *ngIf=\"isLoggedin\" routerLink=\"#logout\"> (Logout)</a></li>\n        <li><a *ngIf=\"! isLoggedin\" routerLink=\"#login\"> (Login)</a></li>\n        \n      </ul>\n    </div>\n    <!-- /.navbar-collapse -->\n\n  </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-fixed-top\">\n  <div class=\"container\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#lgnavbar\" aria-expanded=\"false\">\n                <span class=\"sr-only\">Toggle Navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n      <a class=\"navbar-brand\" href=\"#\">\n        <img src=\"assets/img/logo.png\" alt=\"SPA\" height=\"50\" width=\"50\">\n      </a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse navbar-left\" id=\"lgnavbar\">\n      <ul class=\"nav navbar-nav\">\n        <li>\n          <a routerLink=\"\"> Home </a>\n        </li>\n        <li>\n          <a *ngIf=\"isLoggedin\" routerLink=\"#data\">Data</a>\n        </li>\n    \n        <li *ngIf=\"isLoggedin\" >\n          <a href=\"/logout\"> (Logout)</a>\n        </li>\n        <li *ngIf=\"!isLoggedin\">\n          <a  href=\"/login\"> (Login)</a>\n        </li>\n    \n      </ul>\n    </div>\n    <!-- /.navbar-collapse -->\n\n  </div>\n</nav>"
 
 /***/ }),
 
@@ -364,18 +366,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var NavbarComponent = (function () {
-    function NavbarComponent(_authService, _router) {
+    function NavbarComponent(_authService, _router, cdRef) {
+        var _this = this;
         this._authService = _authService;
         this._router = _router;
+        this.cdRef = cdRef;
         this.isLoggedin = false;
         this.userName = "not logged in";
-    }
-    NavbarComponent.prototype.ngOnInit = function () {
-        var _this = this;
+        console.log("NavbarComponent.constructor()");
         this._authService.initialized.subscribe(function (s) {
             _this.isLoggedin = s;
             _this.userName = _this._authService.user.displayName;
+            _this.cdRef.detectChanges();
+            console.log("NavBarComponent got auth status: " + s + _this._authService.user);
         });
+    }
+    NavbarComponent.prototype.ngOnInit = function () {
+        console.log("NavbarComponent.ngOnInit()");
     };
     NavbarComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -384,7 +391,8 @@ var NavbarComponent = (function () {
             styles: [__webpack_require__("../../../../../public/spa/app/navbar/navbar.component.css")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__auth_service__["a" /* AuthService */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]])
+            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */],
+            __WEBPACK_IMPORTED_MODULE_0__angular_core__["k" /* ChangeDetectorRef */]])
     ], NavbarComponent);
     return NavbarComponent;
 }());

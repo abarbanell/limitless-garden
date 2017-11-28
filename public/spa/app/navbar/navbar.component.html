@@ -16,11 +16,20 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-left" id="lgnavbar">
       <ul class="nav navbar-nav">
-        <li><a routerLink=""> Home </a></li>
-        <li><a *ngIf="isLoggedin" routerLink="#data">Data</a></li>
-        <li><a *ngIf="isLoggedin" routerLink="#logout"> (Logout)</a></li>
-        <li><a *ngIf="! isLoggedin" routerLink="#login"> (Login)</a></li>
-        
+        <li>
+          <a routerLink=""> Home </a>
+        </li>
+        <li>
+          <a *ngIf="isLoggedin" routerLink="#data">Data</a>
+        </li>
+    
+        <li *ngIf="isLoggedin" >
+          <a href="/logout"> (Logout)</a>
+        </li>
+        <li *ngIf="!isLoggedin">
+          <a  href="/login"> (Login)</a>
+        </li>
+    
       </ul>
     </div>
     <!-- /.navbar-collapse -->

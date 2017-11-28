@@ -27,12 +27,14 @@ export class AuthService {
       p.displayName = res['user'].profile.displayName; // TODO: need dig deeper in resource object, once we get it....
       p.rc = res['rc'] || "UNDEFINED"
       p.httpStatus = 200;
+      console.log("AuthService.getProfile response status: "+ p.httpStatus);
       return p;
     }).catch(e => {
       let p = new Profile();
       p.httpStatus = e.status;
       p.rc = e.statusText;
       p.displayName = ""
+      console.log("AuthService.getProfile catch status: "+ p.httpStatus);
       return Observable.of(p)
     })
   }
