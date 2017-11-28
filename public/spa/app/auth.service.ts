@@ -8,12 +8,12 @@ export class AuthService {
   private _baseurl = "";
 
   public user: IProfile;
-  public initialized = new Subject<boolean>();
+  public listen = new Subject<IProfile>();
 
   constructor(private _http: HttpClient) {
     this.getProfile().subscribe(u => {
       this.user = u;
-      this.initialized.next(true);
+      this.listen.next(u);
     })
   }
 

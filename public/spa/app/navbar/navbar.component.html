@@ -24,7 +24,7 @@
         </li>
     
         <li *ngIf="isLoggedin" >
-          <a href="/logout"> (Logout)</a>
+          <a href="/logout"> [ {{ userName }} (logout)]</a>
         </li>
         <li *ngIf="!isLoggedin">
           <a  href="/login"> (Login)</a>

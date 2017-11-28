@@ -34,8 +34,11 @@ describe('AuthService', () => {
     req.flush({displayName: '', rc: 'Forbidden', httpStatus: 403});
     
     // process the values from flush below
-    authService.initialized.subscribe(v => {
-      expect(v).toBe(true);
+    authService.listen.subscribe(u => {
+      expect(u).toBeDefined();
+      expect(u.displayName).toBe("John Doe");
+      expect(u.rc).toBe("OK");
+      expect(u.httpStatus).toBe(200);
       expect(authService.user.displayName).toBe("");
       expect(authService.user.rc).toBe("Forbidden");
       expect(authService.user.httpStatus).toBe(403);
@@ -56,8 +59,11 @@ describe('AuthService', () => {
     req.flush({displayName: 'John Doe', rc: 'OK', httpStatus: 200});
     
     // set up the processor for the flush below
-    authService.initialized.subscribe(v => {
-      expect(v).toBe(true);
+    authService.listen.subscribe(u => {
+      expect(u).toBeDefined();
+      expect(u.displayName).toBe("John Doe");
+      expect(u.rc).toBe("OK");
+      expect(u.httpStatus).toBe(200);
       expect(authService.user.displayName).toBe("John Doe");
       expect(authService.user.rc).toBe("OK");
       expect(authService.user.httpStatus).toBe(200);

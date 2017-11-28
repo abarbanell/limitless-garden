@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
-import { AuthService } from '../auth.service';
+import { AuthService, IProfile } from '../auth.service';
 import { Router } from '@angular/router';
 
 
@@ -10,9 +10,10 @@ import { Router } from '@angular/router';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   isLoggedin = false;
   userName = "not logged in";
+  profile: IProfile;
 
   constructor(
     private _authService: AuthService, 
@@ -20,16 +21,12 @@ export class NavbarComponent implements OnInit {
     private cdRef:ChangeDetectorRef
   ) { 
     console.log("NavbarComponent.constructor()");
-    this._authService.initialized.subscribe(s => {
-      this.isLoggedin = s;
-      this.userName = this._authService.user.displayName;
-      this.cdRef.detectChanges();
-      console.log("NavBarComponent got auth status: "+ s + this._authService.user)
+    this._authService.listen.subscribe(u => {
+      this.profile = u;
+      this.isLoggedin = (u.httpStatus == 200);
+      this.userName = this.profile.displayName;
+      // this.cdRef.detectChanges();
+      console.log("NavBarComponent got auth status: "+ this.profile.httpStatus)
     })
-  }
-
-  ngOnInit() {
-    console.log("NavbarComponent.ngOnInit()");
-
   }
 }

@@ -45,8 +45,11 @@ describe('HomeComponent', () => {
     const req = httpMock.expectOne('/api/me');
     req.flush({displayName: 'John Doe', rc: 'OK', httpStatus: 200});
     // set up the processor for the flush below
-    authService.initialized.subscribe(v => {
-      expect(v).toBe(true);
+    authService.listen.subscribe(u => {
+      expect(u).toBeDefined();
+      expect(u.displayName).toBe("John Doe");
+      expect(u.rc).toBe("OK");
+      expect(u.httpStatus).toBe(200);
       expect(authService.user.displayName).toBe("John Doe");
       expect(authService.user.rc).toBe("OK");
       expect(authService.user.httpStatus).toBe(200);
