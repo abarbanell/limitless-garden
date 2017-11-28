@@ -328,7 +328,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "a.navbar-brand { padding-top: 0px; }\n\n.navbar {\n  background-color: #d5ffd5;\n  height: 50px;\n}\n.navbar-inverse {\n  background-color: darkgreen;\n  color: yellow;\n}\n\n.navbar-inverse > li > a {\n  color:blue;\n}", ""]);
+exports.push([module.i, "a.navbar-brand { padding-top: 0px; }\n\n.navbar {\n  background-color: #d5ffd5;\n  height: 50px;\n  border-color: darkred;\n  border-color: 0 0 1px;\n}\n.navbar-inverse {\n  background-color: darkgreen;\n  color: yellow;\n}\n\n.navbar-inverse > li > a {\n  color:blue;\n}", ""]);
 
 // exports
 
@@ -341,7 +341,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-fixed-top\">\n  <div class=\"container\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#lgnavbar\" aria-expanded=\"false\">\n                <span class=\"sr-only\">Toggle Navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n      <a class=\"navbar-brand\" href=\"#\">\n        <img src=\"assets/img/logo.png\" alt=\"SPA\" height=\"50\" width=\"50\">\n      </a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse navbar-left\" id=\"lgnavbar\">\n      <ul class=\"nav navbar-nav\">\n        <li>\n          <a routerLink=\"\"> Home </a>\n        </li>\n        <li>\n          <a *ngIf=\"isLoggedin\" routerLink=\"#data\">Data</a>\n        </li>\n    \n        <li *ngIf=\"isLoggedin\" >\n          <a href=\"/logout\"> isLoggedin: {{ isLoggedin }}, userName: {{ userName }} (Logout)</a>\n        </li>\n        <li *ngIf=\"!isLoggedin\">\n          <a  href=\"/login\"> (Login)</a>\n        </li>\n    \n      </ul>\n    </div>\n    <!-- /.navbar-collapse -->\n\n  </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-fixed-top\">\n  <div class=\"container\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#lgnavbar\" aria-expanded=\"false\">\n                <span class=\"sr-only\">Toggle Navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n      <a class=\"navbar-brand\" href=\"#\">\n        <img src=\"assets/img/logo.png\" alt=\"SPA\" height=\"50\" width=\"50\">\n      </a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse navbar-left\" id=\"lgnavbar\">\n      <ul class=\"nav navbar-nav\">\n        <li>\n          <a routerLink=\"\"> Home </a>\n        </li>\n        <li>\n          <a *ngIf=\"isLoggedin\" routerLink=\"#data\">Data</a>\n        </li>\n    \n        <li *ngIf=\"isLoggedin\" >\n          <a href=\"/logout\"> [ {{ profile.displayName }} ]</a>\n        </li>\n        <li *ngIf=\"!isLoggedin\">\n          <a  href=\"/login\"> [ Login ]</a>\n        </li>\n    \n      </ul>\n    </div>\n    <!-- /.navbar-collapse -->\n\n  </div>\n</nav>"
 
 /***/ }),
 
@@ -366,27 +366,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var NavbarComponent = (function () {
-    function NavbarComponent(_authService, _router, cdRef) {
+    function NavbarComponent(_authService, _router) {
         var _this = this;
         this._authService = _authService;
         this._router = _router;
-        this.cdRef = cdRef;
         this.isLoggedin = false;
         this.userName = "not logged in";
-        this.flag = false;
         console.log("NavbarComponent.constructor()");
         this._authService.listen.subscribe(function (u) {
             _this.profile = u;
             _this.isLoggedin = (u.httpStatus == 200);
             _this.userName = _this.profile.displayName;
-            // this.cdRef.detectChanges();
             console.log("NavBarComponent got auth status: " + _this.profile.httpStatus);
         });
-        // test flag toggle
-        setTimeout(function () {
-            _this.flag = true;
-        }, 5000);
     }
+    NavbarComponent.prototype.ngOnInit = function () {
+    };
     NavbarComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
             selector: 'app-navbar',
@@ -394,8 +389,7 @@ var NavbarComponent = (function () {
             styles: [__webpack_require__("../../../../../public/spa/app/navbar/navbar.component.css")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__auth_service__["a" /* AuthService */],
-            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */],
-            __WEBPACK_IMPORTED_MODULE_0__angular_core__["k" /* ChangeDetectorRef */]])
+            __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]])
     ], NavbarComponent);
     return NavbarComponent;
 }());

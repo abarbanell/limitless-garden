@@ -24,10 +24,10 @@
         </li>
     
         <li *ngIf="isLoggedin" >
-          <a href="/logout"> [ {{ userName }} (logout)]</a>
+          <a href="/logout"> [ {{ profile.displayName }} ]</a>
         </li>
         <li *ngIf="!isLoggedin">
-          <a  href="/login"> (Login)</a>
+          <a  href="/login"> [ Login ]</a>
         </li>
     
       </ul>
