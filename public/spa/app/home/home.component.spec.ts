@@ -35,7 +35,7 @@ describe('HomeComponent', () => {
   it(`check text in title`, async(() => {
     const fixture = TestBed.createComponent(HomeComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toContain('Spa app for Angular 5');
+    expect(app.title).toContain('Home Component');
   }));
 
   it('should render title in a h1 tag', async(() => {
@@ -55,7 +55,7 @@ describe('HomeComponent', () => {
       expect(authService.user.httpStatus).toBe(200);
       fixture.detectChanges();
       const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelector('h1').textContent).toContain('Spa app for Angular 5');
+      expect(compiled.querySelector('h1').textContent).toContain('Home Component');
     })
   }));
 });

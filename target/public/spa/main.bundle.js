@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n<div class=\"container\">\n    <h1>Welcome to app!</h1>\n    app.component.html\n    \n    <router-outlet></router-outlet>\n</div>\n\n\n"
+module.exports = "<app-navbar></app-navbar>\n<div class=\"container\">\n    <router-outlet></router-outlet>\n</div>\n\n\n"
 
 /***/ }),
 
@@ -266,7 +266,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".panel  { \n    margin-top: 5px; \n}\n", ""]);
 
 // exports
 
@@ -279,7 +279,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"panel panel-default\">\n  <div class=\"panel-body\">\n      <h1>\n          {{title}}\n      </h1>\n  </div>\n</div>"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n            Collections\n    </div>\n    <div class=\"panel-body\">\n\n            <div class=\"row\">\n                <div class=\"col-md-8 col-md-offset-2\">\n                    <table class=\"table table-striped \">\n                        <thead>\n                            <td>Collection</td>\n                        </thead>\n            \n            \n                        <tr>\n                            <td>\n                                <a href=\"/collections/plant\">\n                                    plant\n                                </a>\n                            </td>\n                        </tr>\n                    </table>\n                </div>\n            </div>\n\n\n\n    </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n    <div class=\"panel-heading\">\n            {{title}}\n    </div>\n    <div class=\"panel-body\">\n            You are not logged in            \n    </div>\n</div>"
 
 /***/ }),
 
@@ -289,6 +289,7 @@ module.exports = "<div class=\"panel panel-default\">\n  <div class=\"panel-body
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomeComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__auth_service__ = __webpack_require__("../../../../../public/spa/app/auth.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -299,11 +300,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var HomeComponent = (function () {
-    function HomeComponent() {
-        this.title = 'Spa app for Angular 5!';
+    function HomeComponent(_authService) {
+        this._authService = _authService;
+        this.isLoggedin = false;
+        this.title = 'Home Component';
     }
     HomeComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this._authService.listen.subscribe(function (u) {
+            _this.isLoggedin = (u.httpStatus == 200);
+            console.log("HomeComponent got auth status: " + u.httpStatus);
+        });
     };
     HomeComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -311,7 +320,7 @@ var HomeComponent = (function () {
             template: __webpack_require__("../../../../../public/spa/app/home/home.component.html"),
             styles: [__webpack_require__("../../../../../public/spa/app/home/home.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__auth_service__["a" /* AuthService */]])
     ], HomeComponent);
     return HomeComponent;
 }());
@@ -328,7 +337,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "a.navbar-brand { padding-top: 0px; }\n\n.navbar {\n  background-color: #d5ffd5;\n  height: 50px;\n  border-color: darkred;\n  border-color: 0 0 1px;\n}\n.navbar-inverse {\n  background-color: darkgreen;\n  color: yellow;\n}\n\n.navbar-inverse > li > a {\n  color:blue;\n}", ""]);
+exports.push([module.i, "a.navbar-brand { padding-top: 0px; }\n\n.navbar {\n  background-color: #d5ffd5;\n  height: 50px;\n  border-color: darkred;\n  border: 0 0 1px;\n}\n\n.navbar-inverse {\n  background-color: darkgreen;\n  color: yellow;\n}\n\n.navbar-inverse > li > a {\n  color:blue;\n}", ""]);
 
 // exports
 
@@ -371,12 +380,10 @@ var NavbarComponent = (function () {
         this._authService = _authService;
         this._router = _router;
         this.isLoggedin = false;
-        this.userName = "not logged in";
         console.log("NavbarComponent.constructor()");
         this._authService.listen.subscribe(function (u) {
             _this.profile = u;
             _this.isLoggedin = (u.httpStatus == 200);
-            _this.userName = _this.profile.displayName;
             console.log("NavBarComponent got auth status: " + _this.profile.httpStatus);
         });
     }

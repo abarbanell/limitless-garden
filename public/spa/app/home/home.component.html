@@ -1,7 +1,38 @@
-<div class="panel panel-default">
-  <div class="panel-body">
-      <h1>
-          {{title}}
-      </h1>
-  </div>
+<div *ngIf="isLoggedin" class="panel panel-default">
+    <div class="panel-heading">
+            Collections
+    </div>
+    <div class="panel-body">
+
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <table class="table table-striped ">
+                        <thead>
+                            <td>Collection</td>
+                        </thead>
+            
+            
+                        <tr>
+                            <td>
+                                <a href="/collections/plant">
+                                    plant
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+
+    </div>
+</div>
+
+<div *ngIf="!isLoggedin" class="panel panel-danger">
+    <div class="panel-heading">
+            {{title}}
+    </div>
+    <div class="panel-body">
+            You are not logged in            
+    </div>
 </div>
