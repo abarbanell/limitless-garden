@@ -58,9 +58,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('app');
   }));
 
-  it('should render title in a h1 tag', async(() => {
-      fixture.detectChanges();
-      const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
-  }));
+  // sample test for checking text - currently there is no text in this component
+  // it('should render title in a h1 tag', async(() => {
+  //     fixture.detectChanges();
+  //     const compiled = fixture.debugElement.nativeElement;
+  //     expect(compiled.querySelector('h1').textContent).toContain('Welcome to app!');
+  // }));
 });
