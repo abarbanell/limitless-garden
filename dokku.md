@@ -79,6 +79,8 @@ $ dokku config:set lg PAPERTRAIL_API_TOKEN=<your-papertrail-api-token>
 $ dokku config:set lg NEW_RELIC_LICENSE_KEY=<your-new-relic-license-key>
 $ dokku config:set lg NEW_RELIC_LOG=stdout
 $ dokku config:set lg THREESCALE_PROVIDER_KEY=<your-3scale-apikey>
+$ dokku config:set lg NPM_CONFIG_PRODUCTION=false
+$ dokku config:set lg NODE_ENV=production
 ```
 
 - for google auth we need SSL. We get a certificate with [letsencrypt](https://www.letsencrypt.org) via the dokku plugin 
