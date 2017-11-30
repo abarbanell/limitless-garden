@@ -45,7 +45,6 @@
     "less-middleware": "2.2.1",
     "mongodb": "2.2.31",
     "morgan": "1.6.1",
-    "newrelic": "2.2.0",
     "node-statsd": "0.1.1",
     "passport": "0.3.2",
     "passport-google-oauth": "0.2.0",
