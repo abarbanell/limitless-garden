@@ -5,6 +5,7 @@ HttpTestingController } from '@angular/common/http/testing';
 import { HomeComponent } from './home.component';
 
 import { AuthService } from '../auth.service';
+import { DataService } from '../data.service';
 
 describe('HomeComponent', () => {
   // let component: HomeComponent;
@@ -16,7 +17,8 @@ describe('HomeComponent', () => {
         HomeComponent 
       ],
       providers: [
-        AuthService
+        AuthService,
+        DataService
       ],
       imports: [
         HttpClientTestingModule

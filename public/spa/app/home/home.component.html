@@ -12,10 +12,10 @@
                         </thead>
             
             
-                        <tr>
+                        <tr *ngFor="let c of collections">
                             <td>
                                 <a href="/">
-                                    plant
+                                    {{ c }} 
                                 </a>
                             </td>
                         </tr>
