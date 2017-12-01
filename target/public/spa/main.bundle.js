@@ -225,7 +225,7 @@ var Profile = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -238,18 +238,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var DataService = (function () {
-    function DataService() {
+    function DataService(_http) {
+        this._http = _http;
+        this._url = "/api/collections";
+        this._baseurl = "";
     }
     DataService.prototype.getCollections = function () {
-        return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["a" /* Observable */].of([
-            "table1",
-            "table2",
-            "table3"
-        ]);
+        // return Observable.of([
+        //   "table1",
+        //   "table2",
+        //   "table3"
+        // ]);
+        return this._http.get(this._baseurl + this._url);
     };
     DataService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
     ], DataService);
     return DataService;
 }());
@@ -279,7 +283,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n            Collections\n    </div>\n    <div class=\"panel-body\">\n\n            <div class=\"row\">\n                <div class=\"col-md-8 col-md-offset-2\">\n                    <table class=\"table table-striped \">\n                        <thead>\n                            <td>Collection</td>\n                        </thead>\n            \n            \n                        <tr *ngFor=\"let c of collections\">\n                            <td>\n                                <a href=\"/\">\n                                    {{ c }} \n                                </a>\n                            </td>\n                        </tr>\n                    </table>\n                </div>\n            </div>\n\n\n\n    </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n    <div class=\"panel-heading\">\n            {{title}}\n    </div>\n    <div class=\"panel-body\">\n            You are not logged in            \n    </div>\n</div>"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n            Collections\n    </div>\n    <div class=\"panel-body\">\n\n            <div class=\"row\">\n                <div class=\"col-md-4 \">\n                    <table class=\"table table-striped \">\n                        <thead>\n                            <td>Collection</td>\n                        </thead>\n            \n            \n                        <tr *ngFor=\"let c of collections\">\n                            <td>\n                                <a href=\"/\">\n                                    {{ c }} \n                                </a>\n                            </td>\n                        </tr>\n                    </table>\n                </div>\n            </div>\n\n\n\n    </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n    <div class=\"panel-heading\">\n            {{title}}\n    </div>\n    <div class=\"panel-body\">\n            You are not logged in            \n    </div>\n</div>"
 
 /***/ }),
 
