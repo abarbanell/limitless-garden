@@ -20,4 +20,4 @@ fi
 	rc=$?
 
 	# kill $pid
-	exit $?
+	exit $rc

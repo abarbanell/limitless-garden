@@ -14,12 +14,14 @@ import { AuthService } from "./auth.service";
 // routing
 import { routing } from './app.routing';
 import { HttpClientModule } from '@angular/common/http';
+import { CollectionsComponent } from './collections/collections.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
-    HomeComponent
+    HomeComponent,
+    CollectionsComponent
   ],
   imports: [
     BrowserModule,

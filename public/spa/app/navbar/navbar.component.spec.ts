@@ -5,6 +5,7 @@ import { APP_BASE_HREF } from '@angular/common';
 
 import { NavbarComponent } from './navbar.component';
 import { HomeComponent } from '../home/home.component';
+import { CollectionsComponent } from '../collections/collections.component';
 
 import { AuthService } from '../auth.service';
 import { routing } from '../app.routing';
@@ -17,6 +18,7 @@ describe('NavbarComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ 
         NavbarComponent,
+        CollectionsComponent,
         HomeComponent
       ],
       providers: [ 
