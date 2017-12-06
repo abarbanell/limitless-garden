@@ -897,10 +897,10 @@ var ReplayEvent = /*@__PURE__*/ (/*@__PURE__*/ function () {
 /* unused harmony export Scheduler */
 /* unused harmony export Symbol */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__Subject__["b"]; });
+/* unused harmony reexport Subject */
 /* unused harmony reexport AnonymousSubject */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__Observable__ = __webpack_require__("../../../../rxjs/_esm5/Observable.js");
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__Observable__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__Observable__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__add_observable_bindCallback__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/bindCallback.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__add_observable_bindNodeCallback__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/bindNodeCallback.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__add_observable_combineLatest__ = __webpack_require__("../../../../rxjs/_esm5/add/observable/combineLatest.js");
@@ -1040,7 +1040,7 @@ var ReplayEvent = /*@__PURE__*/ (/*@__PURE__*/ function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_134__ReplaySubject__ = __webpack_require__("../../../../rxjs/_esm5/ReplaySubject.js");
 /* unused harmony reexport ReplaySubject */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_135__BehaviorSubject__ = __webpack_require__("../../../../rxjs/_esm5/BehaviorSubject.js");
-/* unused harmony reexport BehaviorSubject */
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_135__BehaviorSubject__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_136__observable_ConnectableObservable__ = __webpack_require__("../../../../rxjs/_esm5/observable/ConnectableObservable.js");
 /* unused harmony reexport ConnectableObservable */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_137__Notification__ = __webpack_require__("../../../../rxjs/_esm5/Notification.js");

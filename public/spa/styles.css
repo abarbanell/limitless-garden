@@ -27,3 +27,7 @@ h1 {
 .spinner-blue {
   color: #337ab7;
 }
+
+.panel  { 
+  margin-top: 15px; 
+}

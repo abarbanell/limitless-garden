@@ -162,6 +162,7 @@ var routing = __WEBPACK_IMPORTED_MODULE_0__angular_router__["b" /* RouterModule 
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthService; });
+/* unused harmony export Profile */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
@@ -182,31 +183,36 @@ var AuthService = (function () {
         var _this = this;
         this._http = _http;
         this._url = "/api/me";
-        this._baseurl = "";
-        this.listen = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Subject */]();
+        //public user: IProfile = new Profile();
+        this.listen = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["a" /* BehaviorSubject */](new Profile());
         this.getProfile().subscribe(function (u) {
-            _this.user = u;
             _this.listen.next(u);
         });
     }
-    AuthService.prototype.authenticated = function () {
-        return true;
-    };
     AuthService.prototype.getProfile = function () {
-        return this._http.get(this._baseurl + this._url).map(function (res) {
+        //console.log("AuthService.getprofile() called");
+        return this._http.get(this._url)
+            .map(function (res) {
             var p = new Profile();
             p.displayName = res['user'].profile.displayName; // TODO: need dig deeper in resource object, once we get it....
             p.rc = res['rc'] || "UNDEFINED";
-            p.httpStatus = 200;
-            console.log("AuthService.getProfile response status: " + p.httpStatus);
+            if (p.rc == "OK") {
+                p.httpStatus = 200;
+            }
+            else {
+                p.httpStatus = 403;
+            }
+            //console.log("AuthService.getProfile response status: " + p.httpStatus);
             return p;
-        }).catch(function (e) {
+        })
+            .catch(function (e) {
+            console.log("AuthService.getProfile error object: " + JSON.stringify(e));
             var p = new Profile();
-            p.httpStatus = e.status;
-            p.rc = e.statusText;
+            p.httpStatus = e['status'] || 0;
+            p.rc = e['statusText'] || "";
             p.displayName = "";
             console.log("AuthService.getProfile catch status: " + p.httpStatus);
-            return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["a" /* Observable */].of(p);
+            return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Observable */].of(p);
         });
     };
     AuthService = __decorate([
@@ -218,9 +224,13 @@ var AuthService = (function () {
 
 var Profile = (function () {
     function Profile() {
+        this.displayName = "I. N. Itializing";
+        this.rc = "INITIALIZING";
+        this.httpStatus = 503;
     }
     return Profile;
 }());
+
 
 
 /***/ }),
@@ -246,7 +256,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/collections/collections.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  collections works!\n</p>\n"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-success\">\n  <div class=\"panel-heading\">\n          {{title}}\n  </div>\n  <div class=\"panel-body\">\n          You are logged in            \n  </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n  <div class=\"panel-heading\">\n          {{title}}\n  </div>\n  <div class=\"panel-body\">\n          You are not logged in            \n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -256,6 +266,8 @@ module.exports = "<p>\n  collections works!\n</p>\n"
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CollectionsComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__auth_service__ = __webpack_require__("../../../../../public/spa/app/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__data_service__ = __webpack_require__("../../../../../public/spa/app/data.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -266,10 +278,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var CollectionsComponent = (function () {
-    function CollectionsComponent() {
+    function CollectionsComponent(_authService, _dataService) {
+        this._authService = _authService;
+        this._dataService = _dataService;
+        this.isLoggedin = false;
+        this.title = "CollectionsComponent";
     }
     CollectionsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this._authService.listen.subscribe(function (u) {
+            _this.isLoggedin = (u.httpStatus == 200);
+            console.log("CollectionsComponent got auth status: " + u.httpStatus);
+        });
     };
     CollectionsComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -277,7 +300,8 @@ var CollectionsComponent = (function () {
             template: __webpack_require__("../../../../../public/spa/app/collections/collections.component.html"),
             styles: [__webpack_require__("../../../../../public/spa/app/collections/collections.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__auth_service__["a" /* AuthService */],
+            __WEBPACK_IMPORTED_MODULE_2__data_service__["a" /* DataService */]])
     ], CollectionsComponent);
     return CollectionsComponent;
 }());
@@ -337,7 +361,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, ".panel  { \n    margin-top: 15px; \n}\n", ""]);
+exports.push([module.i, "\n", ""]);
 
 // exports
 
@@ -350,7 +374,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n            Collections\n    </div>\n    <div class=\"panel-body\">\n\n            <div class=\"row\">\n                <div class=\"col-md-3 \">\n                    <table class=\"table table-striped \">\n                        <thead>\n                            <td>Collection</td>\n                        </thead>\n            \n            \n                        <tr *ngFor=\"let c of collections\">\n                            <td>\n                                <a routerLink=\"/collections/{{ c }}\">\n                                    {{ c }} \n                                </a>\n                            </td>\n                        </tr>\n                    </table>\n                </div>\n            </div>\n\n    </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n    <div class=\"panel-heading\">\n            {{title}}\n    </div>\n    <div class=\"panel-body\">\n            You are not logged in            \n    </div>\n</div>"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n            Collections\n    </div>\n    <div class=\"panel-body\">\n\n            <div class=\"row\">\n                <div class=\"col-md-3 \">\n                    <table class=\"table table-striped \">\n                        <thead>\n                            <td>Collection</td>\n                        </thead>\n            \n            \n                        <tr *ngFor=\"let c of collections\">\n                            <td>\n                                <a routerLink=\"collections/{{ c }}\">\n                                    {{ c }} \n                                </a>\n                            </td>\n                        </tr>\n                    </table>\n                </div>\n            </div>\n\n    </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n    <div class=\"panel-heading\">\n            {{title}}\n    </div>\n    <div class=\"panel-body\">\n            You are not logged in            \n    </div>\n</div>"
 
 /***/ }),
 

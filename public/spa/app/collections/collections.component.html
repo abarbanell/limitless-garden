@@ -1,3 +1,17 @@
-<p>
-  collections works!
-</p>
+<div *ngIf="isLoggedin" class="panel panel-success">
+  <div class="panel-heading">
+          {{title}}
+  </div>
+  <div class="panel-body">
+          You are logged in            
+  </div>
+</div>
+
+<div *ngIf="!isLoggedin" class="panel panel-danger">
+  <div class="panel-heading">
+          {{title}}
+  </div>
+  <div class="panel-body">
+          You are not logged in            
+  </div>
+</div>

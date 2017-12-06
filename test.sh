@@ -16,7 +16,7 @@ fi
 	# sleep 5
 
 	echo "---- frontend test  --- "
-	ng test --single-run 
+	ng test --single-run --reporter=spec
 	rc=$?
 
 	# kill $pid

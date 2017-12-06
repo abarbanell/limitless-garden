@@ -1,6 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule,
+  HttpTestingController } from '@angular/common/http/testing';
+import { APP_BASE_HREF } from '@angular/common';
 
+import { HomeComponent } from '../home/home.component';
 import { CollectionsComponent } from './collections.component';
+
+import { AuthService } from '../auth.service';
+import { DataService } from '../data.service';
+import { routing } from '../app.routing';
 
 describe('CollectionsComponent', () => {
   let component: CollectionsComponent;
@@ -8,7 +16,19 @@ describe('CollectionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CollectionsComponent ]
+      declarations: [ 
+        HomeComponent,
+        CollectionsComponent 
+      ],
+      providers: [
+        {provide: APP_BASE_HREF, useValue: '/' },        
+        AuthService,
+        DataService
+      ],
+      imports: [
+        HttpClientTestingModule,
+        routing
+      ]
     })
     .compileComponents();
   }));

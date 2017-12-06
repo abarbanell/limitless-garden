@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HomeComponent } from './home/home.component';
 import { CollectionsComponent } from './collections/collections.component';
-
 import { AuthService } from './auth.service';
 import { routing } from './app.routing';
 
