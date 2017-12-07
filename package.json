@@ -8,7 +8,7 @@
   "scripts": {
     "start": "node ./target/src/server.js",
     "start:watch": "watch 'npm start' target",
-    "start:full": "rimraf node_modules && npm install && npm start",
+    "start:full": "rimraf node_modules && npm install && npm run build && npm start",
     "jshint": "jshint ./target/src/**.js",
     "jscs": "jscs --preset=google **.js",
     "copyfiles": "copyfiles 'public/**' 'spec/**/*.json' 'src/**/*.ejs'  target/",
