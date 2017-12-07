@@ -17,26 +17,26 @@ export class SensorModel {
   }
 
   private createIndex() {
-    logger.error("model.sensor.createIndex - called");
+    logger.info("model.sensor.createIndex - called");
     var options = {unique:true, background:true, w:1};
     db.connect(function(err, dbObj) {
       var collection = dbObj.collection(SensorModel._collectionName);
       // delete all - remove this later...
-      collection.deleteMany({}, function (e, results) {
+      // collection.deleteMany({}, function (e, results) {
         collection.createIndex({name:1}
           , options, function(err: string, indexName: string) {
-            logger.error("model.sensor.createIndex - callback");
+            logger.info("model.sensor.createIndex - callback");
             if (err) {
               logger.error("model.sensor.createIndex - error: %s", err);         
             }
             if (indexName) {
               SensorModel._indexName = indexName;
-              logger.error("model.sensor.createIndex - indexName: %s", util.inspect(indexName));            
+              logger.info("model.sensor.createIndex - indexName: %s", util.inspect(indexName));            
             }
         });
-      });
+      // });
     });
-    logger.error("model.sensor.createIndex - return(void)");    
+    logger.info("model.sensor.createIndex - return(void)");    
   }
 
   static getInstance() {
