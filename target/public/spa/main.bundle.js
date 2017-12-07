@@ -190,7 +190,6 @@ var AuthService = (function () {
         });
     }
     AuthService.prototype.getProfile = function () {
-        //console.log("AuthService.getprofile() called");
         return this._http.get(this._url)
             .map(function (res) {
             var p = new Profile();
@@ -202,7 +201,6 @@ var AuthService = (function () {
             else {
                 p.httpStatus = 403;
             }
-            //console.log("AuthService.getProfile response status: " + p.httpStatus);
             return p;
         })
             .catch(function (e) {
@@ -211,7 +209,6 @@ var AuthService = (function () {
             p.httpStatus = e['status'] || 0;
             p.rc = e['statusText'] || "";
             p.displayName = "";
-            console.log("AuthService.getProfile catch status: " + p.httpStatus);
             return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Observable */].of(p);
         });
     };
@@ -297,7 +294,7 @@ var CollectionsComponent = (function () {
         var _this = this;
         this._authService.listen.subscribe(function (u) {
             _this.isLoggedin = (u.httpStatus == 200);
-            console.log("CollectionsComponent got auth status: " + u.httpStatus);
+            // console.log("CollectionsComponent got auth status: "+ u.httpStatus)
         });
     };
     CollectionsComponent = __decorate([
@@ -380,7 +377,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n            Collections\n    </div>\n    <div class=\"panel-body\">\n\n            <div class=\"row\">\n                <div class=\"col-md-3 \">\n                    <table class=\"table table-striped \">\n                        <thead>\n                            <td>Collection</td>\n                        </thead>\n            \n            \n                        <tr *ngFor=\"let c of collections\">\n                            <td>\n                                <a routerLink=\"collections/{{ c }}\">\n                                    {{ c }} \n                                </a>\n                            </td>\n                        </tr>\n                    </table>\n                </div>\n            </div>\n\n    </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n    <div class=\"panel-heading\">\n            {{title}}\n    </div>\n    <div class=\"panel-body\">\n            You are not logged in            \n    </div>\n</div>"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n            Collections\n    </div>\n    <div class=\"panel-body\">\n\n            <div class=\"row\">\n                <div class=\"col-md-8 col-md-offset-2 \">\n                    <table class=\"table table-striped \">\n                        <thead>\n                            <td>Collection</td>\n                        </thead>\n            \n            \n                        <tr *ngFor=\"let c of collections\">\n                            <td>\n                                <a routerLink=\"collections/{{ c }}\">\n                                    {{ c }} \n                                </a>\n                            </td>\n                        </tr>\n                    </table>\n                </div>\n            </div>\n\n    </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n    <div class=\"panel-heading\">\n            {{title}}\n    </div>\n    <div class=\"panel-body\">\n            You are not logged in            \n    </div>\n</div>"
 
 /***/ }),
 
@@ -416,7 +413,7 @@ var HomeComponent = (function () {
         var _this = this;
         this._authService.listen.subscribe(function (u) {
             _this.isLoggedin = (u.httpStatus == 200);
-            console.log("HomeComponent got auth status: " + u.httpStatus);
+            // console.log("HomeComponent got auth status: "+ u.httpStatus)
             _this.getCollections();
         });
     };
@@ -493,11 +490,10 @@ var NavbarComponent = (function () {
         this._authService = _authService;
         this._router = _router;
         this.isLoggedin = false;
-        console.log("NavbarComponent.constructor()");
         this._authService.listen.subscribe(function (u) {
             _this.profile = u;
             _this.isLoggedin = (u.httpStatus == 200);
-            console.log("NavBarComponent got auth status: " + _this.profile.httpStatus);
+            // console.log("NavBarComponent got auth status: "+ this.profile.httpStatus)
         });
     }
     NavbarComponent.prototype.ngOnInit = function () {

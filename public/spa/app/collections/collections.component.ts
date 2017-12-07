@@ -26,7 +26,7 @@ export class CollectionsComponent implements OnInit {
  ngOnInit() {
     this._authService.listen.subscribe(u => {
       this.isLoggedin = (u.httpStatus == 200);
-      console.log("CollectionsComponent got auth status: "+ u.httpStatus)
+      // console.log("CollectionsComponent got auth status: "+ u.httpStatus)
     })
   }
 

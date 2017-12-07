@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "engines": {
-    "node": "9.0.x"
+    "node": "9.2.x"
   },
   "scripts": {
     "start": "node ./target/src/server.js",

@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this._authService.listen.subscribe(u => {
       this.isLoggedin = (u.httpStatus == 200);
-      console.log("HomeComponent got auth status: "+ u.httpStatus)
+      // console.log("HomeComponent got auth status: "+ u.httpStatus)
       this.getCollections()
     })
   }
