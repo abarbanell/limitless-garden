@@ -10,6 +10,12 @@ import { DataService } from '../data.service';
 export class CollectionsComponent implements OnInit {
   isLoggedin = false;
   title = "CollectionsComponent";
+  data = [
+    {json: "dummy json 1"},
+    {json: "dummy json 2"},
+    {json: "dummy json 3"},
+    {json: "dummy json 4"}
+  ]
   
   constructor(
     private _authService: AuthService,

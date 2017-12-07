@@ -1,9 +1,24 @@
-<div *ngIf="isLoggedin" class="panel panel-success">
+<div *ngIf="isLoggedin" class="panel panel-default">
   <div class="panel-heading">
           {{title}}
   </div>
   <div class="panel-body">
-          You are logged in            
+        <div class="row">
+                <div class="col-md-8 col-md-offset-2 ">
+                    <table class="table table-striped ">
+                        <thead>
+                            <td>Collection "Name"</td>
+                        </thead>
+            
+            
+                        <tr *ngFor="let row of data">
+                            <td>
+                                    {{ row.json }} 
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>       
   </div>
 </div>
 

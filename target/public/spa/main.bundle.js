@@ -256,7 +256,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/collections/collections.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-success\">\n  <div class=\"panel-heading\">\n          {{title}}\n  </div>\n  <div class=\"panel-body\">\n          You are logged in            \n  </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n  <div class=\"panel-heading\">\n          {{title}}\n  </div>\n  <div class=\"panel-body\">\n          You are not logged in            \n  </div>\n</div>\n"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n  <div class=\"panel-heading\">\n          {{title}}\n  </div>\n  <div class=\"panel-body\">\n        <div class=\"row\">\n                <div class=\"col-md-8 col-md-offset-2 \">\n                    <table class=\"table table-striped \">\n                        <thead>\n                            <td>Collection \"Name\"</td>\n                        </thead>\n            \n            \n                        <tr *ngFor=\"let row of data\">\n                            <td>\n                                    {{ row.json }} \n                            </td>\n                        </tr>\n                    </table>\n                </div>\n            </div>       \n  </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n  <div class=\"panel-heading\">\n          {{title}}\n  </div>\n  <div class=\"panel-body\">\n          You are not logged in            \n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -286,6 +286,12 @@ var CollectionsComponent = (function () {
         this._dataService = _dataService;
         this.isLoggedin = false;
         this.title = "CollectionsComponent";
+        this.data = [
+            { json: "dummy json 1" },
+            { json: "dummy json 2" },
+            { json: "dummy json 3" },
+            { json: "dummy json 4" }
+        ];
     }
     CollectionsComponent.prototype.ngOnInit = function () {
         var _this = this;
