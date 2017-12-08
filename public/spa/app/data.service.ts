@@ -47,13 +47,13 @@ export interface ICollectionData {
   rows: ICollectionRow[]
 }
 
-class CollectionData implements ICollectionData {
+export class CollectionData implements ICollectionData {
   name: string;
   count: number;
   rows: ICollectionRow[];
 
-  constructor(name: string, count?: number) {
-    this.name = name;
+  constructor(name?: string, count?: number) {
+    this.name = name || "";
     this.count = count || 0;
     this.rows = [];
   }

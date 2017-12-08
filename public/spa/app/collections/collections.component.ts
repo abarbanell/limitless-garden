@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 
 import { AuthService, IProfile } from '../auth.service';
-import { DataService, ICollectionData } from '../data.service';
+import { DataService, ICollectionData, CollectionData } from '../data.service';
 
 @Component({
   selector: 'spa-collections',
@@ -13,7 +13,7 @@ export class CollectionsComponent implements OnInit {
   isLoggedin = false;
   title = "CollectionsComponent";
 
-  data: ICollectionData;
+  data: ICollectionData = new CollectionData();
   
   constructor(
     private _authService: AuthService

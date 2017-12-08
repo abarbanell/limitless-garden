@@ -126,7 +126,7 @@ var AppModule = (function () {
             ],
             providers: [
                 __WEBPACK_IMPORTED_MODULE_6__auth_service__["a" /* AuthService */],
-                __WEBPACK_IMPORTED_MODULE_5__data_service__["a" /* DataService */]
+                __WEBPACK_IMPORTED_MODULE_5__data_service__["b" /* DataService */]
             ],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */]]
         })
@@ -286,6 +286,7 @@ var CollectionsComponent = (function () {
         this._route = _route;
         this.isLoggedin = false;
         this.title = "CollectionsComponent";
+        this.data = new __WEBPACK_IMPORTED_MODULE_3__data_service__["a" /* CollectionData */]();
     }
     CollectionsComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -308,7 +309,7 @@ var CollectionsComponent = (function () {
             styles: [__webpack_require__("../../../../../public/spa/app/collections/collections.component.css")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__auth_service__["a" /* AuthService */],
-            __WEBPACK_IMPORTED_MODULE_3__data_service__["a" /* DataService */],
+            __WEBPACK_IMPORTED_MODULE_3__data_service__["b" /* DataService */],
             __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* ActivatedRoute */]])
     ], CollectionsComponent);
     return CollectionsComponent;
@@ -322,7 +323,8 @@ var CollectionsComponent = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DataService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CollectionData; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -373,7 +375,7 @@ var CollectionRow = (function () {
 }());
 var CollectionData = (function () {
     function CollectionData(name, count) {
-        this.name = name;
+        this.name = name || "";
         this.count = count || 0;
         this.rows = [];
     }
@@ -382,6 +384,7 @@ var CollectionData = (function () {
     };
     return CollectionData;
 }());
+
 
 
 /***/ }),
@@ -460,7 +463,7 @@ var HomeComponent = (function () {
             styles: [__webpack_require__("../../../../../public/spa/app/home/home.component.css")]
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__auth_service__["a" /* AuthService */],
-            __WEBPACK_IMPORTED_MODULE_2__data_service__["a" /* DataService */]])
+            __WEBPACK_IMPORTED_MODULE_2__data_service__["b" /* DataService */]])
     ], HomeComponent);
     return HomeComponent;
 }());
