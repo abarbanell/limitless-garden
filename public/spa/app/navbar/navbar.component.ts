@@ -18,11 +18,10 @@ export class NavbarComponent implements OnInit{
     private _authService: AuthService, 
     private _router: Router,
   ) { 
-    console.log("NavbarComponent.constructor()");
     this._authService.listen.subscribe(u => {
       this.profile = u;
       this.isLoggedin = (u.httpStatus == 200);
-      console.log("NavBarComponent got auth status: "+ this.profile.httpStatus)
+      // console.log("NavBarComponent got auth status: "+ this.profile.httpStatus)
     })
   }
 

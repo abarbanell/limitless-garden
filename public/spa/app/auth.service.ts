@@ -16,7 +16,6 @@ export class AuthService {
   }
 
   public getProfile(): Observable<IProfile> {
-    //console.log("AuthService.getprofile() called");
     return this._http.get(this._url)
     .map(res => {
       let p: IProfile = new Profile();
@@ -27,7 +26,6 @@ export class AuthService {
       } else { 
         p.httpStatus = 403;
       }
-      //console.log("AuthService.getProfile response status: " + p.httpStatus);
       return p;
     })
     .catch(e => {
@@ -36,7 +34,6 @@ export class AuthService {
       p.httpStatus = e['status'] || 0;
       p.rc = e['statusText'] || "";
       p.displayName = ""
-      console.log("AuthService.getProfile catch status: "+ p.httpStatus);
       return Observable.of(p)
     })
   }

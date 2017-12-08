@@ -5,21 +5,18 @@
 <div class="panel-body">
         <div class="row">
                 <div class="col-md-8 col-md-offset-2 ">
-                        <table class="table table-striped ">
-                                <thead>
-                                        <tr>
-                                                <td>Collection "Name"</td>
-                                        </tr>
-                                </thead>
-                                <tbody>
-                                        <tr *ngFor="let row of data">
-                                                <td>
-                                                        {{ row.json }}
-                                                </td>
-                                        </tr>
-                                </tbody>
-
-                        </table>
+                    <table class="table table-striped ">
+                        <thead>
+                            <td>Collection:  {{ coll }} </td>
+                        </thead>
+            
+            
+                        <tr *ngFor="let row of data">
+                            <td>
+                                    {{ row.json }} 
+                            </td>
+                        </tr>
+                    </table>
                 </div>
         </div>
 </div>
