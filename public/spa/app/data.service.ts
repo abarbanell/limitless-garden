@@ -10,53 +10,54 @@ export class DataService {
   constructor(private _http: HttpClient) { }
 
   getCollections() {
-    // return Observable.of([
-    //   "table1",
-    //   "table2",
-    //   "table3"
-    // ]);
-    return this._http.get<string[]>(this._url);
-    
+    return this._http.get<string[]>(this._url)
   }
 
-  getCollectionData2(coll: string) {
-    let data: IDataServiceObject[] = [
-      new DataServiceObject("service json 1"),
-      new DataServiceObject("service json 2"),
-      new DataServiceObject("service json 3"),
-      new DataServiceObject("service json 4"),
-      new DataServiceObject("service json 5")
-    ];
-    return Observable.of(data);
-  }
-
-  getCollectionData(coll: string) {
-  //   let data = [
-  //     {json: "service json 1"},
-  //     {json: "service json 2"},
-  //     {json: "service json 3"},
-  //     {json: "service json 4"}
-  //   ];
-      return this._http.get<Object[]>(this._url + "/" + coll)
+  getCollectionData(coll: string): Observable<ICollectionData> {
+      return this._http.get<Object[]>(this._url + "/" + coll, { observe: 'response'})
       .map(r => { 
-         let d: IDataServiceObject[] = [];
-         for (let s of r) {
-           let o = new DataServiceObject(JSON.stringify(s))
+         let d = new CollectionData(coll);
+         d.count = Number(r.headers.get('X-Total-Count'));
+
+         for (let s of r.body) {
+           let o = new CollectionRow(JSON.stringify(s))
            d.push(o);
          }
-          return d
+         console.log(d);
+         return d
        });
   }
 }
 
-export interface IDataServiceObject {
+export interface ICollectionRow {
   json: string
 }
 
-class DataServiceObject implements IDataServiceObject {
+class CollectionRow implements ICollectionRow {
   json: string
 
   constructor(s?: string) {
     this.json = s || "";
+  }
+}
+
+export interface ICollectionData {
+  name: string,
+  count: number,
+  rows: ICollectionRow[]
+}
+
+class CollectionData implements ICollectionData {
+  name: string;
+  count: number;
+  rows: ICollectionRow[];
+
+  constructor(name: string, count?: number) {
+    this.name = name;
+    this.count = count || 0;
+    this.rows = [];
+  }
+  push(row: ICollectionRow) {
+    this.rows.push(row);
   }
 }

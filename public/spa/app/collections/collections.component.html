@@ -8,12 +8,16 @@
                                 <table class="table table-striped ">
                                         <thead>
                                                 <tr>
-                                                        <td>Collection: {{ coll }} </td>
+                                                        <td>
+                                                                Collection: 
+                                                                {{ data.name }} 
+                                                                [ {{ data.count }} rows] 
+                                                        </td>
                                                 </tr>
                                         </thead>
 
-                                        <tbody>
-                                                <tr *ngFor="let row of data">
+                                        <tbody *ngIf="data">
+                                                <tr *ngFor="let row of data.rows">
                                                         <td>
                                                                 {{ row.json }}
                                                         </td>

@@ -253,7 +253,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/collections/collections.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n                {{title}}\n        </div>\n        <div class=\"panel-body\">\n                <div class=\"row\">\n                        <div class=\"col-md-8 col-md-offset-2 \">\n                                <table class=\"table table-striped \">\n                                        <thead>\n                                                <tr>\n                                                        <td>Collection: {{ coll }} </td>\n                                                </tr>\n                                        </thead>\n\n                                        <tbody>\n                                                <tr *ngFor=\"let row of data\">\n                                                        <td>\n                                                                {{ row.json }}\n                                                        </td>\n                                                </tr>\n\n                                        </tbody>\n                                </table>\n                        </div>\n                </div>\n        </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n        <div class=\"panel-heading\">\n                {{title}}\n        </div>\n        <div class=\"panel-body\">\n                You are not logged in\n        </div>\n</div>"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n                {{title}}\n        </div>\n        <div class=\"panel-body\">\n                <div class=\"row\">\n                        <div class=\"col-md-8 col-md-offset-2 \">\n                                <table class=\"table table-striped \">\n                                        <thead>\n                                                <tr>\n                                                        <td>\n                                                                Collection: \n                                                                {{ data.name }} \n                                                                [ {{ data.count }} rows] \n                                                        </td>\n                                                </tr>\n                                        </thead>\n\n                                        <tbody *ngIf=\"data\">\n                                                <tr *ngFor=\"let row of data.rows\">\n                                                        <td>\n                                                                {{ row.json }}\n                                                        </td>\n                                                </tr>\n\n                                        </tbody>\n                                </table>\n                        </div>\n                </div>\n        </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n        <div class=\"panel-heading\">\n                {{title}}\n        </div>\n        <div class=\"panel-body\">\n                You are not logged in\n        </div>\n</div>"
 
 /***/ }),
 
@@ -286,20 +286,16 @@ var CollectionsComponent = (function () {
         this._route = _route;
         this.isLoggedin = false;
         this.title = "CollectionsComponent";
-        this.coll = "[]";
-        this.data = [];
     }
     CollectionsComponent.prototype.ngOnInit = function () {
         var _this = this;
         this._authService.listen.subscribe(function (u) {
             _this.isLoggedin = (u.httpStatus == 200);
-            // console.log("CollectionsComponent got auth status: "+ u.httpStatus)
         });
         this._route.params.subscribe(function (params) {
-            //console.log(params);
-            _this.coll = params["coll"];
+            var coll = params["coll"];
             _this._dataService
-                .getCollectionData(_this.coll)
+                .getCollectionData(coll)
                 .subscribe(function (d) {
                 _this.data = d;
             });
@@ -328,8 +324,7 @@ var CollectionsComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -341,60 +336,51 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-
 var DataService = (function () {
     function DataService(_http) {
         this._http = _http;
         this._url = "/api/collections";
     }
     DataService.prototype.getCollections = function () {
-        // return Observable.of([
-        //   "table1",
-        //   "table2",
-        //   "table3"
-        // ]);
         return this._http.get(this._url);
     };
-    DataService.prototype.getCollectionData2 = function (coll) {
-        var data = [
-            new DataServiceObject("service json 1"),
-            new DataServiceObject("service json 2"),
-            new DataServiceObject("service json 3"),
-            new DataServiceObject("service json 4"),
-            new DataServiceObject("service json 5")
-        ];
-        return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Observable */].of(data);
-    };
     DataService.prototype.getCollectionData = function (coll) {
-        //   let data = [
-        //     {json: "service json 1"},
-        //     {json: "service json 2"},
-        //     {json: "service json 3"},
-        //     {json: "service json 4"}
-        //   ];
-        return this._http.get(this._url + "/" + coll)
+        return this._http.get(this._url + "/" + coll, { observe: 'response' })
             .map(function (r) {
-            var d = [];
-            for (var _i = 0, r_1 = r; _i < r_1.length; _i++) {
-                var s = r_1[_i];
-                var o = new DataServiceObject(JSON.stringify(s));
+            var d = new CollectionData(coll);
+            d.count = Number(r.headers.get('X-Total-Count'));
+            for (var _i = 0, _a = r.body; _i < _a.length; _i++) {
+                var s = _a[_i];
+                var o = new CollectionRow(JSON.stringify(s));
                 d.push(o);
             }
+            console.log(d);
             return d;
         });
     };
     DataService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
     ], DataService);
     return DataService;
 }());
 
-var DataServiceObject = (function () {
-    function DataServiceObject(s) {
+var CollectionRow = (function () {
+    function CollectionRow(s) {
         this.json = s || "";
     }
-    return DataServiceObject;
+    return CollectionRow;
+}());
+var CollectionData = (function () {
+    function CollectionData(name, count) {
+        this.name = name;
+        this.count = count || 0;
+        this.rows = [];
+    }
+    CollectionData.prototype.push = function (row) {
+        this.rows.push(row);
+    };
+    return CollectionData;
 }());
 
 
