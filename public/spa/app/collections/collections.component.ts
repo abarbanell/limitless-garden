@@ -35,7 +35,7 @@ export class CollectionsComponent implements OnInit {
       // console.log("CollectionsComponent got auth status: "+ u.httpStatus)
     })
     this._route.params.subscribe( params => {
-      console.log(params);
+      //console.log(params);
       this.coll = params["coll"];
      });
   }
