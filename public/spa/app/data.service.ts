@@ -19,29 +19,44 @@ export class DataService {
     
   }
 
-  getCollectionData(coll: string) {
-    let data = [
-      {json: "service json 1"},
-      {json: "service json 2"},
-      {json: "service json 3"},
-      {json: "service json 4"}
+  getCollectionData2(coll: string) {
+    let data: IDataServiceObject[] = [
+      new DataServiceObject("service json 1"),
+      new DataServiceObject("service json 2"),
+      new DataServiceObject("service json 3"),
+      new DataServiceObject("service json 4"),
+      new DataServiceObject("service json 5")
     ];
     return Observable.of(data);
   }
 
-  // getCollectionData(coll: string) {
+  getCollectionData(coll: string) {
   //   let data = [
   //     {json: "service json 1"},
   //     {json: "service json 2"},
   //     {json: "service json 3"},
   //     {json: "service json 4"}
   //   ];
-  //   return this._http.get<Object[]>(this._url + "/" + coll)
-  //     .map(r => { 
-  //       let d: {json: string}[] = [];
-  //       for (let s of r) {
-  //         let o = { json: }
-  //       }
-  //     });
-  // }
+      return this._http.get<Object[]>(this._url + "/" + coll)
+      .map(r => { 
+         let d: IDataServiceObject[] = [];
+         for (let s of r) {
+           let o = new DataServiceObject(JSON.stringify(s))
+           d.push(o);
+         }
+          return d
+       });
+  }
+}
+
+export interface IDataServiceObject {
+  json: string
+}
+
+class DataServiceObject implements IDataServiceObject {
+  json: string
+
+  constructor(s?: string) {
+    this.json = s || "";
+  }
 }

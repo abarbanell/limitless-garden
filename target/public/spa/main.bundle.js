@@ -287,12 +287,7 @@ var CollectionsComponent = (function () {
         this.isLoggedin = false;
         this.title = "CollectionsComponent";
         this.coll = "[]";
-        this.data = [
-            { json: "dummy json 1" },
-            { json: "dummy json 2" },
-            { json: "dummy json 3" },
-            { json: "dummy json 4" }
-        ];
+        this.data = [];
     }
     CollectionsComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -360,14 +355,33 @@ var DataService = (function () {
         // ]);
         return this._http.get(this._url);
     };
-    DataService.prototype.getCollectionData = function (coll) {
+    DataService.prototype.getCollectionData2 = function (coll) {
         var data = [
-            { json: "service json 1" },
-            { json: "service json 2" },
-            { json: "service json 3" },
-            { json: "service json 4" }
+            new DataServiceObject("service json 1"),
+            new DataServiceObject("service json 2"),
+            new DataServiceObject("service json 3"),
+            new DataServiceObject("service json 4"),
+            new DataServiceObject("service json 5")
         ];
         return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Observable */].of(data);
+    };
+    DataService.prototype.getCollectionData = function (coll) {
+        //   let data = [
+        //     {json: "service json 1"},
+        //     {json: "service json 2"},
+        //     {json: "service json 3"},
+        //     {json: "service json 4"}
+        //   ];
+        return this._http.get(this._url + "/" + coll)
+            .map(function (r) {
+            var d = [];
+            for (var _i = 0, r_1 = r; _i < r_1.length; _i++) {
+                var s = r_1[_i];
+                var o = new DataServiceObject(JSON.stringify(s));
+                d.push(o);
+            }
+            return d;
+        });
     };
     DataService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
@@ -376,6 +390,12 @@ var DataService = (function () {
     return DataService;
 }());
 
+var DataServiceObject = (function () {
+    function DataServiceObject(s) {
+        this.json = s || "";
+    }
+    return DataServiceObject;
+}());
 
 
 /***/ }),
@@ -484,7 +504,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/navbar/navbar.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"container\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#lgnavbar\" aria-expanded=\"false\">\n                <span class=\"sr-only\">Toggle Navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n      <a class=\"navbar-brand\" href=\"#\">\n        <img src=\"assets/img/logo.png\" alt=\"SPA\" height=\"49\" width=\"49\">\n      </a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse navbar-left\" id=\"lgnavbar\">\n      <ul class=\"nav navbar-nav\">\n        <li>\n          <a routerLink=\"\"> Home </a>\n        </li>\n        <li>\n          <a *ngIf=\"isLoggedin\" routerLink=\"#data\">Data</a>\n        </li>\n    \n        <li *ngIf=\"isLoggedin\" >\n          <a href=\"/logout\"> [ {{ profile.displayName }} ]</a>\n        </li>\n        <li *ngIf=\"!isLoggedin\">\n          <a  href=\"/login\"> [ Login ]</a>\n        </li>\n    \n      </ul>\n    </div>\n    <!-- /.navbar-collapse -->\n\n  </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-inverse navbar-fixed-top\">\n  <div class=\"container\">\n    <!-- Brand and toggle get grouped for better mobile display -->\n    <div class=\"navbar-header\">\n      <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#lgnavbar\" aria-expanded=\"false\">\n                <span class=\"sr-only\">Toggle Navigation</span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n                <span class=\"icon-bar\"></span>\n            </button>\n      <a class=\"navbar-brand\" href=\"/\">\n        <img src=\"assets/img/logo.png\" alt=\"SPA\" height=\"49\" width=\"49\">\n      </a>\n    </div>\n\n    <!-- Collect the nav links, forms, and other content for toggling -->\n    <div class=\"collapse navbar-collapse navbar-left\" id=\"lgnavbar\">\n      <ul class=\"nav navbar-nav\">\n        <li>\n          <a routerLink=\"\"> Spa Home </a>\n        </li>\n        <li>\n          <a *ngIf=\"isLoggedin\" routerLink=\"#data\">Data</a>\n        </li>\n    \n        <li *ngIf=\"isLoggedin\" >\n          <a href=\"/logout\"> [ {{ profile.displayName }} ]</a>\n        </li>\n        <li *ngIf=\"!isLoggedin\">\n          <a  href=\"/login\"> [ Login ]</a>\n        </li>\n    \n      </ul>\n    </div>\n    <!-- /.navbar-collapse -->\n\n  </div>\n</nav>"
 
 /***/ }),
 

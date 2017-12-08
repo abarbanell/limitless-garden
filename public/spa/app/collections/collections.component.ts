@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 
 import { AuthService, IProfile } from '../auth.service';
-import { DataService } from '../data.service';
+import { DataService, IDataServiceObject } from '../data.service';
 
 @Component({
   selector: 'spa-collections',
@@ -14,12 +14,7 @@ export class CollectionsComponent implements OnInit {
   title = "CollectionsComponent";
   coll = "[]";
 
-  data = [
-    {json: "dummy json 1"},
-    {json: "dummy json 2"},
-    {json: "dummy json 3"},
-    {json: "dummy json 4"}
-  ]
+  data: IDataServiceObject[] = []
   
   constructor(
     private _authService: AuthService
