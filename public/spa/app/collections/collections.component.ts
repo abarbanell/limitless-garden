@@ -37,6 +37,11 @@ export class CollectionsComponent implements OnInit {
     this._route.params.subscribe( params => {
       //console.log(params);
       this.coll = params["coll"];
+      this._dataService
+        .getCollectionData(this.coll)
+        .subscribe(d => {
+          this.data = d
+        });
      });
   }
 

@@ -253,7 +253,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/collections/collections.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n  <div class=\"panel-heading\">\n          {{title}}\n  </div>\n  <div class=\"panel-body\">\n        <div class=\"row\">\n                <div class=\"col-md-8 col-md-offset-2 \">\n                    <table class=\"table table-striped \">\n                        <thead>\n                            <td>Collection {{ coll }} </td>\n                        </thead>\n            \n            \n                        <tr *ngFor=\"let row of data\">\n                            <td>\n                                    {{ row.json }} \n                            </td>\n                        </tr>\n                    </table>\n                </div>\n            </div>       \n  </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n  <div class=\"panel-heading\">\n          {{title}}\n  </div>\n  <div class=\"panel-body\">\n          You are not logged in            \n  </div>\n</div>\n"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n                {{title}}\n        </div>\n        <div class=\"panel-body\">\n                <div class=\"row\">\n                        <div class=\"col-md-8 col-md-offset-2 \">\n                                <table class=\"table table-striped \">\n                                        <thead>\n                                                <tr>\n                                                        <td>Collection: {{ coll }} </td>\n                                                </tr>\n                                        </thead>\n\n                                        <tbody>\n                                                <tr *ngFor=\"let row of data\">\n                                                        <td>\n                                                                {{ row.json }}\n                                                        </td>\n                                                </tr>\n\n                                        </tbody>\n                                </table>\n                        </div>\n                </div>\n        </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n        <div class=\"panel-heading\">\n                {{title}}\n        </div>\n        <div class=\"panel-body\">\n                You are not logged in\n        </div>\n</div>"
 
 /***/ }),
 
@@ -301,8 +301,13 @@ var CollectionsComponent = (function () {
             // console.log("CollectionsComponent got auth status: "+ u.httpStatus)
         });
         this._route.params.subscribe(function (params) {
-            console.log(params);
+            //console.log(params);
             _this.coll = params["coll"];
+            _this._dataService
+                .getCollectionData(_this.coll)
+                .subscribe(function (d) {
+                _this.data = d;
+            });
         });
     };
     CollectionsComponent = __decorate([
@@ -328,7 +333,8 @@ var CollectionsComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__ = __webpack_require__("../../../../rxjs/_esm5/Rx.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -340,11 +346,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var DataService = (function () {
     function DataService(_http) {
         this._http = _http;
         this._url = "/api/collections";
-        this._baseurl = "";
     }
     DataService.prototype.getCollections = function () {
         // return Observable.of([
@@ -352,11 +358,20 @@ var DataService = (function () {
         //   "table2",
         //   "table3"
         // ]);
-        return this._http.get(this._baseurl + this._url);
+        return this._http.get(this._url);
+    };
+    DataService.prototype.getCollectionData = function (coll) {
+        var data = [
+            { json: "service json 1" },
+            { json: "service json 2" },
+            { json: "service json 3" },
+            { json: "service json 4" }
+        ];
+        return __WEBPACK_IMPORTED_MODULE_1_rxjs_Rx__["b" /* Observable */].of(data);
     };
     DataService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__angular_common_http__["a" /* HttpClient */]])
     ], DataService);
     return DataService;
 }());
@@ -386,7 +401,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n            Collections\n    </div>\n    <div class=\"panel-body\">\n\n            <div class=\"row\">\n                <div class=\"col-md-8 col-md-offset-2 \">\n                    <table class=\"table table-striped \">\n                        <thead>\n                            <td>Collection</td>\n                        </thead>\n            \n            \n                        <tr *ngFor=\"let c of collections\">\n                            <td>\n                                <a routerLink=\"collections/{{ c }}\">\n                                    {{ c }} \n                                </a>\n                            </td>\n                        </tr>\n                    </table>\n                </div>\n            </div>\n\n    </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n    <div class=\"panel-heading\">\n            {{title}}\n    </div>\n    <div class=\"panel-body\">\n            You are not logged in            \n    </div>\n</div>"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        Collections\n    </div>\n    <div class=\"panel-body\">\n\n        <div class=\"row\">\n            <div class=\"col-md-8 col-md-offset-2 \">\n                <table class=\"table table-striped \">\n                    <thead>\n                        <tr>\n                            <td>Collection</td>\n                        </tr>\n                    </thead>\n\n                    <tbody>\n                        <tr *ngFor=\"let c of collections\">\n                            <td>\n                                <a routerLink=\"collections/{{ c }}\">\n                                    {{ c }}\n                                </a>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n\n    </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n    <div class=\"panel-heading\">\n        {{title}}\n    </div>\n    <div class=\"panel-body\">\n        You are not logged in\n    </div>\n</div>"
 
 /***/ }),
 
