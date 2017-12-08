@@ -1,36 +1,39 @@
 <div *ngIf="isLoggedin" class="panel panel-default">
     <div class="panel-heading">
-            Collections
+        Collections
     </div>
     <div class="panel-body">
 
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2 ">
-                    <table class="table table-striped ">
-                        <thead>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 ">
+                <table class="table table-striped ">
+                    <thead>
+                        <tr>
                             <td>Collection</td>
-                        </thead>
-            
-            
+                        </tr>
+                    </thead>
+
+                    <tbody>
                         <tr *ngFor="let c of collections">
                             <td>
                                 <a routerLink="collections/{{ c }}">
-                                    {{ c }} 
+                                    {{ c }}
                                 </a>
                             </td>
                         </tr>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
             </div>
+        </div>
 
     </div>
 </div>
 
 <div *ngIf="!isLoggedin" class="panel panel-danger">
     <div class="panel-heading">
-            {{title}}
+        {{title}}
     </div>
     <div class="panel-body">
-            You are not logged in            
+        You are not logged in
     </div>
 </div>
