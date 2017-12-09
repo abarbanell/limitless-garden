@@ -42,4 +42,9 @@ describe('CollectionsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should have initial data', () => {
+    expect(component.data).toBeDefined();
+    expect(component.data.count).toBeGreaterThanOrEqual(component.data.rows.length);
+  })
 });
