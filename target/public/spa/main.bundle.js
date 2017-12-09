@@ -410,7 +410,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/home/home.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        Collections\n    </div>\n    <div class=\"panel-body\">\n\n        <div class=\"row\">\n            <div class=\"col-md-8 col-md-offset-2 \">\n                <table class=\"table table-striped \">\n                    <thead>\n                        <tr>\n                            <td>Collection</td>\n                        </tr>\n                    </thead>\n\n                    <tbody>\n                        <tr *ngFor=\"let c of collections\">\n                            <td>\n                                <a routerLink=\"collections/{{ c }}\">\n                                    {{ c }}\n                                </a>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n\n    </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n    <div class=\"panel-heading\">\n        {{title}}\n    </div>\n    <div class=\"panel-body\">\n        You are not logged in\n    </div>\n</div>"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n    <div class=\"panel-heading\">\n        Collections\n    </div>\n    <div class=\"panel-body\">\n\n        <div class=\"row\">\n            <div class=\"col-md-8 col-md-offset-2 \">\n                <table class=\"table table-striped \">\n                    <thead>\n                        <tr>\n                            <td>Collections [ {{collectionCount}} items ]</td>\n                        </tr>\n                    </thead>\n\n                    <tbody>\n                        <tr *ngFor=\"let c of collections\">\n                            <td>\n                                <a routerLink=\"collections/{{ c }}\">\n                                    {{ c }}\n                                </a>\n                            </td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n\n    </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n    <div class=\"panel-heading\">\n        {{title}}\n    </div>\n    <div class=\"panel-body\">\n        You are not logged in\n    </div>\n</div>"
 
 /***/ }),
 
@@ -440,6 +440,7 @@ var HomeComponent = (function () {
         this._dataService = _dataService;
         this.isLoggedin = false;
         this.collections = [];
+        this.collectionCount = 0;
         this.title = 'Home Component';
     }
     HomeComponent.prototype.ngOnInit = function () {
@@ -454,6 +455,7 @@ var HomeComponent = (function () {
         var _this = this;
         this._dataService.getCollections().subscribe(function (s) {
             _this.collections = s;
+            _this.collectionCount = s.length;
         });
     };
     HomeComponent = __decorate([

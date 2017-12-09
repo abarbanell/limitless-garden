@@ -11,8 +11,8 @@ import { DataService } from '../data.service';
 import { routing } from '../app.routing';
 
 describe('HomeComponent', () => {
-  // let component: HomeComponent;
-  // let fixture: ComponentFixture<HomeComponent>;
+  let app: HomeComponent;
+  let fixture: ComponentFixture<HomeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -31,23 +31,20 @@ describe('HomeComponent', () => {
       ]
     })
     .compileComponents();
+    fixture = TestBed.createComponent(HomeComponent);
+    app = fixture.componentInstance;
   }));
 
 
   it('should create', () => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
 
   it(`check text in title`, async(() => {
-    const fixture = TestBed.createComponent(HomeComponent);
-    const app = fixture.debugElement.componentInstance;
     expect(app.title).toContain('Home Component');
   }));
 
   it('should render title in a h1 tag', async(() => {
-    const fixture = TestBed.createComponent(HomeComponent);
     let authService: AuthService = TestBed.get(AuthService);
     let httpMock: HttpTestingController = TestBed.get(HttpTestingController)
     const req = httpMock.expectOne('/api/me');
@@ -62,4 +59,8 @@ describe('HomeComponent', () => {
       expect(compiled.querySelector('.panel-heading').textContent).toContain('Collection');
     })
   }));
+
+  it('should have collectionCount', () => {
+    expect(app.collectionCount).toBe(app.collections.length);
+  })
 });

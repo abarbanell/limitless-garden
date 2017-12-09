@@ -11,6 +11,7 @@ import { DataService } from '../data.service';
 export class HomeComponent implements OnInit {
   isLoggedin = false;
   collections: string[] = []; 
+  collectionCount: number = 0;
 
   title = 'Home Component';
   
@@ -31,6 +32,7 @@ export class HomeComponent implements OnInit {
   private getCollections() {
     this._dataService.getCollections().subscribe(s => {
       this.collections = s;
+      this.collectionCount = s.length
     })
   }
 
