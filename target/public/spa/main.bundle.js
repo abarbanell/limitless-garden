@@ -482,7 +482,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "a.navbar-brand { \n  padding-top: 0px; \n}\n\n.navbar-brand { \n  padding-top: 0px; \n}\n\n.navbar {\n  background-color: #d5ffd5;\n  height: 50px;\n  border-color: darkred;\n  border: 0 0 1px;\n}\n\n.navbar-inverse { \n  color: black;\n\tbackground-color: #6CD886;\n\tborder-color: #080808;\n}\n\n.navbar-inverse .navbar-nav>li>a {\n  color: black;\n}\n\n.navbar-inverse .navbar-nav>li {\n  color: darkred;\n}\n\n.navbar-inverse > li > a {\n  color:blue;\n}\n\n.navbar-toggle .icon-bar {\n\tbackground-color: black;\n}\n", ""]);
+exports.push([module.i, "", ""]);
 
 // exports
 

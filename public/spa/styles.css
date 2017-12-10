@@ -1,12 +1,43 @@
 
-html {
-  position: relative;
-  min-height: 100%;
+body {
+  padding-top: 50px;
 }
 
-body {
-  padding-top: 5rem;
-  margin-bottom: 60px;
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.navbar-inverse { 
+  color: black;
+	background-color: #6CD886;
+	border-color: #080808;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+  color: black;
+}
+
+.navbar-inverse .navbar-nav>li {
+  color: darkred;
+}
+
+.navbar-brand { 
+	padding-top: 0px;
+}
+
+.lgerror {
+  color: red;
+  text-align: center;
+}
+
+.lgerror-trace {
+  color: #000;
+  text-align: left;
+}
+
+.navbar-toggle .icon-bar {
+	background-color: black;
 }
 
 h1 {

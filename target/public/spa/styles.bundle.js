@@ -97,7 +97,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "\nhtml {\n  position: relative;\n  min-height: 100%;\n}\n\nbody {\n  padding-top: 5rem;\n  margin-bottom: 60px;\n}\n\nh1 {\n  color: #369;\n  font-family: Helvetica, Arial, sans-serif;\n  font-size: 250%;\n}\n\n.btn-selected { \n  background-color: #d5ffd5;\n  color: #337ab7;\n}\n\n.adblock {\n  height: 100px;\n}\n\n.spinner-blue {\n  color: #337ab7;\n}\n\n.panel  { \n  margin-top: 15px; \n}", ""]);
+exports.push([module.i, "\nbody {\n  padding-top: 50px;\n}\n\n.starter-template {\n  padding: 40px 15px;\n  text-align: center;\n}\n\n.navbar-inverse { \n  color: black;\n\tbackground-color: #6CD886;\n\tborder-color: #080808;\n}\n\n.navbar-inverse .navbar-nav>li>a {\n  color: black;\n}\n\n.navbar-inverse .navbar-nav>li {\n  color: darkred;\n}\n\n.navbar-brand { \n\tpadding-top: 0px;\n}\n\n.lgerror {\n  color: red;\n  text-align: center;\n}\n\n.lgerror-trace {\n  color: #000;\n  text-align: left;\n}\n\n.navbar-toggle .icon-bar {\n\tbackground-color: black;\n}\n\nh1 {\n  color: #369;\n  font-family: Helvetica, Arial, sans-serif;\n  font-size: 250%;\n}\n\n.btn-selected { \n  background-color: #d5ffd5;\n  color: #337ab7;\n}\n\n.adblock {\n  height: 100px;\n}\n\n.spinner-blue {\n  color: #337ab7;\n}\n\n.panel  { \n  margin-top: 15px; \n}\n", ""]);
 
 // exports
 
