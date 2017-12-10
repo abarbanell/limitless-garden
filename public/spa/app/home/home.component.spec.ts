@@ -4,6 +4,7 @@ HttpTestingController } from '@angular/common/http/testing';
 import { APP_BASE_HREF } from '@angular/common';
 
 import { HomeComponent } from './home.component';
+import { DataComponent } from '../data/data.component';
 import { CollectionsComponent } from '../collections/collections.component';
 
 import { AuthService } from '../auth.service';
@@ -18,7 +19,8 @@ describe('HomeComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ 
         HomeComponent,
-        CollectionsComponent 
+        CollectionsComponent,
+        DataComponent 
       ],
       providers: [
         {provide: APP_BASE_HREF, useValue: '/' },        
@@ -56,7 +58,7 @@ describe('HomeComponent', () => {
       expect(u.httpStatus).toBe(200);
       fixture.detectChanges();
       const compiled = fixture.debugElement.nativeElement;
-      expect(compiled.querySelector('.panel-heading').textContent).toContain('Collection');
+      expect(compiled.querySelector('.panel-heading').textContent).toContain('Home Component');
     })
   }));
 

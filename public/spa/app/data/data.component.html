@@ -1,7 +1,7 @@
 <div *ngIf="isLoggedin" class="panel panel-default">
     <div class="panel-heading">
-            {{title}}
-        </div>
+        {{ title }}
+    </div>
     <div class="panel-body">
 
         <div class="row">
@@ -16,7 +16,7 @@
                     <tbody>
                         <tr *ngFor="let c of collections">
                             <td>
-                                <a routerLink="collections/{{ c }}">
+                                <a routerLink="/collections/{{ c }}">
                                     {{ c }}
                                 </a>
                             </td>

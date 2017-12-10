@@ -6,6 +6,7 @@ import { HttpClientTestingModule,
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HomeComponent } from './home/home.component';
+import { DataComponent } from './data/data.component';
 import { CollectionsComponent } from './collections/collections.component';
 import { AuthService } from './auth.service';
 import { routing } from './app.routing';
@@ -19,7 +20,8 @@ describe('AppComponent', () => {
         AppComponent,
         NavbarComponent,
         CollectionsComponent,
-        HomeComponent
+        HomeComponent, 
+        DataComponent
       ],
       providers: [
         {provide: APP_BASE_HREF, useValue: '/' },

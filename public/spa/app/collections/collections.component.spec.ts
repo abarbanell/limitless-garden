@@ -9,6 +9,7 @@ import { CollectionsComponent } from './collections.component';
 import { AuthService } from '../auth.service';
 import { DataService } from '../data.service';
 import { routing } from '../app.routing';
+import { DataComponent } from '../data/data.component';
 
 describe('CollectionsComponent', () => {
   let component: CollectionsComponent;
@@ -18,7 +19,8 @@ describe('CollectionsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ 
         HomeComponent,
-        CollectionsComponent 
+        CollectionsComponent,
+        DataComponent 
       ],
       providers: [
         {provide: APP_BASE_HREF, useValue: '/' },        

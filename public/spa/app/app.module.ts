@@ -15,13 +15,15 @@ import { AuthService } from "./auth.service";
 import { routing } from './app.routing';
 import { HttpClientModule } from '@angular/common/http';
 import { CollectionsComponent } from './collections/collections.component';
+import { DataComponent } from './data/data.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     HomeComponent,
-    CollectionsComponent
+    CollectionsComponent,
+    DataComponent
   ],
   imports: [
     BrowserModule,

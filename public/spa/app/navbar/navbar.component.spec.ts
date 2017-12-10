@@ -9,6 +9,7 @@ import { CollectionsComponent } from '../collections/collections.component';
 
 import { AuthService } from '../auth.service';
 import { routing } from '../app.routing';
+import { DataComponent } from '../data/data.component';
 
 describe('NavbarComponent', () => {
   let component: NavbarComponent;
@@ -19,7 +20,8 @@ describe('NavbarComponent', () => {
       declarations: [ 
         NavbarComponent,
         CollectionsComponent,
-        HomeComponent
+        HomeComponent,
+        DataComponent
       ],
       providers: [ 
         {provide: APP_BASE_HREF, useValue: '/' },
