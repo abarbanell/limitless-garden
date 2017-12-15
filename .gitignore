@@ -44,13 +44,13 @@ npm-debug.log
 nohup.out
 .DS_Store
 
-# webpack build artifacts - currently we need to put webpack and dist / target files into git 
-# because we deploy from git without running webpack after deploy (i.e. webpack is only
-# on dev system)
-# /public/app
+# target and dist can be ignored, because  we run the npm build after deploy
+# on travis and prod. Requires dev tools availability on travis and 
+# prod (see app.json)
 
-# target
-# dist
+
+target
+dist
 
 # Credentials
 .travis/*.pem
