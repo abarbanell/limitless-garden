@@ -56,14 +56,14 @@ var MongoHeartbeat = (function (_super) {
         var host = s.host;
         var sensor = model_sensor_1.SensorModel.getInstance();
         var _loop_1 = function () {
-            logger.error("observeHeartbeat() - value to insert: %s", util.inspect(value));
+            logger.info("observeHeartbeat() - value to insert: %s", util.inspect(value));
             // problem is var (global scope) vs let (local scope) - should be fine now...
             var pattern = new model_sensor_1.Sensor();
             pattern.host = host;
             pattern.type = value.type;
-            logger.error("observeHeartbeat() - going to find existing sensor pattern: %s", util.inspect(pattern));
+            logger.info("observeHeartbeat() - going to find existing sensor pattern: %s", util.inspect(pattern));
             sensor.find(pattern).subscribe(function (d) {
-                logger.error("observeHeartbeat() - find existing sensor pattern: %s - found entries %s", util.inspect(pattern), util.inspect(d));
+                logger.info("observeHeartbeat() - find existing sensor pattern: %s - found entries %s", util.inspect(pattern), util.inspect(d));
                 if (d.length == 0) {
                     sensor.post(pattern).subscribe(function (id) {
                         sensor.postData(id, host, value.type, value.val).subscribe(function (rc) {
@@ -73,13 +73,13 @@ var MongoHeartbeat = (function (_super) {
                     });
                 }
                 if (d.length == 1) {
-                    logger.error("observeHeartbeat() - sensorData trying to insert with sensor id " + d[0]._id);
+                    logger.info("observeHeartbeat() - sensorData trying to insert with sensor id " + d[0]._id);
                     sensor.postData(d[0]._id, host, value.type, value.val).subscribe(function (rc) {
                         obs.next("observeHeartBeat() - sensorData inserted with sensor id " + d[0]._id
                             + " for value " + value.type + " for host " + host);
                     }, function (err) {
                         var msg = "observeHeartbeat() - could not post with sensor id " + d[0]._id;
-                        logger.error(msg);
+                        logger.info(msg);
                         obs.error(msg);
                     });
                 }

@@ -29,15 +29,15 @@ describe('SensorModel - not prepopulated', function() {
 	beforeEach ((done) => {
 		sensor = SensorModel.getInstance();
 		sensor.deleteAll().subscribe(s => {
-			logger.error("SensorModel.deleteAll() affected %d rows", s)
+			logger.info("SensorModel.deleteAll() BEFORE test affected %d rows", s)
 			done()
 		})
 	});
 
 	afterEach ((done) => {
-		logger.error("TODO: sensorModelSpec.ts change to afterAll()");
 		sensor = SensorModel.getInstance();
 		sensor.deleteAll().subscribe(s => {
+			logger.info("SensorModel.deleteAll() AFTER test affected %d rows", s)
 			done()
 		})
 	});
@@ -89,8 +89,6 @@ describe('SensorModel - not prepopulated', function() {
 		}).subscribe(strId => {
 			let nonExistingId = "58cd177e9900ff4a2a741bbc";
 			expect(strId).toEqual(jasmine.any(String));
-			logger.error("inserted id = ", strId);
-			logger.error("non-existing id = ", nonExistingId);
 			expect(strId).not.toBe(nonExistingId);
 			var sut = sensor.getById(nonExistingId);
 			sut.subscribe(s => {
@@ -160,17 +158,13 @@ describe('SensorModel - not prepopulated', function() {
 		let sut1 = sensor.post(data[0]);
 		expect(sut1 instanceof Observable).toBe(true);
 		sut1.subscribe(s => {
-			logger.error("sensor inserted as id %s: %s", s, util.inspect(data[0]));
 			let sut2 = sensor.post(data[1]);
 			expect(sut2 instanceof Observable).toBe(true);
 			sut2.subscribe(s => {
-				logger.error("sensor inserted as id %s: %s", s, util.inspect(data[1]));
 				expect(s).toEqual(jasmine.any(String));
 				let pattern = new Sensor();
 				pattern.name = data[1].name;
-				logger.error("pattern for find: %s", util.inspect(pattern));
 				sensor.find(pattern).subscribe(d => {
-						logger.error("find %s returned: %s", util.inspect(pattern), util.inspect(d));
 					expect(d.length).toBe(1);
 					expect(d[0].host).toBe(data[1].host);
 					done();
@@ -340,9 +334,7 @@ describe('Sensor Model V1 prepopulated', function() {
 	
 	it('find all yields three result2', (done) => {
 		var pattern: ISensor = new Sensor();
-		logger.error("find pattern: %s", util.inspect(pattern))
 		sensor.find(pattern).subscribe(d => {
-			logger.error("find result: %s", util.inspect(d))			
 			expect(d.length).toBe(3);
 			done();
 		})
@@ -352,9 +344,7 @@ describe('Sensor Model V1 prepopulated', function() {
 		var pattern: ISensor = new Sensor();
 		pattern.host = "rpi01";
 		pattern.type = "soil";
-		logger.error("find pattern: %s", util.inspect(pattern))
 		sensor.find(pattern).subscribe(d => {
-			logger.error("find result: %s", util.inspect(d))			
 			expect(d.length).toBe(1);
 			done();
 		})
@@ -364,9 +354,7 @@ describe('Sensor Model V1 prepopulated', function() {
 		var pattern: ISensor = new Sensor();
 		pattern.host = "rpi77";
 		pattern.type = "soil";		
-		logger.error("find pattern: %s", util.inspect(pattern))
 		sensor.find(pattern).subscribe(d => {
-			logger.error("find result: %s", util.inspect(d))						
 			expect(d.length).toBe(2);
 			done();
 		})

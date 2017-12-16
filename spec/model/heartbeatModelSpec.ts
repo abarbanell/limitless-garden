@@ -28,7 +28,7 @@ describe('Heartbeat Model', function () {
 		let sensor = SensorModel.getInstance();
 		hb.deleteAll().subscribe(hb => {
 			sensor.deleteAll().subscribe(s => {
-				logger.error("beforeEach: Heartbeat and Sensor deleteAll() done'");
+				logger.info("beforeEach: Heartbeat and Sensor deleteAll() done'");
 				done();
 			})
 		})
@@ -88,7 +88,7 @@ describe('Heartbeat Model', function () {
 		obs.subscribe(msg => {
 			expect(msg).toContain("inserted");
 			i++;
-			logger.error("observeHeartBeat() response %d is %s", i, msg);
+			logger.info("observeHeartBeat() response %d is %s", i, msg);
 			if (i == 2) {
 				done();
 			}

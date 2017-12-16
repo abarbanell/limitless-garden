@@ -47,15 +47,15 @@ export class MongoHeartbeat extends HeartbeatPayload {
     var host = s.host;
     var sensor = SensorModel.getInstance();
     for (var value of s.values) {
-      logger.error("observeHeartbeat() - value to insert: %s", util.inspect(value));
+      logger.info("observeHeartbeat() - value to insert: %s", util.inspect(value));
       // problem is var (global scope) vs let (local scope) - should be fine now...
       let pattern: ISensor = new Sensor();
       pattern.host = host;
       pattern.type = value.type;
-      logger.error("observeHeartbeat() - going to find existing sensor pattern: %s", 
+      logger.info("observeHeartbeat() - going to find existing sensor pattern: %s", 
           util.inspect(pattern));
       sensor.find(pattern).subscribe(d => {
-        logger.error("observeHeartbeat() - find existing sensor pattern: %s - found entries %s", 
+        logger.info("observeHeartbeat() - find existing sensor pattern: %s - found entries %s", 
           util.inspect(pattern), util.inspect(d))
         if (d.length == 0 ) {
           sensor.post(pattern).subscribe(id => {
@@ -66,7 +66,7 @@ export class MongoHeartbeat extends HeartbeatPayload {
           })
         } 
         if (d.length == 1) {
-          logger.error("observeHeartbeat() - sensorData trying to insert with sensor id " + d[0]._id)
+          logger.info("observeHeartbeat() - sensorData trying to insert with sensor id " + d[0]._id)
           sensor.postData(d[0]._id, host, value.type, value.val).subscribe(
             rc => {
             obs.next("observeHeartBeat() - sensorData inserted with sensor id " + d[0]._id 
@@ -74,7 +74,7 @@ export class MongoHeartbeat extends HeartbeatPayload {
             },
             err => {
               var msg = "observeHeartbeat() - could not post with sensor id " + d[0]._id;
-              logger.error(msg)
+              logger.info(msg)
               obs.error(msg)
             })
         }

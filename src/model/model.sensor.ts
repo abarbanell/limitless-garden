@@ -73,7 +73,7 @@ export class SensorModel {
         var oid = mongodb.ObjectID.createFromHexString(id)
         coll.findOne({ _id: oid }, {}, function (e, results) {
           if (e) {
-            logger.error("SensorModel.getById.findOne: ", e);
+            logger.warn("SensorModel.getById.findOne error: ", e);
             obs.error(e);
           }
           if (results && results._id) {
@@ -94,7 +94,7 @@ export class SensorModel {
     let id: string = "error";
     if (!data.name) {
       data.name = data.host + "." + data.type;
-      logger.error("sensor.post(): name set to %s", data.name);
+      logger.info("sensor.post(): name set to %s", data.name);
     }
     let ms = new MongoSensor(data);
     let obs = new Subject<string>();
@@ -122,7 +122,7 @@ export class SensorModel {
     var obs = new Subject<string>();
     var mongoSensorId: mongodb.ObjectID;
     try {
-      logger.error("sensor.postData() - try to convert to ObjectID: %s [%s]", sensorId, typeof(sensorId))
+      logger.info("sensor.postData() - try to convert to ObjectID: %s [%s]", sensorId, typeof(sensorId))
       mongoSensorId = mongodb.ObjectID.createFromHexString(sensorId.toString())
       db.connect(function(err,dbObj){
         var coll = dbObj.collection(SensorModel._dataCollectionName);
@@ -134,7 +134,7 @@ export class SensorModel {
         }, {}, function(e, results){
           if (e) {
             var msg = e.toString();
-            logger.error(msg);
+            logger.warn(msg);
             obs.error(msg);
           }
           if (results) {

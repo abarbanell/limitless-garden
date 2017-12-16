@@ -63,7 +63,7 @@ var SensorModel = (function () {
                 var oid = mongodb.ObjectID.createFromHexString(id);
                 coll.findOne({ _id: oid }, {}, function (e, results) {
                     if (e) {
-                        logger.error("SensorModel.getById.findOne: ", e);
+                        logger.warn("SensorModel.getById.findOne error: ", e);
                         obs.error(e);
                     }
                     if (results && results._id) {
@@ -84,7 +84,7 @@ var SensorModel = (function () {
         var id = "error";
         if (!data.name) {
             data.name = data.host + "." + data.type;
-            logger.error("sensor.post(): name set to %s", data.name);
+            logger.info("sensor.post(): name set to %s", data.name);
         }
         var ms = new MongoSensor(data);
         var obs = new Rx_1.Subject();
@@ -111,7 +111,7 @@ var SensorModel = (function () {
         var obs = new Rx_1.Subject();
         var mongoSensorId;
         try {
-            logger.error("sensor.postData() - try to convert to ObjectID: %s [%s]", sensorId, typeof (sensorId));
+            logger.info("sensor.postData() - try to convert to ObjectID: %s [%s]", sensorId, typeof (sensorId));
             mongoSensorId = mongodb.ObjectID.createFromHexString(sensorId.toString());
             db.connect(function (err, dbObj) {
                 var coll = dbObj.collection(SensorModel._dataCollectionName);
@@ -123,7 +123,7 @@ var SensorModel = (function () {
                 }, {}, function (e, results) {
                     if (e) {
                         var msg = e.toString();
-                        logger.error(msg);
+                        logger.warn(msg);
                         obs.error(msg);
                     }
                     if (results) {
