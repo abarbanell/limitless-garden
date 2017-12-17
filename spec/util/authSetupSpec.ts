@@ -2,17 +2,32 @@
 
 import { AuthSetup}  from '../../src/util/authSetup';
 
+import logger = require('../../src/util/logger');
+
+// system under test
+var server = require('../../src/server');
+
 // var httpMocks = require('node-mocks-http');
-// var logger = require('../../src/util/logger.js');
 // var util = require('util');
 
 describe('AuthSetup', function() {
-    it("islocal for dev env", function() {
+    it("isLocal for dev env", function() {
         process.env.ENVIRONMENT="dev";
         expect(AuthSetup.isLocal()).toBe(false);
     })
-    it("islocal for local env", function() {
+    it("isLocal for local env", function() {
         process.env.ENVIRONMENT="local";
         expect(AuthSetup.isLocal()).toBe(true);
     })
+    it("AuthSetup.setAuth(null)", function() {
+        expect(function() {
+            AuthSetup.setAuth(null)
+        }).not.toThrow();
+    })
+    it("AuthSetup(app)", function() {
+        expect(function() {
+            AuthSetup.setAuth(server);
+        }).not.toThrow()
+    })
+
 });
