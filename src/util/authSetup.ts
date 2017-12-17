@@ -2,13 +2,16 @@ var user = require('../model/user');
 var logger = require('../util/logger');
 
 export class AuthSetup {
+    public static isLocal(): boolean {
+        return(process.env.ENVIRONMENT === "local")
+    }
 
     public static setAuth(app: any): void {
         // encapsulate the authentication setup and strategy.
         // disable for environment "local"
 
         //set auth strategy
-        if (process.env.ENVIRONMENT === "local") {
+        if (AuthSetup.isLocal()) {
             // bypass authentication
             logger.info("authSetup only local, environment = ", process.env.ENVIRONMENT)
 

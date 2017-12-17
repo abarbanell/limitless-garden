@@ -5,11 +5,14 @@ var logger = require('../util/logger');
 var AuthSetup = (function () {
     function AuthSetup() {
     }
+    AuthSetup.isLocal = function () {
+        return (process.env.ENVIRONMENT === "local");
+    };
     AuthSetup.setAuth = function (app) {
         // encapsulate the authentication setup and strategy.
         // disable for environment "local"
         //set auth strategy
-        if (process.env.ENVIRONMENT === "local") {
+        if (AuthSetup.isLocal()) {
             // bypass authentication
             logger.info("authSetup only local, environment = ", process.env.ENVIRONMENT);
         }
