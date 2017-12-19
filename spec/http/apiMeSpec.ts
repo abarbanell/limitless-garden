@@ -1,3 +1,5 @@
+import { EventEmitter } from "@angular/core";
+
 // API integration tests
 
 // prerequisites
@@ -50,23 +52,32 @@ describe("/me endpoint", function () {
 			});
 	})
 
-	xit('mocked cookie authentication OK', function (done) {
+	it('route function ok', function (done) {
 		let request = httpMocks.createRequest({
 			method: 'GET',
 			url: '/api/me',
-			isAuthenticated: function () { return true; }
+			isAuthenticated: function () { return true; },
+			user: { profile: { displayName: "Unit Test User" }}
 		});
+		expect(request).toBeDefined();
+
 		let response = httpMocks.createResponse();
 
 		// response is an EventEmitter, so I need to emit this first before 
-		// I can see the json function...	
-		expect(response.json).toBeDefined();
-		expect(typeof(response.json)).toBe('function');
-
+		// I can see the json function. Don't do this:	
+		// expect(response.json).toBeDefined();
+		expect(util.inspect(response)).toContain('EventEmitter');
+	
 		let next = apiRouter.__get__('meRoute');
-		authenticated.cookie(request, response, next);
+		expect(next).toBeDefined();
+		expect(typeof(next)).toBe('function');
 
-		//expect(response.statusCode).toBe(httpStatus.OK);
+		// it fails inside this call because the resolving of next requires 
+		// a req.user object: 
+		let lrc = next(request, response);
+
+		expect(lrc).toBeUndefined();
+		expect(response.statusCode).toBe(httpStatus.OK);
 		done();
 	});
 

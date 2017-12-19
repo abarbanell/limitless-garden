@@ -1,6 +1,6 @@
 // test for AuthSetup class
 
-import { AuthSetup}  from '../../src/util/authSetup';
+import { AuthSetup }  from '../../src/util/authSetup';
 
 import logger = require('../../src/util/logger');
 

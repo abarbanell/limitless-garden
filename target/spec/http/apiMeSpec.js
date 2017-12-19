@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // API integration tests
 // prerequisites
 var supertest = require('supertest');
@@ -42,20 +44,27 @@ describe("/me endpoint", function () {
             return done();
         });
     });
-    xit('mocked cookie authentication OK', function (done) {
+    it('route function ok', function (done) {
         var request = httpMocks.createRequest({
             method: 'GET',
             url: '/api/me',
-            isAuthenticated: function () { return true; }
+            isAuthenticated: function () { return true; },
+            user: { profile: { displayName: "Unit Test User" } }
         });
+        expect(request).toBeDefined();
         var response = httpMocks.createResponse();
         // response is an EventEmitter, so I need to emit this first before 
-        // I can see the json function...	
-        expect(response.json).toBeDefined();
-        expect(typeof (response.json)).toBe('function');
+        // I can see the json function. Don't do this:	
+        // expect(response.json).toBeDefined();
+        expect(util.inspect(response)).toContain('EventEmitter');
         var next = apiRouter.__get__('meRoute');
-        authenticated.cookie(request, response, next);
-        //expect(response.statusCode).toBe(httpStatus.OK);
+        expect(next).toBeDefined();
+        expect(typeof (next)).toBe('function');
+        // it fails inside this call because the resolving of next requires 
+        // a req.user object: 
+        var lrc = next(request, response);
+        expect(lrc).toBeUndefined();
+        expect(response.statusCode).toBe(httpStatus.OK);
         done();
     });
     it('mocked without cookie should fail authentication', function (done) {
