@@ -12,6 +12,7 @@ import { AuthSetup } from '../util/authSetup';
 //   will redirect the user back to this application at /auth/google/callback
 if ( AuthSetup.isLocal() ) {
     router.get('/google', function(req, res){
+      logger.error('TODO: get passport-stub and login to create session');
       res.redirect('/');
     });
   } else { 
