@@ -14,8 +14,10 @@ export class DataService {
   }
 
   getCollectionData(coll: string): Observable<ICollectionData> {
-      return this._http.get<Object[]>(this._url + "/" + coll, { observe: 'response'})
-      .map(r => { 
+      return this._http.get<Object[]>(
+        this._url + "/" + coll + "?filldate=1",
+        { observe: 'response'}
+      ).map(r => { 
          let d = new CollectionData(coll);
          d.count = Number(r.headers.get('X-Total-Count'));
 
@@ -23,7 +25,6 @@ export class DataService {
            let o = new CollectionRow(JSON.stringify(s))
            d.push(o);
          }
-         console.log(d);
          return d
        });
   }
@@ -36,16 +37,15 @@ export interface ICollectionRow {
 }
 
 class CollectionRow implements ICollectionRow {
-  id: string = "id";
-  date: string = "date";
-  json: string
+  id: string; 
+  date: string; 
+  json: string;
 
   constructor(s?: string) {
     this.json = s || "";
     let obj = JSON.parse(this.json);
     this.id = obj._id || "unknown ID";
-    // let oid = ObjectID.getFromHexString(this.id);
-    // let d = oid.getTimeStamp();
+    this.date = obj.date || "unknown date"
   }
 }
 

@@ -54,7 +54,7 @@ describe('DataService', () => {
       expect("this").toBe("should not be reached");
     })
 
-    const req = httpMock.expectOne('/api/collections/test');
+    const req = httpMock.expectOne('/api/collections/test?filldate=1');
     expect(req.request.method).toEqual('GET');
     
     req.flush([ {

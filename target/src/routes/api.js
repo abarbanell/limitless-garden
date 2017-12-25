@@ -42,10 +42,16 @@ router.get('/collections/:collectionName', function (req, res, next) {
         var limit = req.query.limit || 10;
         var offset = req.query.offset || 0;
         var fillDate = req.query.filldate || 0;
+        delete req.query.filldate;
+        delete req.query.limit;
+        delete req.query.offset;
         var queryObj = QueryMapper.qmap(req.query);
-        req.collection.find(queryObj, { limit: limit, offset: offset, sort: { '_id': 1 } }).toArray(function (e, results) {
+        req.collection
+            .find(queryObj, { limit: limit, offset: offset, sort: { '_id': 1 } })
+            .toArray(function (e, results) {
             if (e)
                 return next(e);
+            logger.info("fillDate=" + fillDate + ", results = " + util.inspect(results));
             fillResults(req, res, fillDate, count, results);
         });
     });

@@ -45,12 +45,18 @@ router.get('/collections/:collectionName', function(req, res, next) {
 			logger.error('get error: %s', util.inspect(err));
 			return next(err);
 		}
-		var limit = req.query.limit || 10;
-		var offset = req.query.offset || 0;
-		var fillDate = req.query.filldate || 0;
-		var queryObj = QueryMapper.qmap(req.query);
-		req.collection.find(queryObj ,{limit: limit, offset: offset, sort: {'_id': 1}}).toArray(function(e, results){
+		const limit = req.query.limit || 10;
+		const offset = req.query.offset || 0;
+		const fillDate = req.query.filldate || 0;
+		delete req.query.filldate;
+		delete req.query.limit;
+		delete req.query.offset;
+		const queryObj = QueryMapper.qmap(req.query);
+		req.collection
+		.find(queryObj ,{limit: limit, offset: offset, sort: {'_id': 1}})
+		.toArray(function(e, results){
 			if (e) return next(e)
+			logger.info("fillDate=" + fillDate + ", results = " + util.inspect(results));
 			fillResults(req, res, fillDate, count, results);
 		});
 	});
@@ -58,7 +64,7 @@ router.get('/collections/:collectionName', function(req, res, next) {
 
 var fillResults = function(req, res, fill, count, results) {
 	if (fill) {
-		for (var i = 0; i< results.length; i++) {
+		for (let i = 0; i< results.length; i++) {
 			if (! results[i].hasOwnProperty("date")) {
 				results[i].date = ObjectID(results[i]._id).getTimestamp();
 			}	

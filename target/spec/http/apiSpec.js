@@ -86,7 +86,7 @@ describe('collections API integration tests', function () {
             expect(res.status).toBeTruthy();
             expect(res.status).toEqual(httpStatus.OK);
             expect(typeof (res.body.length)).toBe('number');
-            logger.info('body has %s items', res.body.length);
+            logger.error('body has %s items', res.body.length);
             done();
         });
     });
@@ -99,7 +99,7 @@ describe('collections API integration tests', function () {
             expect(res.status).toBeTruthy();
             expect(res.status).toEqual(httpStatus.OK);
             expect(typeof (res.body.length)).toBe('number');
-            logger.info('body has %s items', res.body.length);
+            logger.error('body has %s items', res.body.length);
             if (res.body.length == 0) {
                 return done();
             }
@@ -109,6 +109,20 @@ describe('collections API integration tests', function () {
                 if ((index + 1) == arr.length) {
                     return done();
                 }
+            });
+        });
+    });
+    it('GET testcollection with filldate should return same number of rows', function (done) {
+        var url1 = '/api/collections/test?user_key=true';
+        var url2 = '/api/collections/test?filldate=1&user_key=true';
+        supertest(server)
+            .get(url1).end(function (err, res) {
+            var count1 = res.body.length;
+            supertest(server)
+                .get(url2).end(function (err2, res2) {
+                var count2 = res2.body.length;
+                expect(count2).toBe(count1);
+                return done();
             });
         });
     });

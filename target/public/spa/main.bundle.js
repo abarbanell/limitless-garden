@@ -353,8 +353,7 @@ var DataService = (function () {
         return this._http.get(this._url);
     };
     DataService.prototype.getCollectionData = function (coll) {
-        return this._http.get(this._url + "/" + coll, { observe: 'response' })
-            .map(function (r) {
+        return this._http.get(this._url + "/" + coll + "?filldate=1", { observe: 'response' }).map(function (r) {
             var d = new CollectionData(coll);
             d.count = Number(r.headers.get('X-Total-Count'));
             for (var _i = 0, _a = r.body; _i < _a.length; _i++) {
@@ -362,7 +361,6 @@ var DataService = (function () {
                 var o = new CollectionRow(JSON.stringify(s));
                 d.push(o);
             }
-            console.log(d);
             return d;
         });
     };
@@ -375,13 +373,10 @@ var DataService = (function () {
 
 var CollectionRow = (function () {
     function CollectionRow(s) {
-        this.id = "id";
-        this.date = "date";
         this.json = s || "";
         var obj = JSON.parse(this.json);
         this.id = obj._id || "unknown ID";
-        // let oid = ObjectID.getFromHexString(this.id);
-        // let d = oid.getTimeStamp();
+        this.date = obj.date || "unknown date";
     }
     return CollectionRow;
 }());
