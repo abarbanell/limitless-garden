@@ -30,14 +30,22 @@ export class DataService {
 }
 
 export interface ICollectionRow {
+  id: string,
+  date: string,
   json: string
 }
 
 class CollectionRow implements ICollectionRow {
+  id: string = "id";
+  date: string = "date";
   json: string
 
   constructor(s?: string) {
     this.json = s || "";
+    let obj = JSON.parse(this.json);
+    this.id = obj._id || "unknown ID";
+    // let oid = ObjectID.getFromHexString(this.id);
+    // let d = oid.getTimeStamp();
   }
 }
 

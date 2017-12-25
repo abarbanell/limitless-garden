@@ -1,23 +1,36 @@
 <div *ngIf="isLoggedin" class="panel panel-default">
         <div class="panel-heading">
-                {{title}}
+                {{title}} - Collection: 
+                {{ data.name }} 
+                [ {{ data.count }} rows]
         </div>
         <div class="panel-body">
                 <div class="row">
-                        <div class="col-md-8 col-md-offset-2 ">
+                        <div class="col-md-12 ">
                                 <table class="table table-striped ">
                                         <thead>
                                                 <tr>
                                                         <td>
-                                                                Collection: 
-                                                                {{ data.name }} 
-                                                                [ {{ data.count }} rows] 
+                                                                ID
+                                                        </td>
+                                                        <td>
+                                                                Date
+                                                        </td>
+                                                        <td>
+                                                                JSON data
+                                                                 
                                                         </td>
                                                 </tr>
                                         </thead>
 
                                         <tbody *ngIf="data">
                                                 <tr *ngFor="let row of data.rows">
+                                                        <td>
+                                                                {{ row.id }}
+                                                        </td>
+                                                        <td>
+                                                                {{ row.date }}
+                                                        </td>
                                                         <td>
                                                                 {{ row.json }}
                                                         </td>
