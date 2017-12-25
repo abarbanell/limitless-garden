@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var authSetup_1 = require("../util/authSetup");
 var express = require('express');
 var router = express.Router();
 var db = require('../util/db');
@@ -192,7 +195,7 @@ router.get('/about', function (req, res, next) {
     });
 });
 router.get('/logout', function (req, res) {
-    req.logout();
+    authSetup_1.AuthSetup.logout(req);
     res.redirect('/');
 });
 router.get('/dashboard/:host/:field', authenticated.cookie, function (req, res) {

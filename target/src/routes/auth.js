@@ -13,6 +13,14 @@ var authSetup_1 = require("../util/authSetup");
 //   will redirect the user back to this application at /auth/google/callback
 if (authSetup_1.AuthSetup.isLocal()) {
     router.get('/google', function (req, res) {
+        logger.error('TODO: get passport-stub and login to create session');
+        var passportStub = require('passport-stub');
+        passportStub.login({
+            profile: {
+                id: 17,
+                displayName: "Local Test User"
+            }
+        });
         res.redirect('/');
     });
 }

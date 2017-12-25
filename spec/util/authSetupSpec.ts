@@ -5,7 +5,7 @@ import { AuthSetup }  from '../../src/util/authSetup';
 import logger = require('../../src/util/logger');
 
 // system under test
-import server = require('../../src/server');
+import app = require('../../src/app');
 
 // var httpMocks = require('node-mocks-http');
 // var util = require('util');
@@ -19,14 +19,14 @@ describe('AuthSetup', function() {
         process.env.ENVIRONMENT="local";
         expect(AuthSetup.isLocal()).toBe(true);
     })
-    it("AuthSetup.setAuth(null) does not throw", function() {
+    it("AuthSetup.setAuth(null) does throw", function() {
         expect(function() {
             AuthSetup.setAuth(null)
-        }).not.toThrow();
+        }).toThrow();
     })
     it("AuthSetup(app) does not throw", function() {
         expect(function() {
-            AuthSetup.setAuth(server);
+            AuthSetup.setAuth(app);
         }).not.toThrow()
     })
 

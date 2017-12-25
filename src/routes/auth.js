@@ -13,6 +13,13 @@ import { AuthSetup } from '../util/authSetup';
 if ( AuthSetup.isLocal() ) {
     router.get('/google', function(req, res){
       logger.error('TODO: get passport-stub and login to create session');
+      let passportStub = require('passport-stub');
+      passportStub.login({
+        profile: {
+          id: 17,
+          displayName: "Local Test User"
+        }
+      });
       res.redirect('/');
     });
   } else { 
