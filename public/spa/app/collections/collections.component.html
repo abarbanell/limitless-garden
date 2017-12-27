@@ -22,7 +22,7 @@
                                                                 ID
                                                         </td>
                                                         <td>
-                                                                Date
+                                                                Date [UTC]
                                                         </td>
                                                         <td>
                                                                 JSON data
@@ -37,8 +37,7 @@
                                                                 {{ row.id }}
                                                         </td>
                                                         <td>
-                                                                {{ row.date }}
-                                                        </td>
+                                                                {{ row.date | date:'yyyy-MM-dd HH:mm:ss':'UTC' }}
                                                         <td>
                                                                 {{ row.json }}
                                                         </td>
