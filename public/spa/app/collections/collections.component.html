@@ -2,9 +2,17 @@
         <div class="panel-heading">
                 {{title}} - Collection: 
                 {{ data.name }} 
-                [ {{ data.count }} rows]
+                [ showing max {{ data.limit }} from position {{ data.offset }} of total {{ data.count }} rows]
         </div>
         <div class="panel-body">
+                <div class="row">
+                <button type="button" class="btn btn-info" (click)="onPrevPage()" [disabled]="data.offset==0">
+                        Prev
+                </button>
+                <button type="button" class="btn btn-info" (click)="onNextPage()" [disabled]="(data.offset + data.limit) >= data.count">
+                        Next
+                </button>
+        </div>
                 <div class="row">
                         <div class="col-md-12 ">
                                 <table class="table table-striped ">

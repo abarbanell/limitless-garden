@@ -17,6 +17,8 @@ export class CollectionsComponent implements OnInit {
   isLoading = true;
   isDeleting: string = "";
   colName: string = "";
+  limit = 5;
+  offset = 0;
 
   data: ICollectionData = new CollectionData();
 
@@ -31,9 +33,10 @@ export class CollectionsComponent implements OnInit {
   private load() {
     this.isLoading = true;
     this._dataService
-      .getCollectionData(this.colName)
+      .getCollectionData(this.colName, this.offset, this.limit)
       .subscribe(d => {
         this.data = d;
+        console.log(d);
         this.isLoading = false;
       });
   }
@@ -64,6 +67,19 @@ export class CollectionsComponent implements OnInit {
       this.error('delete returned error: ' + e);
       this.isDeleting = "";
     });
+  }
+
+  onNextPage() {
+    this.offset += this.limit;
+    this.load();
+  }
+
+  onPrevPage() {
+    this.offset -= this.limit;
+    if (this.offset < 0) {
+      this.offset = 0;
+    }
+    this.load();
   }
 
   private info(s: string) {

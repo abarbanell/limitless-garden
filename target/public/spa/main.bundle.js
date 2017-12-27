@@ -259,7 +259,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/collections/collections.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n                {{title}} - Collection: \n                {{ data.name }} \n                [ {{ data.count }} rows]\n        </div>\n        <div class=\"panel-body\">\n                <div class=\"row\">\n                        <div class=\"col-md-12 \">\n                                <table class=\"table table-striped \">\n                                        <thead>\n                                                <tr>\n                                                        <td>\n                                                                ID\n                                                        </td>\n                                                        <td>\n                                                                Date\n                                                        </td>\n                                                        <td>\n                                                                JSON data\n                                                                 \n                                                        </td>\n                                                </tr>\n                                        </thead>\n\n                                        <tbody *ngIf=\"data\">\n                                                <tr *ngFor=\"let row of data.rows\">\n                                                        <td>\n                                                                {{ row.id }}\n                                                        </td>\n                                                        <td>\n                                                                {{ row.date }}\n                                                        </td>\n                                                        <td>\n                                                                {{ row.json }}\n                                                        </td>\n                                                        <td>\n                                                                <button type=\"button\" class=\"btn btn-warning\" (click)=\"onDelete(row.id)\" [disabled]=\"isDeleting==row.id\">\n                                                                        Delete\n                                                                </button>\n                                                        </td>\n                                                </tr>\n\n                                        </tbody>\n                                </table>\n                        </div>\n                </div>\n        </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n        <div class=\"panel-heading\">\n                {{title}}\n        </div>\n        <div class=\"panel-body\">\n                You are not logged in\n        </div>\n</div>"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n                {{title}} - Collection: \n                {{ data.name }} \n                [ showing max {{ data.limit }} from position {{ data.offset }} of total {{ data.count }} rows]\n        </div>\n        <div class=\"panel-body\">\n                <div class=\"row\">\n                <button type=\"button\" class=\"btn btn-info\" (click)=\"onPrevPage()\" [disabled]=\"data.offset==0\">\n                        Prev\n                </button>\n                <button type=\"button\" class=\"btn btn-info\" (click)=\"onNextPage()\" [disabled]=\"(data.offset + data.limit) >= data.count\">\n                        Next\n                </button>\n        </div>\n                <div class=\"row\">\n                        <div class=\"col-md-12 \">\n                                <table class=\"table table-striped \">\n                                        <thead>\n                                                <tr>\n                                                        <td>\n                                                                ID\n                                                        </td>\n                                                        <td>\n                                                                Date\n                                                        </td>\n                                                        <td>\n                                                                JSON data\n                                                                 \n                                                        </td>\n                                                </tr>\n                                        </thead>\n\n                                        <tbody *ngIf=\"data\">\n                                                <tr *ngFor=\"let row of data.rows\">\n                                                        <td>\n                                                                {{ row.id }}\n                                                        </td>\n                                                        <td>\n                                                                {{ row.date }}\n                                                        </td>\n                                                        <td>\n                                                                {{ row.json }}\n                                                        </td>\n                                                        <td>\n                                                                <button type=\"button\" class=\"btn btn-warning\" (click)=\"onDelete(row.id)\" [disabled]=\"isDeleting==row.id\">\n                                                                        Delete\n                                                                </button>\n                                                        </td>\n                                                </tr>\n\n                                        </tbody>\n                                </table>\n                        </div>\n                </div>\n        </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n        <div class=\"panel-heading\">\n                {{title}}\n        </div>\n        <div class=\"panel-body\">\n                You are not logged in\n        </div>\n</div>"
 
 /***/ }),
 
@@ -297,15 +297,18 @@ var CollectionsComponent = (function () {
         this.isLoading = true;
         this.isDeleting = "";
         this.colName = "";
+        this.limit = 5;
+        this.offset = 0;
         this.data = new __WEBPACK_IMPORTED_MODULE_3__data_service__["a" /* CollectionData */]();
     }
     CollectionsComponent.prototype.load = function () {
         var _this = this;
         this.isLoading = true;
         this._dataService
-            .getCollectionData(this.colName)
+            .getCollectionData(this.colName, this.offset, this.limit)
             .subscribe(function (d) {
             _this.data = d;
+            console.log(d);
             _this.isLoading = false;
         });
     };
@@ -337,6 +340,17 @@ var CollectionsComponent = (function () {
             _this.error('delete returned error: ' + e);
             _this.isDeleting = "";
         });
+    };
+    CollectionsComponent.prototype.onNextPage = function () {
+        this.offset += this.limit;
+        this.load();
+    };
+    CollectionsComponent.prototype.onPrevPage = function () {
+        this.offset -= this.limit;
+        if (this.offset < 0) {
+            this.offset = 0;
+        }
+        this.load();
     };
     CollectionsComponent.prototype.info = function (s) {
         this.infoMsg = s;
@@ -391,10 +405,11 @@ var DataService = (function () {
     DataService.prototype.getCollections = function () {
         return this._http.get(this._url);
     };
-    DataService.prototype.getCollectionData = function (coll) {
-        return this._http.get(this._url + "/" + coll + "?filldate=1", { observe: 'response' }).map(function (r) {
-            var d = new CollectionData(coll);
-            d.count = Number(r.headers.get('X-Total-Count'));
+    DataService.prototype.getCollectionData = function (coll, offset, limit) {
+        offset = offset || 0;
+        limit = limit || 10;
+        return this._http.get(this._url + "/" + coll + "?filldate=1&offset=" + offset + "&limit=" + limit, { observe: 'response' }).map(function (r) {
+            var d = new CollectionData(coll, Number(r.headers.get('X-Total-Count')), offset, limit);
             for (var _i = 0, _a = r.body; _i < _a.length; _i++) {
                 var s = _a[_i];
                 var o = new CollectionRow(JSON.stringify(s));
@@ -448,9 +463,11 @@ var CollectionRow = (function () {
     return CollectionRow;
 }());
 var CollectionData = (function () {
-    function CollectionData(name, count) {
+    function CollectionData(name, count, offset, limit) {
         this.name = name || "";
         this.count = count || 0;
+        this.offset = offset;
+        this.limit = limit;
         this.rows = [];
     }
     CollectionData.prototype.push = function (row) {

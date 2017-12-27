@@ -45,15 +45,17 @@ router.get('/collections/:collectionName', function(req, res, next) {
 			logger.error('get error: %s', util.inspect(err));
 			return next(err);
 		}
-		const limit = req.query.limit || 10;
-		const offset = req.query.offset || 0;
+		const limit = Number(req.query.limit) || 10;
+		const offset = Number(req.query.offset) || 0;
 		const fillDate = req.query.filldate || 0;
 		delete req.query.filldate;
 		delete req.query.limit;
 		delete req.query.offset;
 		const queryObj = QueryMapper.qmap(req.query);
+		const opts = {limit: limit, skip: offset, sort: {'_id': 1}};
+		logger.info("find options: " + util.inspect(opts));
 		req.collection
-		.find(queryObj ,{limit: limit, offset: offset, sort: {'_id': 1}})
+		.find(queryObj ,opts)
 		.toArray(function(e, results){
 			if (e) return next(e)
 			logger.info("fillDate=" + fillDate + ", results = " + util.inspect(results));

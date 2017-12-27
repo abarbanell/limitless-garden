@@ -13,13 +13,18 @@ export class DataService {
     return this._http.get<string[]>(this._url)
   }
 
-  getCollectionData(coll: string): Observable<ICollectionData> {
-      return this._http.get<Object[]>(
-        this._url + "/" + coll + "?filldate=1",
-        { observe: 'response'}
+  getCollectionData(coll: string, offset?: number, limit?: number): Observable<ICollectionData> {
+    offset = offset || 0;
+    limit = limit || 10;  
+    return this._http.get<Object[]>(
+        this._url + "/" + coll + "?filldate=1&offset=" + offset + "&limit=" + limit,
+        { observe: 'response' }
       ).map(r => { 
-         let d = new CollectionData(coll);
-         d.count = Number(r.headers.get('X-Total-Count'));
+         let d = new CollectionData(coll, 
+            Number(r.headers.get('X-Total-Count')),
+            offset,
+            limit
+          );
 
          for (let s of r.body) {
            let o = new CollectionRow(JSON.stringify(s))
@@ -84,17 +89,23 @@ class CollectionRow implements ICollectionRow {
 export interface ICollectionData {
   name: string,
   count: number,
+  offset: number,
+  limit: number,
   rows: ICollectionRow[]
 }
 
 export class CollectionData implements ICollectionData {
   name: string;
   count: number;
+  offset: number;
+  limit: number;
   rows: ICollectionRow[];
 
-  constructor(name?: string, count?: number) {
+  constructor(name?: string, count?: number, offset?: number, limit?: number) {
     this.name = name || "";
     this.count = count || 0;
+    this.offset = offset;
+    this.limit = limit
     this.rows = [];
   }
   push(row: ICollectionRow) {
