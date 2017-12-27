@@ -1,21 +1,23 @@
 // Angular imports
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 // Components
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HomeComponent } from './home/home.component';
+import { CollectionsComponent } from './collections/collections.component';
+import { DataComponent } from './data/data.component';
 
 // Services
 import { DataService } from "./data.service";
 import { AuthService } from "./auth.service";
+import { LoggedinGuard } from './loggedin.guard';
 
 // routing
 import { routing } from './app.routing';
-import { HttpClientModule } from '@angular/common/http';
-import { CollectionsComponent } from './collections/collections.component';
-import { DataComponent } from './data/data.component';
+
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { DataComponent } from './data/data.component';
   ],
   providers: [
     AuthService,
-    DataService
+    DataService,
+    LoggedinGuard
   ],
   bootstrap: [AppComponent]
 })

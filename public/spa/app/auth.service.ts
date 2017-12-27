@@ -5,6 +5,7 @@ import { HttpClient, HttpResponse, HttpHeaders} from '@angular/common/http';
 @Injectable()
 export class AuthService {
   private _url = "/api/me";
+  private _isAuthenticated = false;
 
   //public user: IProfile = new Profile();
   public listen = new BehaviorSubject<IProfile>(new Profile());
@@ -14,6 +15,10 @@ export class AuthService {
       this.listen.next(u);
     })
   }
+
+  public authenticated() {
+    return this._isAuthenticated;
+ }
 
   public getProfile(): Observable<IProfile> {
     return this._http.get(this._url)
@@ -26,6 +31,7 @@ export class AuthService {
       } else { 
         p.httpStatus = 403;
       }
+      this._isAuthenticated = (p.rc == "OK");
       return p;
     })
     .catch(e => {
