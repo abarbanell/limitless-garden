@@ -70,19 +70,18 @@ class MongoDeleteResponse {
 export interface ICollectionRow {
   id: string,
   date: string,
-  json: string
+  obj: any
 }
 
 class CollectionRow implements ICollectionRow {
   id: string; 
   date: string; 
-  json: string;
+  obj: any;
 
   constructor(s?: string) {
-    this.json = s || "";
-    let obj = JSON.parse(this.json);
-    this.id = obj._id || "unknown ID";
-    this.date = obj.date || "unknown date"
+    this.obj = JSON.parse(s) || {};
+    this.id = this.obj._id || "unknown ID";
+    this.date = this.obj.date || "unknown date"
   }
 }
 
