@@ -259,7 +259,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../public/spa/app/collections/collections.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n                {{title}} - Collection: \n                {{ data.name }} \n                [ {{ data.count }} rows]\n        </div>\n        <div class=\"panel-body\">\n                <div class=\"row\">\n                        <div class=\"col-md-12 \">\n                                <table class=\"table table-striped \">\n                                        <thead>\n                                                <tr>\n                                                        <td>\n                                                                ID\n                                                        </td>\n                                                        <td>\n                                                                Date\n                                                        </td>\n                                                        <td>\n                                                                JSON data\n                                                                 \n                                                        </td>\n                                                </tr>\n                                        </thead>\n\n                                        <tbody *ngIf=\"data\">\n                                                <tr *ngFor=\"let row of data.rows\">\n                                                        <td>\n                                                                {{ row.id }}\n                                                        </td>\n                                                        <td>\n                                                                {{ row.date }}\n                                                        </td>\n                                                        <td>\n                                                                {{ row.json }}\n                                                        </td>\n                                                </tr>\n\n                                        </tbody>\n                                </table>\n                        </div>\n                </div>\n        </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n        <div class=\"panel-heading\">\n                {{title}}\n        </div>\n        <div class=\"panel-body\">\n                You are not logged in\n        </div>\n</div>"
+module.exports = "<div *ngIf=\"isLoggedin\" class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n                {{title}} - Collection: \n                {{ data.name }} \n                [ {{ data.count }} rows]\n        </div>\n        <div class=\"panel-body\">\n                <div class=\"row\">\n                        <div class=\"col-md-12 \">\n                                <table class=\"table table-striped \">\n                                        <thead>\n                                                <tr>\n                                                        <td>\n                                                                ID\n                                                        </td>\n                                                        <td>\n                                                                Date\n                                                        </td>\n                                                        <td>\n                                                                JSON data\n                                                                 \n                                                        </td>\n                                                </tr>\n                                        </thead>\n\n                                        <tbody *ngIf=\"data\">\n                                                <tr *ngFor=\"let row of data.rows\">\n                                                        <td>\n                                                                {{ row.id }}\n                                                        </td>\n                                                        <td>\n                                                                {{ row.date }}\n                                                        </td>\n                                                        <td>\n                                                                {{ row.json }}\n                                                        </td>\n                                                        <td>\n                                                                <button type=\"button\" class=\"btn btn-warning\" (click)=\"onDelete(row.id)\" [disabled]=\"isDeleting==row.id\">\n                                                                        Delete\n                                                                </button>\n                                                        </td>\n                                                </tr>\n\n                                        </tbody>\n                                </table>\n                        </div>\n                </div>\n        </div>\n</div>\n\n<div *ngIf=\"!isLoggedin\" class=\"panel panel-danger\">\n        <div class=\"panel-heading\">\n                {{title}}\n        </div>\n        <div class=\"panel-body\">\n                You are not logged in\n        </div>\n</div>"
 
 /***/ }),
 
@@ -292,21 +292,59 @@ var CollectionsComponent = (function () {
         this._route = _route;
         this.isLoggedin = false;
         this.title = "CollectionsComponent";
+        this.errorMsg = "";
+        this.infoMsg = "";
+        this.isLoading = true;
+        this.isDeleting = "";
+        this.colName = "";
         this.data = new __WEBPACK_IMPORTED_MODULE_3__data_service__["a" /* CollectionData */]();
     }
+    CollectionsComponent.prototype.load = function () {
+        var _this = this;
+        this.isLoading = true;
+        this._dataService
+            .getCollectionData(this.colName)
+            .subscribe(function (d) {
+            _this.data = d;
+            _this.isLoading = false;
+        });
+    };
     CollectionsComponent.prototype.ngOnInit = function () {
         var _this = this;
         this._authService.listen.subscribe(function (u) {
             _this.isLoggedin = (u.httpStatus == 200);
         });
         this._route.params.subscribe(function (params) {
-            var coll = params["coll"];
-            _this._dataService
-                .getCollectionData(coll)
-                .subscribe(function (d) {
-                _this.data = d;
-            });
+            _this.colName = params["coll"];
+            _this.load();
         });
+    };
+    CollectionsComponent.prototype.onDelete = function (id) {
+        var _this = this;
+        this.isDeleting = id;
+        this._dataService.deleteRow(this.colName, id).subscribe(function (s) {
+            if (s.rc == "OK") {
+                _this.info("deleted ID: " + id);
+                // this.form.reset()// reset form to be untouched, clear fields
+                _this.load();
+                _this.isDeleting = "";
+            }
+            else {
+                _this.error("response from delete: " + JSON.stringify(s));
+                _this.isDeleting = "";
+            }
+        }, function (e) {
+            _this.error('delete returned error: ' + e);
+            _this.isDeleting = "";
+        });
+    };
+    CollectionsComponent.prototype.info = function (s) {
+        this.infoMsg = s;
+        this.errorMsg = "";
+    };
+    CollectionsComponent.prototype.error = function (s) {
+        this.errorMsg = s;
+        this.infoMsg = "";
     };
     CollectionsComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -330,6 +368,7 @@ var CollectionsComponent = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DataService; });
+/* unused harmony export DataServiceResponse */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CollectionData; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
@@ -364,6 +403,22 @@ var DataService = (function () {
             return d;
         });
     };
+    DataService.prototype.deleteRow = function (collectionName, id) {
+        var url = this._url + "/" + collectionName + "/" + id;
+        // var headers = new Headers({});
+        // var options= new RequestOptions({
+        //   headers: headers,
+        //   search: "user_key=" + this._user_key
+        // });
+        return this._http.delete(url)
+            .map(this._mapDeleteResponse);
+        // .catch(this.handleError);
+    };
+    DataService.prototype._mapDeleteResponse = function (result) {
+        var rc = result.ok == 1 ?
+            { rc: "OK", n: result.n } : { rc: "ERROR", n: result.n };
+        return rc;
+    };
     DataService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
@@ -371,6 +426,18 @@ var DataService = (function () {
     return DataService;
 }());
 
+var DataServiceResponse = (function () {
+    function DataServiceResponse(s) {
+        this.rc = s;
+    }
+    return DataServiceResponse;
+}());
+
+var MongoDeleteResponse = (function () {
+    function MongoDeleteResponse() {
+    }
+    return MongoDeleteResponse;
+}());
 var CollectionRow = (function () {
     function CollectionRow(s) {
         this.json = s || "";

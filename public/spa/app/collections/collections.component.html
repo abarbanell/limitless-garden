@@ -34,6 +34,11 @@
                                                         <td>
                                                                 {{ row.json }}
                                                         </td>
+                                                        <td>
+                                                                <button type="button" class="btn btn-warning" (click)="onDelete(row.id)" [disabled]="isDeleting==row.id">
+                                                                        Delete
+                                                                </button>
+                                                        </td>
                                                 </tr>
 
                                         </tbody>
