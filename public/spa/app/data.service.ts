@@ -28,6 +28,17 @@ export class DataService {
          return d
        });
   }
+
+  deleteRow(collectionName: string, id: string): Observable<DataServiceResponse> {
+    return Observable.of(new DataServiceResponse("not implemented"));
+  }
+}
+
+export class DataServiceResponse {
+  rc: string;
+  constructor(s: string) {
+    this.rc = s;
+  }
 }
 
 export interface ICollectionRow {
