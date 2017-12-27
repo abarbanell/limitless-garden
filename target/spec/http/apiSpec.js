@@ -146,24 +146,37 @@ describe('collections API integration tests', function () {
     it('GET with limit=1 & offset 0/1 returns different rows', function (done) {
         var url1 = '/api/collections/test?limit=1&offset=0&user_key=true';
         var url2 = '/api/collections/test?limit=1&offset=1&user_key=true';
+        var postUrl = '/api/collections/test?user_key=true';
         supertest(server)
-            .get(url1).end(function (err, res) {
-            var count1 = res.body.length;
-            expect(count1).toBe(1);
-            var id1 = res.body[0]._id;
-            expect(id1).toBeDefined();
-            logger.info(util.inspect(res.body));
+            .post(postUrl)
+            .send({ field: "content" })
+            .expect(httpStatus.OK)
+            .end(function (err, res) {
             supertest(server)
-                .get(url2)
+                .post(postUrl)
+                .send({ field: "content" })
                 .expect(httpStatus.OK)
-                .end(function (err2, res2) {
-                var count2 = res2.body.length;
-                expect(count2).toBe(1);
-                var id2 = res2.body[0]._id;
-                logger.info(util.inspect(res2.body));
-                expect(id2).toBeDefined();
-                expect(id2).not.toBe(id1);
-                return done();
+                .end(function (err, res) {
+                supertest(server)
+                    .get(url1).end(function (err, res) {
+                    var count1 = res.body.length;
+                    expect(count1).toBe(1);
+                    var id1 = res.body[0]._id;
+                    expect(id1).toBeDefined();
+                    logger.info(util.inspect(res.body));
+                    supertest(server)
+                        .get(url2)
+                        .expect(httpStatus.OK)
+                        .end(function (err2, res2) {
+                        var count2 = res2.body.length;
+                        expect(count2).toBe(1);
+                        var id2 = res2.body[0]._id;
+                        logger.info(util.inspect(res2.body));
+                        expect(id2).toBeDefined();
+                        expect(id2).not.toBe(id1);
+                        return done();
+                    });
+                });
             });
         });
     });
