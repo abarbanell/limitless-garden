@@ -30,8 +30,24 @@ export class DataService {
   }
 
   deleteRow(collectionName: string, id: string): Observable<DataServiceResponse> {
-    return Observable.of(new DataServiceResponse("not implemented"));
-  }
+      var url = this._url + "/" + collectionName + "/" +  id;
+      // var headers = new Headers({});
+      // var options= new RequestOptions({
+      //   headers: headers,
+      //   search: "user_key=" + this._user_key
+      // });
+      return this._http.delete<MongoDeleteResponse>(url)
+        .map(this._mapDeleteResponse)
+        // .catch(this.handleError);
+    }
+
+    private _mapDeleteResponse(result: MongoDeleteResponse): DataServiceResponse {
+      var rc = result.ok == 1 ? 
+        { rc: "OK", n: result.n } : { rc: "ERROR", n: result.n };
+      return rc;
+    }
+    
+  
 }
 
 export class DataServiceResponse {
@@ -39,6 +55,11 @@ export class DataServiceResponse {
   constructor(s: string) {
     this.rc = s;
   }
+}
+
+class MongoDeleteResponse {
+  public ok: number;
+  public n: number;
 }
 
 export interface ICollectionRow {

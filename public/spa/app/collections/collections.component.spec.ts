@@ -48,5 +48,27 @@ describe('CollectionsComponent', () => {
   it('should have initial data', () => {
     expect(component.data).toBeDefined();
     expect(component.data.count).toBeGreaterThanOrEqual(component.data.rows.length);
+  });
+
+  it('onDelete returns ok', () => {
+    expect(component.data).toBeDefined();
+    let id = "12345678901234567891234";
+    component.colName = "test";
+
+    let service = TestBed.get(DataService);
+    let httpMock: HttpTestingController = TestBed.get(HttpTestingController)
+ 
+    component.onDelete(id);
+
+    const req = httpMock.expectOne('/api/collections/test/' + id);
+    expect(req.request.method).toEqual('DELETE');
+    req.flush({
+      ok: 1,
+      n: 1
+    })
+
+    // we still have open requests here...
+    // httpMock.verify();
+    expect(component.infoMsg).toContain(id);
   })
 });

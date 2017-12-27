@@ -12,6 +12,8 @@ import { DataService, ICollectionData, CollectionData } from '../data.service';
 export class CollectionsComponent implements OnInit {
   isLoggedin = false;
   title = "CollectionsComponent";
+  errorMsg="";
+  infoMsg="";
   isLoading = true;
   isDeleting: string = "";
   colName: string = "";
@@ -50,17 +52,27 @@ export class CollectionsComponent implements OnInit {
     this.isDeleting=id;
     this._dataService.deleteRow(this.colName, id).subscribe(s => {
       if (s.rc == "OK") { 
-        //this.info("deleted ID: " + id)
+        this.info("deleted ID: " + id)
         // this.form.reset()// reset form to be untouched, clear fields
         this.load();
         this.isDeleting = "";
       } else {
-        //this.error("could not verify response from delete: " + JSON.stringify(s));
+        this.error("response from delete: " + JSON.stringify(s));
         this.isDeleting = "";
       }
     }, e => {
-      //this.error('delete returned error: ' + e);
+      this.error('delete returned error: ' + e);
       this.isDeleting = "";
     });
+  }
+
+  private info(s: string) {
+    this.infoMsg = s;
+    this.errorMsg = "";
+  }
+
+  private error(s: string) {
+    this.errorMsg = s;
+    this.infoMsg = "";
   }
 }
