@@ -9,8 +9,8 @@ var logger = require('./logger');
 var Statsd = require('node-statsd');
 
 var client = new Statsd({
-  host: process.env.STATSD_HOST,
-  port: process.env.STATSD_PORT
+  host: process.env.STATSD_HOST || "127.0.0.1",
+  port: process.env.STATSD_PORT || "8125"
 });
 var prefix = process.env.ENVIRONMENT;
 
