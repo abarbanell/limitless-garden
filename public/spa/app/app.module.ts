@@ -2,6 +2,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 // Components
 import { AppComponent } from './app.component';
@@ -30,7 +32,8 @@ import { routing } from './app.routing';
   imports: [
     BrowserModule,
     HttpClientModule,
-    routing
+    routing,
+    ServiceWorkerModule.register('/spa/ngsw-worker.js', {enabled: environment.production})
   ],
   providers: [
     AuthService,
