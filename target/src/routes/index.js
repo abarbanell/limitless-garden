@@ -172,9 +172,8 @@ router.param('collectionName', function (req, res, next, collectionName) {
 router.use(authenticated.admin);
 /* GET home page. */
 router.get('/', authenticated.cookie, collectionsListRoute);
+// router.get('/', authenticated.cookie, spaRoute);
 router.get('/collections/:collectionName', authenticated.cookie, collectionsRoute);
-/* GET sensor page. */
-router.get('/sensor', authenticated.cookie, sensorRoute);
 /* temporarily park some routes which will be filled later */
 router.get('/hosts/:host', authenticated.cookie, hostDataRoute);
 router.get('/hosts', authenticated.cookie, hostsRoute);
@@ -183,13 +182,6 @@ router.get('/spa', authenticated.cookie, spaRoute);
 /* GET login page. */
 router.get('/login', function (req, res, next) {
     res.render('login', {
-        title: 'Limitless Garden',
-        user: req.user
-    });
-});
-/* GET about page. */
-router.get('/about', function (req, res, next) {
-    res.render('about', {
         title: 'Limitless Garden',
         user: req.user
     });
