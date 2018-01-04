@@ -162,8 +162,10 @@ router.param('collectionName', function(req, res, next, collectionName){
 router.use(authenticated.admin);
 
 /* GET home page. */
-router.get('/', authenticated.cookie, collectionsListRoute);
-// router.get('/', authenticated.cookie, spaRoute);
+// router.get('/', authenticated.cookie, collectionsListRoute);
+router.get('/', authenticated.cookie, function(req,res){
+	res.redirect('/spa');
+});
 router.get('/collections/:collectionName', authenticated.cookie, collectionsRoute);
 
 

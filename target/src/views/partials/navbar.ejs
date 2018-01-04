@@ -19,13 +19,9 @@
         </div>
 
         <div id="lgnavbar" class="collapse navbar-collapse navbar-left">
-          <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>           
+          <ul class="nav navbar-nav">          
 						
             <% if (user && user.profile && user.profile.id ) { %>
-              <li>
-                <a href="/spa">Spa</a>
-              </li>
               <li>
                <a href="/logout">[<%= user.profile.displayName %> 
                 <% if (user.admin) { %>
