@@ -1,17 +1,17 @@
 {
-  "index": "/spa/index.html",
+  "index": "/index.html",
   "assetGroups": [{
     "name": "app",
     "installMode": "prefetch",
     "resources": {
       "files": [
         "/favicon.ico",
-        "/spa/index.html"
+        "/index.html"
       ],
       "versionedFiles": [
-        "/spa/*.bundle.css",
-        "/spa/*.bundle.js",
-        "/spa/*.chunk.js"
+        "/*.bundle.css",
+        "/*.bundle.js",
+        "/*.chunk.js"
       ]
     }
   }, {
@@ -20,7 +20,7 @@
     "updateMode": "prefetch",
     "resources": {
       "files": [
-        "/spa/assets/**"
+        "/assets/**"
       ]
     }
   }],
