@@ -6,12 +6,12 @@
     "resources": {
       "files": [
         "/favicon.ico",
-        "/index.html"
+        "/spa/index.html"
       ],
       "versionedFiles": [
-        "/*.bundle.css",
-        "/*.bundle.js",
-        "/*.chunk.js"
+        "/spa/*.bundle.css",
+        "/spa/*.bundle.js",
+        "/spa/*.chunk.js"
       ]
     }
   }, {
@@ -20,21 +20,21 @@
     "updateMode": "prefetch",
     "resources": {
       "files": [
-        "/assets/**"
+        "/spa/assets/**"
       ]
     }
   }],
   "dataGroups": [
     {
-      "name": "api-performance", 
+      "name": "api-freshness", 
       "urls": [
         "/api/**"
       ],
       "cacheConfig": {
-        "strategy": "performance", 
+        "strategy": "freshness", 
         "maxSize": 100,
         "maxAge": "3d", 
-        "timeout": "10s"
+        "timeout": "2s"
       }
     }
   ]
