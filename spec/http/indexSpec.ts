@@ -206,14 +206,16 @@ describe('index.js routes with mocked auth', function() {
 			});
 			response = httpMocks.createResponse();
 			response.sendFile = function(url) {
+				logger.error("sendfile mock callback for url: " + url);
 				expect(url).toContain('index.html');
+				logger.error("sendfile mock callback: we are done() here");
+				done();
 			}
 
 			let sr = indexrouter.__get__('spaRoute');
 			sr(request, response);
 
 			expect(response.statusCode).toBe(200);
-			done();
 		});
 
 

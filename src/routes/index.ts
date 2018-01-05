@@ -146,7 +146,7 @@ var hostDataRoute = function (req, res, next) {
 
 let spaRoute = function (req, res, next) {
 	let url = __dirname + '/../../public/app/index.html'
-	logger.error('url: %s', url)
+	logger.info('spaRoute called for url: %s', url)
 	return res.sendFile(url);
 }
 
