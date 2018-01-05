@@ -206,9 +206,9 @@ describe('index.js routes with mocked auth', function() {
 			});
 			response = httpMocks.createResponse();
 			response.sendFile = function(url) {
-				logger.error("sendfile mock callback for url: " + url);
+				logger.info("sendfile mock callback for url: " + url);
 				expect(url).toContain('index.html');
-				logger.error("sendfile mock callback: we are done() here");
+				logger.info("sendfile mock callback: we are done() here");
 				done();
 			}
 
